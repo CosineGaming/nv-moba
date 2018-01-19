@@ -6,6 +6,7 @@ extends Control
 var SERVER_IP = "127.0.0.1"
 var SERVER_PORT = 2467
 var MAX_PLAYERS = 2
+var SERVER_PLAYING = true
 
 var player_info = {}
 var my_info = {}
@@ -32,6 +33,7 @@ func _singleplayer_init():
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(SERVER_PORT, 1)
 	get_tree().set_network_peer(peer)
+	player_info[1] = my_info
 	pre_configure_game()
 
 func _server_init():
@@ -39,6 +41,8 @@ func _server_init():
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
 	get_node("Server").set_text("Serving!")
+	if SERVER_PLAYING:
+		player_info[1] = my_info
 
 func _player_connected(id):
 	print("Connect, my friend: " + str(id))
@@ -49,13 +53,14 @@ func _connected_ok():
 remote func register_player(id, info):
 	player_info[id] = info
 	if (get_tree().is_network_server()):
-		rpc_id(id, "register_player", 1, my_info)
 		# Send current players' info to new player
+		rpc_id(id, "register_player", 1, my_info)
 		for peer_id in player_info:
 			rpc_id(id, "register_player", peer_id, player_info[peer_id])
 		if (player_info.size() == MAX_PLAYERS):
 			rpc("pre_configure_game")
-			pre_configure_game()
+			if SERVER_PLAYING:
+				pre_configure_game()
 
 var players_done = []
 remote func done_preconfiguring(who):
@@ -70,15 +75,11 @@ remote func pre_configure_game():
 	var world = load("res://world.tscn").instance()
 	get_node("/root").add_child(world)
 	
-	var my_player = preload("res://player.tscn").instance()
-	my_player.set_name(str(self_peer_id))
-	my_player.set_network_master(self_peer_id)
-	get_node("/root/world/players").add_child(my_player)
-	
-	# Load other players
+	# Load all players (including self)
 	for p in player_info:
 		var player = preload("res://player.tscn").instance()
 		player.set_name(str(p))
+		player.set_network_master(p)
 		get_node("/root/world/players").add_child(player)
 	
 	rpc_id(1, "done_preconfiguring", self_peer_id)
