@@ -57,12 +57,18 @@ func collect_info():
 	my_info.username = get_node("Username").get_text()
 	my_info.hero = get_node("HeroSelect").get_selected_id()
 
-remote func register_player(id, info):
-	player_info[id] = info
+remote func register_player(new_peer, info):
+	player_info[new_peer] = info
 	if (get_tree().is_network_server()):
 		# Send current players' info to new player
-		for peer_id in player_info:
-			rpc_id(id, "register_player", peer_id, player_info[peer_id])
+		for old_peer in player_info:
+			# Send new player, old player's info
+			rpc_id(new_peer, "register_player", old_peer, player_info[old_peer])
+			# You'd think this part could be met with a simple `rpc(`, but actually it can't
+			# My best guess is this is because we haven't registered the names yet, but I'm not sure (TODO)
+			if old_peer != 1 and old_peer != new_peer:
+				# Send old player, new player's info (not us, no infinite loop)
+				rpc_id(old_peer, "register_player", new_peer, info)
 		if (player_info.size() == MAX_PLAYERS):
 			start_game()
 
