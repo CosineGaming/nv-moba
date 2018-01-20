@@ -60,18 +60,14 @@ func _input(event):
 			quit()
 
 
+master func _integrate_forces(state):
+	control_player(state)
+	rpc_unreliable("set_status", get_transform(), get_linear_velocity(), get_angular_velocity())
 
-func _integrate_forces(state):
-	
-	if is_network_master():
-		control_player(state)
-		rset_unreliable("slave_transform", get_transform())
-		rset_unreliable("slave_lin_v", get_linear_velocity())
-		rset_unreliable("slave_ang_v", get_angular_velocity())
-	else:
-		set_transform(slave_transform)
-		set_linear_velocity(slave_lin_v)
-		set_angular_velocity(slave_ang_v)
+slave func set_status(tf, lv, av):
+	set_transform(tf)
+	set_linear_velocity(lv)
+	set_angular_velocity(av)
 
 func control_player(state):
 	
@@ -96,13 +92,7 @@ func control_player(state):
 	direction = direction.normalized()
 	var ray = get_node("Ray")
 	
-	# Increase walk speed and jump height while running and decrement stamina:
-	if Input.is_action_pressed("run") and is_moving and ray.is_colliding():
-		walk_speed *= 1.4
-		jump_speed *= 1.2
-	
-	print("---")
-	print(state.get_linear_velocity())
+	#print("---")
 
 	if ray.is_colliding():
 		var up = state.get_total_gravity().normalized()
