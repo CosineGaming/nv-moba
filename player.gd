@@ -7,7 +7,6 @@ extends RigidBody
 var view_sensitivity = 0.25
 var yaw = 0
 var pitch = 0
-var is_moving = false
 
 const max_accel = 0.005
 const air_accel = 0.02
@@ -60,11 +59,6 @@ func _input(event):
 		if Input.is_action_pressed("quit"):
 			quit()
 
-func _physics_process(delta):
-	#get_node("FPS").set_text(str(OS.get_frames_per_second(), " FPS"))
-	#get_node("Stamina").set_value(stamina)
-	
-	is_moving = false
 
 
 func _integrate_forces(state):
@@ -92,16 +86,12 @@ func control_player(state):
 
 	if Input.is_action_pressed("move_forwards"):
 		direction -= aim[2]
-		is_moving = true
 	if Input.is_action_pressed("move_backwards"):
 		direction += aim[2]
-		is_moving = true
 	if Input.is_action_pressed("move_left"):
 		direction -= aim[0]
-		is_moving = true
 	if Input.is_action_pressed("move_right"):
 		direction += aim[0]
-		is_moving = true
 
 	direction = direction.normalized()
 	var ray = get_node("Ray")
