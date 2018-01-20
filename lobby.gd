@@ -5,7 +5,7 @@ extends Control
 # var b = "textvar"
 var SERVER_IP = "127.0.0.1"
 var SERVER_PORT = 2467
-var MAX_PLAYERS = 2
+var MAX_PLAYERS = 10
 var SERVER_PLAYING = true
 
 var player_info = {}
@@ -15,6 +15,7 @@ func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
 	get_node("Server").connect("pressed", self, "_server_init")
+	get_node("ServerStart").connect("pressed", self, "start_game")
 	get_node("Client").connect("pressed", self, "_client_init")
 	get_node("Singleplayer").connect("pressed", self, "_singleplayer_init")
 	
@@ -42,6 +43,7 @@ func _server_init():
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
 	get_node("Server").set_text("Serving!")
+	get_node("ServerStart").show()
 	if SERVER_PLAYING:
 		player_info[1] = my_info
 
@@ -59,13 +61,15 @@ remote func register_player(id, info):
 	player_info[id] = info
 	if (get_tree().is_network_server()):
 		# Send current players' info to new player
-		rpc_id(id, "register_player", 1, my_info)
 		for peer_id in player_info:
 			rpc_id(id, "register_player", peer_id, player_info[peer_id])
 		if (player_info.size() == MAX_PLAYERS):
-			rpc("pre_configure_game")
-			if SERVER_PLAYING:
-				pre_configure_game()
+			start_game()
+
+func start_game():
+	rpc("pre_configure_game")
+	if SERVER_PLAYING:
+		pre_configure_game()
 
 var players_done = []
 remote func done_preconfiguring(who):

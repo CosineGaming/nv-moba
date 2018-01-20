@@ -3,7 +3,7 @@
 [ext_resource path="res://lobby.gd" type="Script" id=1]
 [ext_resource path="res://hero_select.gd" type="Script" id=2]
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -48,10 +48,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 5.0
-margin_top = 45.0
-margin_right = 54.0
-margin_bottom = 65.0
+margin_left = 133.0
+margin_top = 55.0
+margin_right = 182.0
+margin_bottom = 75.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -72,10 +72,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 6.0
-margin_top = 87.0
-margin_right = 185.0
-margin_bottom = 107.0
+margin_left = 8.0
+margin_top = 180.0
+margin_right = 187.0
+margin_bottom = 200.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -105,10 +105,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 72.0
-margin_top = 8.0
-margin_right = 161.0
-margin_bottom = 28.0
+margin_left = 5.0
+margin_top = 94.0
+margin_right = 94.0
+margin_bottom = 114.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -129,10 +129,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 238.0
-margin_top = 9.0
-margin_right = 426.0
-margin_bottom = 29.0
+margin_left = 5.0
+margin_top = 142.0
+margin_right = 193.0
+margin_bottom = 162.0
 rect_rotation = -0.0115615
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
@@ -150,5 +150,64 @@ align = 0
 selected = -1
 items = [  ]
 script = ExtResource( 2 )
+
+[node name="TextEdit" type="TextEdit" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 7.0
+margin_top = 55.0
+margin_right = 118.0
+margin_bottom = 75.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "IP"
+readonly = false
+highlight_current_line = false
+syntax_highlighting = false
+show_line_numbers = false
+highlight_all_occurrences = false
+override_selected_font_color = false
+context_menu_enabled = true
+smooth_scrolling = false
+v_scroll_speed = 80.0
+hiding_enabled = 0
+wrap_lines = false
+caret_block_mode = false
+caret_blink = false
+caret_blink_speed = 0.65
+caret_moving_by_right_click = true
+
+[node name="ServerStart" type="Button" parent="." index="6"]
+
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 72.0
+margin_top = 12.0
+margin_right = 152.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Start game"
+flat = false
+align = 1
+_sections_unfolded = [ "Visibility" ]
 
 
