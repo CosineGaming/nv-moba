@@ -16,22 +16,27 @@ Side mechanics ideas:
 
 Ideas for characters:
 
-- Blink (Tracer) - no cooldown, but loses all speed on hitting walls
-- Merge (Mercy) - combines with someone to boost their speed
-- Amp it up (Lucio/Zarya) - Area of effect or zarya-like cast, speeds people up
-- Changes side of see-saw for each team (should it be mechanic instead??)
-- Build Zineth-like rails for anyone to use
-- Teleportation (for others!), like Symettra (but faster pace)
-- Heavy guy - Slow, but very heavy for the see-saw
+- More active
+  - Blink (Tracer) - no cooldown, but loses all speed on hitting walls
+  - Heavy guy - Slow, but very heavy for the see-saw
+- More supportive
+  - Merge - combines with someone to boost their speed
+  - Boost - Area of effect or zarya-like cast, speeds people up
+  - Flop - Changes side of see-saw for each team (should it be mechanic instead??)
+  - Build - Build Zineth-like rails for anyone to use
+  - Teleportation - (for others! or maybe including the enemy too!)
+- More offensive
+  - Lay walls
+  - Lay traps
+  - Destroy buildings
+  - Slow in AoE
 
 Key concepts:
 
 - From mobas we take:
-
   - An emphasis on teamwork (Objective-based is a plus)
   - Rich, emergent interaction
   - Quick battles (very high replay value)
-
 - From Zineth we take:
   - A rethinking of racing games
   - High skill cap, low skill floor
