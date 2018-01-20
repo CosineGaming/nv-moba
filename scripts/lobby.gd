@@ -3,7 +3,6 @@ extends Control
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
-var SERVER_IP = "127.0.0.1"
 var SERVER_PORT = 2467
 var MAX_PLAYERS = 10
 var SERVER_PLAYING = true
@@ -25,7 +24,8 @@ func _ready():
 func _client_init():
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_client(SERVER_IP, SERVER_PORT)
+	var server_ip = get_node("IP").get_text()
+	peer.create_client(server_ip, SERVER_PORT)
 	get_tree().set_network_peer(peer)
 	get_node("Client").set_text("Clienting!")
 

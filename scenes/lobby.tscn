@@ -9,8 +9,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 80.0
+margin_top = 99.0
+margin_right = 120.0
+margin_bottom = 139.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 0
 mouse_default_cursor_shape = 0
@@ -24,10 +26,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 4.0
-margin_top = 12.0
-margin_right = 56.0
-margin_bottom = 32.0
+margin_left = 7.0
+margin_top = -9.0
+margin_right = 177.0
+margin_bottom = 46.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -42,16 +44,58 @@ text = "Server"
 flat = false
 align = 1
 
-[node name="Client" type="Button" parent="." index="1"]
+[node name="ServerStart" type="Button" parent="." index="1"]
+
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 186.0
+margin_top = -8.0
+margin_right = 336.0
+margin_bottom = 47.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Start game"
+flat = false
+align = 1
+_sections_unfolded = [ "Visibility" ]
+
+[node name="HSeparator" type="HSeparator" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 133.0
-margin_top = 55.0
-margin_right = 182.0
-margin_bottom = 75.0
+margin_left = 10.0
+margin_top = 61.0
+margin_right = 408.0
+margin_bottom = 65.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="Client" type="Button" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 10.0
+margin_top = 76.0
+margin_right = 175.0
+margin_bottom = 133.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -66,23 +110,44 @@ text = "Client"
 flat = false
 align = 1
 
-[node name="Username" type="TextEdit" parent="." index="2"]
+[node name="IPLabel" type="Label" parent="." index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 8.0
-margin_top = 180.0
-margin_right = 187.0
-margin_bottom = 200.0
+margin_left = 189.0
+margin_top = 85.0
+margin_right = 214.0
+margin_bottom = 101.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "IP:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Visibility" ]
+
+[node name="IP" type="TextEdit" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 186.0
+margin_top = 106.0
+margin_right = 288.0
+margin_bottom = 124.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-text = ""
+text = "127.0.0.1"
 readonly = false
 highlight_current_line = false
 syntax_highlighting = false
@@ -99,16 +164,32 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="Singleplayer" type="Button" parent="." index="3"]
+[node name="HSeparator2" type="HSeparator" parent="." index="6"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 5.0
-margin_top = 94.0
-margin_right = 94.0
-margin_bottom = 114.0
+margin_left = 13.0
+margin_top = 154.0
+margin_right = 411.0
+margin_bottom = 158.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="Singleplayer" type="Button" parent="." index="7"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 12.0
+margin_top = 174.0
+margin_right = 171.0
+margin_bottom = 237.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -123,16 +204,85 @@ text = "Singleplayer"
 flat = false
 align = 1
 
-[node name="HeroSelect" type="OptionButton" parent="." index="4"]
+[node name="VSeparator" type="VSeparator" parent="." index="8"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 5.0
-margin_top = 142.0
-margin_right = 193.0
-margin_bottom = 162.0
+margin_left = 431.0
+margin_top = -3.0
+margin_right = 435.0
+margin_bottom = 110.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="Label" type="Label" parent="." index="9"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 459.0
+margin_top = -6.0
+margin_right = 564.0
+margin_bottom = 13.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Player Settings"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Username" type="TextEdit" parent="." index="10"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 457.0
+margin_top = 27.0
+margin_right = 636.0
+margin_bottom = 47.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "Nickname"
+readonly = false
+highlight_current_line = false
+syntax_highlighting = false
+show_line_numbers = false
+highlight_all_occurrences = false
+override_selected_font_color = false
+context_menu_enabled = true
+smooth_scrolling = false
+v_scroll_speed = 80.0
+hiding_enabled = 0
+wrap_lines = false
+caret_block_mode = false
+caret_blink = false
+caret_blink_speed = 0.65
+caret_moving_by_right_click = true
+
+[node name="HeroSelect" type="OptionButton" parent="." index="11"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 457.0
+margin_top = 67.0
+margin_right = 645.0
+margin_bottom = 87.0
 rect_rotation = -0.0115615
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
@@ -150,64 +300,5 @@ align = 0
 selected = -1
 items = [  ]
 script = ExtResource( 2 )
-
-[node name="TextEdit" type="TextEdit" parent="." index="5"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 7.0
-margin_top = 55.0
-margin_right = 118.0
-margin_bottom = 75.0
-rect_pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-text = "IP"
-readonly = false
-highlight_current_line = false
-syntax_highlighting = false
-show_line_numbers = false
-highlight_all_occurrences = false
-override_selected_font_color = false
-context_menu_enabled = true
-smooth_scrolling = false
-v_scroll_speed = 80.0
-hiding_enabled = 0
-wrap_lines = false
-caret_block_mode = false
-caret_blink = false
-caret_blink_speed = 0.65
-caret_moving_by_right_click = true
-
-[node name="ServerStart" type="Button" parent="." index="6"]
-
-visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 72.0
-margin_top = 12.0
-margin_right = 152.0
-margin_bottom = 32.0
-rect_pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Start game"
-flat = false
-align = 1
-_sections_unfolded = [ "Visibility" ]
 
 
