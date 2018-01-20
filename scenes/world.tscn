@@ -31,7 +31,7 @@ radial_segments = 64
 rings = 32
 is_hemisphere = false
 
-[node name="world" type="Spatial" index="0"]
+[node name="world" type="Spatial"]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="0"]
 
@@ -161,7 +161,9 @@ constant_angular_velocity = Vector3( 0, 0, 0 )
 shape = SubResource( 1 )
 disabled = false
 
-[node name="Objective" type="RigidBody" parent="." index="7"]
+[node name="Objective" type="RigidBody" parent="." index="7" groups=[
+"objective",
+]]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -91.3336, 3.19767, 4.06596 )
 input_ray_pickable = true
@@ -175,8 +177,8 @@ bounce = 0.0
 gravity_scale = 1.0
 custom_integrator = false
 continuous_cd = false
-contacts_reported = 0
-contact_monitor = false
+contacts_reported = 8
+contact_monitor = true
 sleeping = false
 can_sleep = true
 axis_lock_linear_x = true
@@ -190,7 +192,7 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 3 )
-_sections_unfolded = [ "Axis Lock", "Linear", "Transform" ]
+_sections_unfolded = [ "Axis Lock", "Collision", "Linear", "Transform", "Visibility" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Objective" index="0"]
 
@@ -231,7 +233,7 @@ custom_integrator = false
 continuous_cd = false
 contacts_reported = 0
 contact_monitor = false
-sleeping = false
+sleeping = true
 can_sleep = true
 axis_lock_linear_x = false
 axis_lock_linear_y = false

@@ -21,6 +21,7 @@ var timer = 0
 var walk_speed = 3
 var jump_speed = 15
 
+var weight = 500
 var health = 100
 var stamina = 10000
 var ray_length = 10
@@ -107,8 +108,18 @@ func control_player(delta):
 		velocity.z *= friction
 		velocity.y += gravity
 		velocity += direction * air_accel
+	
+	# Just for testing TODO
+	if Input.is_action_pressed("jump"):
+		velocity.y += jump_speed * 0.1
 
 	move_and_slide(velocity, Vector3(0, 1, 0))
+	
+	for i in range(get_slide_count()):
+		var collision = get_slide_collision(i)
+		if collision.collider.is_in_group("objective"):
+			collision.collider.apply_impulse(Vector3(-5,0,-5), Vector3(0, -weight, 0))
+			print("collided with the objective!")
 
 func _exit_scene():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
