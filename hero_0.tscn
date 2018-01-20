@@ -20,7 +20,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="KinematicBody"]
+[node name="RigidBody" type="KinematicBody" index="0"]
 
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -73,7 +73,7 @@ h_offset = 0.0
 v_offset = 0.0
 doppler_tracking = 0
 projection = 0
-current = true
+current = false
 fov = 70.0
 size = 1.0
 near = 0.05

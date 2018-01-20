@@ -39,6 +39,7 @@ directional_shadow_max_distance = 200.0
 [node name="players" type="Spatial" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4634, 0 )
+_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="." index="2"]
 
