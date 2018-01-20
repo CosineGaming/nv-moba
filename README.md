@@ -41,3 +41,21 @@ Key concepts:
   - A rethinking of racing games
   - High skill cap, low skill floor
   - Forgiving gameplay
+
+Running
+=======
+
+First, install [godot engine 3.0-rc1](https://godotengine.org/article/dev-snapshot-godot-3-0-rc-1). Then:
+
+    $ git clone https://github.com/CosineGaming/nv-moba && cd nv-moba
+    $ godot
+
+Contributing
+============
+
+I'd love to have contributions!
+
+Please open an issue first. As games are a creative project, I reserve the right to control the direction of the project.
+
+Also, I need a name!!!
+
