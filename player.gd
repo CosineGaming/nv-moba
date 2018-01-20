@@ -11,8 +11,9 @@ var pitch = 0
 const air_accel = 0.02
 
 var gravity = -1
-var tf = Basis()
 var velocity = Vector3()
+slave var slave_tf = Basis()
+slave var slave_vel = Vector3()
 
 var timer = 0
 
@@ -63,11 +64,11 @@ func _input(event):
 func _physics_process(delta):
 	if is_network_master():
 		control_player(delta)
-		rset_unreliable("tf", get_transform())
-		rset_unreliable("velocity", velocity)
+		rset_unreliable("slave_tf", get_transform())
+		rset_unreliable("slave_vel", velocity)
 	else:
-		set_transform(tf)
-		move_and_slide(velocity)
+		set_transform(slave_tf)
+		move_and_slide(slave_vel)
 
 func control_player(delta):
 

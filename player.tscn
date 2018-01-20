@@ -20,7 +20,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="KinematicBody"]
+[node name="RigidBody" type="KinematicBody" index="0"]
 
 input_ray_pickable = true
 input_capture_on_drag = false
