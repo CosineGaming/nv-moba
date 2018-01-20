@@ -1,4 +1,4 @@
-extends "res://player.gd"
+extends "res://scripts/player.gd"
 
 const wallride_speed = 0.5
 const wallride_speed_necessary = 15

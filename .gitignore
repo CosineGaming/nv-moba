@@ -3,6 +3,8 @@
 *.swo
 .fscache
 .import
+*.import
+*.blend1
 
 ._*
 ehthumbs.db

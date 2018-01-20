@@ -18,7 +18,7 @@ func _ready():
 	get_node("ServerStart").connect("pressed", self, "start_game")
 	get_node("Client").connect("pressed", self, "_client_init")
 	get_node("Singleplayer").connect("pressed", self, "_singleplayer_init")
-	
+
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 
@@ -28,7 +28,7 @@ func _client_init():
 	peer.create_client(SERVER_IP, SERVER_PORT)
 	get_tree().set_network_peer(peer)
 	get_node("Client").set_text("Clienting!")
-	
+
 func _singleplayer_init():
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
@@ -79,19 +79,19 @@ remote func done_preconfiguring(who):
 
 remote func pre_configure_game():
 	var self_peer_id = get_tree().get_network_unique_id()
-	
+
 	get_node("/root/Control").queue_free()
-	var world = load("res://world.tscn").instance()
+	var world = load("res://scenes/world.tscn").instance()
 	get_node("/root").add_child(world)
-	
+
 	# Load all players (including self)
 	for p in player_info:
 		var hero = player_info[p].hero
-		var player = load("res://hero_" + str(hero) + ".tscn").instance()
+		var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
 		player.set_name(str(p))
 		player.set_network_master(p)
 		get_node("/root/world/players").call_deferred("add_child", player)
-	
+
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 
 #func _process(delta):
