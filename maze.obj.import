@@ -9,10 +9,10 @@ path="res://.import/maze.obj-c0bc716dc2eec47dec52eafdca72e5fb.mesh"
 files=[ "res://.import/maze.obj-c0bc716dc2eec47dec52eafdca72e5fb.mesh" ]
 
 source_file="res://maze.obj"
-source_md5="b00ca930ed2cb8c33ecb33f5b9130086"
+source_md5="ddfc0e190f5bf69c7973c00c0ca8efc0"
 
 dest_files=[ "res://.import/maze.obj-c0bc716dc2eec47dec52eafdca72e5fb.mesh", "res://.import/maze.obj-c0bc716dc2eec47dec52eafdca72e5fb.mesh" ]
-dest_md5="3a830ffdaee87ef97f291de834671134"
+dest_md5="215d956c276d47023447d0730fbed508"
 
 [params]
 
