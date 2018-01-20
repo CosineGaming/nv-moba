@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://lobby.gd" type="Script" id=1]
+[ext_resource path="res://hero_select.gd" type="Script" id=2]
 
-[node name="Control" type="Control" index="0"]
+[node name="Control" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -23,9 +24,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 6.0
-margin_right = 52.0
-margin_bottom = 26.0
+margin_left = 4.0
+margin_top = 12.0
+margin_right = 56.0
+margin_bottom = 32.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -46,10 +48,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 1.0
-margin_top = 44.0
-margin_right = 50.0
-margin_bottom = 64.0
+margin_left = 5.0
+margin_top = 45.0
+margin_right = 54.0
+margin_bottom = 65.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -70,10 +72,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 3.0
-margin_top = 88.0
-margin_right = 182.0
-margin_bottom = 108.0
+margin_left = 6.0
+margin_top = 87.0
+margin_right = 185.0
+margin_bottom = 107.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -120,5 +122,33 @@ group = null
 text = "Singleplayer"
 flat = false
 align = 1
+
+[node name="HeroSelect" type="OptionButton" parent="." index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 238.0
+margin_top = 9.0
+margin_right = 426.0
+margin_bottom = 29.0
+rect_rotation = -0.0115615
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 0
+selected = -1
+items = [  ]
+script = ExtResource( 2 )
 
 

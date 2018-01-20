@@ -22,14 +22,14 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 
 func _client_init():
-	my_info.username = get_node("Username").get_text()
+	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_client(SERVER_IP, SERVER_PORT)
 	get_tree().set_network_peer(peer)
 	get_node("Client").set_text("Clienting!")
 	
 func _singleplayer_init():
-	my_info.username = get_node("Username").get_text()
+	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(SERVER_PORT, 1)
 	get_tree().set_network_peer(peer)
@@ -37,6 +37,7 @@ func _singleplayer_init():
 	pre_configure_game()
 
 func _server_init():
+	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
@@ -49,6 +50,10 @@ func _player_connected(id):
 
 func _connected_ok():
 	rpc("register_player", get_tree().get_network_unique_id(), my_info)
+
+func collect_info():
+	my_info.username = get_node("Username").get_text()
+	my_info.hero = get_node("HeroSelect").get_selected_id()
 
 remote func register_player(id, info):
 	player_info[id] = info
@@ -77,10 +82,11 @@ remote func pre_configure_game():
 	
 	# Load all players (including self)
 	for p in player_info:
-		var player = preload("res://player.tscn").instance()
+		var hero = player_info[p].hero
+		var player = load("res://hero_" + str(hero) + ".tscn").instance()
 		player.set_name(str(p))
 		player.set_network_master(p)
-		get_node("/root/world/players").add_child(player)
+		get_node("/root/world/players").call_deferred("add_child", player)
 	
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 
