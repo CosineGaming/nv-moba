@@ -2,7 +2,7 @@ extends "res://scripts/player.gd"
 
 const wallride_speed = 0
 const wallride_speed_necessary = 15
-const wallride_leap_height = 10
+const wallride_leap_height = 20
 const wallride_leap_side = 10
 
 var since_on_wall = 0
