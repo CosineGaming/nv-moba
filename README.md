@@ -19,6 +19,7 @@ Ideas for characters:
 - More active
   - Blink (Tracer) - no cooldown, but loses all speed on hitting walls
   - Heavy guy - Slow, but very heavy for the see-saw
+  - Flying, of course
 - More supportive
   - Merge - combines with someone to boost their speed
   - Boost - Area of effect or zarya-like cast, speeds people up
