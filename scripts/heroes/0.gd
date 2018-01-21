@@ -9,22 +9,32 @@ var since_on_wall = 0
 var last_wall_normal = Vector3()
 var wallride_forgiveness = .150
 
-func control_player(delta):
-	wallride(delta)
-	.control_player(delta)
+func control_player(state):
+	.control_player(state)
+	wallride(state)
 
-func wallride(delta):
+func wallride(state):
+
+	var ray = get_node("Ray")
+	var vel = get_linear_velocity()
+
 	# If our feet aren't touching, but we are colliding, we are wall-riding
-	if is_on_wall() and not is_on_floor() and velocity.length() > wallride_speed_necessary:
+	if !ray.is_colliding() and get_colliding_bodies() and vel.length() > wallride_speed_necessary:
 		since_on_wall = 0
-		last_wall_normal = get_slide_collision(0).normal
+		last_wall_normal = state.get_contact_local_normal()
 	else:
 		since_on_wall += delta
+
 	if since_on_wall < wallride_forgiveness:
 		var aim = get_node("Yaw").get_global_transform().basis
 		# Add zero gravity
-		velocity.y = -gravity # So it's undone in super
+		set_gravity_scale(0)
 		# Allow jumping (for wall hopping!)
 		if Input.is_action_just_pressed("jump"):
-			velocity.y += wallride_leap_height
-			velocity += wallride_leap_side * last_wall_normal
+			var jump_impulse = -wallride_leap_side * last_wall_normal
+			jump_impulse.y += wallride_leap_height
+			state.apply_impulse(Vector3(), jump_impulse)
+	else:
+		# We need to return to falling (we aren't riding anymore)
+		set_gravity_scale(1)
+

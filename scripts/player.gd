@@ -2,16 +2,11 @@
 # This source code form is governed by the MIT license.
 # Original: https://raw.githubusercontent.com/Calinou/fps-test/master/scripts/player.gd
 
-extends KinematicBody
+extends RigidBody
 
 var view_sensitivity = 0.25
 var yaw = 0
 var pitch = 0
-
-var gravity = -.8
-var velocity = Vector3()
-slave var slave_tf = Basis()
-slave var slave_vel = Vector3()
 
 var timer = 0
 
@@ -26,6 +21,9 @@ var ray_length = 10
 
 var debug_node
 
+slave var slave_transform = Basis()
+slave var slave_lin_v = Vector3()
+slave var slave_ang_v = Vector3()
 
 func _ready():
 	set_process_input(true)
@@ -61,16 +59,21 @@ func _input(event):
 			quit()
 
 
-func _physics_process(delta):
-	if is_network_master():
-		control_player(delta)
-		rset_unreliable("slave_tf", get_transform())
-		rset_unreliable("slave_vel", velocity)
-	else:
-		set_transform(slave_tf)
-		move_and_slide(slave_vel)
+master func _integrate_forces(state):
+	control_player(state)
+	rpc_unreliable("set_status", get_transform(), get_linear_velocity(), get_angular_velocity())
 
-func control_player(delta):
+slave func set_status(tf, lv, av):
+	set_transform(tf)
+	set_linear_velocity(lv)
+	set_angular_velocity(av)
+
+func control_player(state):
+	
+	# Default walk speed:
+	walk_speed = 5
+	# Default jump height:
+	jump_speed = 3
 
 	var aim = get_node("Yaw").get_global_transform().basis
 
@@ -86,30 +89,57 @@ func control_player(delta):
 		direction += aim[0]
 
 	direction = direction.normalized()
+	var ray = get_node("Ray")
+	
+	#print("---")
 
-	var friction
+	if ray.is_colliding():
+		var up = state.get_total_gravity().normalized()
+		var normal = ray.get_collision_normal()
+		var floor_velocity = Vector3()
+		var object = ray.get_collider()
 
-	if is_on_floor():
+		if object is RigidBody or object is StaticBody:
+			var point = ray.get_collision_point() - object.get_translation()
+			var floor_angular_vel = Vector3()
+			if object is RigidBody:
+				floor_velocity = object.get_linear_velocity()
+				floor_angular_vel = object.get_angular_velocity()
+			elif object is StaticBody:
+				floor_velocity = object.get_constant_linear_velocity()
+				floor_angular_vel = object.get_constant_angular_velocity()
+			# Surely there should be a function to convert Euler angles to a 3x3 matrix
+			var tf = Basis(Vector3(1, 0, 0), floor_angular_vel.x)
+			tf = tf.rotated(Vector3(0, 1, 0), floor_angular_vel.y)
+			tf = tf.rotated(Vector3(0, 0, 1), floor_angular_vel.z)
+			floor_velocity += tf.xform_inv(point) - point
+			yaw = fmod(yaw + rad2deg(floor_angular_vel.y) * state.get_step(), 360)
+			get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
+			print("isRB||isSB")
 
-		friction = 1 - 0.16
-		velocity.x *= friction
-		velocity.z *= friction
-		velocity.y = 0
-		velocity += direction * walk_speed
+		var diff = floor_velocity + direction * walk_speed - state.get_linear_velocity()
+		var vertdiff = aim[1] * diff.dot(aim[1])
+		print("VD: " + str(vertdiff))
+		diff -= vertdiff
+		diff = diff.normalized() * clamp(diff.length(), 0, max_accel / state.get_step())
+		diff += vertdiff
+
+		print("D: " + str(diff))
+		apply_impulse(Vector3(), diff * get_mass())
 
 		if Input.is_action_pressed("jump"):
-			velocity.y += jump_speed
+			apply_impulse(Vector3(), normal * jump_speed * get_mass())
 
 	else:
-		friction = 1 - 0.01
-		velocity.x *= friction
-		velocity.z *= friction
-		velocity.y += gravity
-		velocity += direction * air_accel
+		apply_impulse(Vector3(), direction * air_accel * get_mass())
+	
+	print(get_translation())
+	print(state.get_linear_velocity())
 
-	debug_node.set_text("%8.f,%8.f,%8.f" % [velocity.x, velocity.y, velocity.z])
+	var vel = get_linear_velocity()
+	debug_node.set_text("%8.f,%8.f,%8.f" % [vel.x, vel.y, vel.z])
 
-	velocity = move_and_slide(velocity, Vector3(0, 1, 0))
+	state.integrate_forces()
 
 func _exit_scene():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
