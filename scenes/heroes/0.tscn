@@ -20,23 +20,25 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" index="0"]
+[node name="RigidBody" type="RigidBody" groups=[
+"player",
+]]
 
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
 collision_mask = 1
 mode = 2
-mass = 1.0
-friction = 0.0
+mass = 100.0
+friction = 1.0
 bounce = 0.0
 gravity_scale = 1.0
-custom_integrator = true
-continuous_cd = true
-contacts_reported = 8
+custom_integrator = false
+continuous_cd = false
+contacts_reported = 4
 contact_monitor = true
 sleeping = false
-can_sleep = false
+can_sleep = true
 axis_lock_linear_x = false
 axis_lock_linear_y = false
 axis_lock_linear_z = false

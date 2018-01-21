@@ -20,23 +20,25 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" index="0"]
+[node name="RigidBody" type="RigidBody" index="0" groups=[
+"player",
+]]
 
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
 collision_mask = 1
 mode = 2
-mass = 1.0
-friction = 0.0
+mass = 200.0
+friction = 1.0
 bounce = 0.0
 gravity_scale = 1.0
-custom_integrator = true
-continuous_cd = true
-contacts_reported = 8
-contact_monitor = true
+custom_integrator = false
+continuous_cd = false
+contacts_reported = 0
+contact_monitor = false
 sleeping = false
-can_sleep = false
+can_sleep = true
 axis_lock_linear_x = false
 axis_lock_linear_y = false
 axis_lock_linear_z = false
@@ -48,7 +50,7 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Pause", "Transform", "Visibility", "collision" ]
+_sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Transform", "Visibility", "collision" ]
 
 [node name="Body" type="CollisionShape" parent="." index="0"]
 

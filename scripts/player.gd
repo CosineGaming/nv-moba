@@ -11,13 +11,14 @@ var pitch = 0
 var timer = 0
 
 # Walking speed and jumping height are defined later.
-var walk_speed = 3
-var jump_speed = 15
-const air_accel = .5
+var walk_speed = 2
+var jump_speed = 3
+const air_accel = .6
+var floor_friction = 0.92
+var air_friction = 0.98
 
 var health = 100
 var stamina = 10000
-var ray_length = 10
 
 var debug_node
 
@@ -69,11 +70,6 @@ slave func set_status(tf, lv, av):
 	set_angular_velocity(av)
 
 func control_player(state):
-	
-	# Default walk speed:
-	walk_speed = 5
-	# Default jump height:
-	jump_speed = 3
 
 	var aim = get_node("Yaw").get_global_transform().basis
 
@@ -90,8 +86,6 @@ func control_player(state):
 
 	direction = direction.normalized()
 	var ray = get_node("Ray")
-	
-	#print("---")
 
 	if ray.is_colliding():
 		var up = state.get_total_gravity().normalized()
@@ -115,26 +109,25 @@ func control_player(state):
 			floor_velocity += tf.xform_inv(point) - point
 			yaw = fmod(yaw + rad2deg(floor_angular_vel.y) * state.get_step(), 360)
 			get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
-			print("isRB||isSB")
 
-		var diff = floor_velocity + direction * walk_speed - state.get_linear_velocity()
-		var vertdiff = aim[1] * diff.dot(aim[1])
-		print("VD: " + str(vertdiff))
-		diff -= vertdiff
-		diff = diff.normalized() * clamp(diff.length(), 0, max_accel / state.get_step())
-		diff += vertdiff
-
-		print("D: " + str(diff))
-		apply_impulse(Vector3(), diff * get_mass())
+		var diff = floor_velocity + direction * walk_speed
+		state.apply_impulse(Vector3(), diff * get_mass())
+		var lin_v = state.get_linear_velocity()
+		lin_v.x *= floor_friction
+		lin_v.z *= floor_friction
+		state.set_linear_velocity(lin_v)
 
 		if Input.is_action_pressed("jump"):
-			apply_impulse(Vector3(), normal * jump_speed * get_mass())
+			state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
 
 	else:
-		apply_impulse(Vector3(), direction * air_accel * get_mass())
-	
-	print(get_translation())
-	print(state.get_linear_velocity())
+		state.apply_impulse(Vector3(), direction * air_accel * get_mass())
+		var lin_v = state.get_linear_velocity()
+		lin_v.x *= air_friction
+		lin_v.z *= air_friction
+		state.set_linear_velocity(lin_v)
+
+	# print(state.get_linear_velocity())
 
 	var vel = get_linear_velocity()
 	debug_node.set_text("%8.f,%8.f,%8.f" % [vel.x, vel.y, vel.z])
