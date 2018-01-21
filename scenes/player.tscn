@@ -20,7 +20,9 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="KinematicBody" index="0"]
+[node name="RigidBody" type="KinematicBody" index="0" groups=[
+"player",
+]]
 
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -34,7 +36,7 @@ axis_lock_angular_y = false
 axis_lock_angular_z = false
 collision/safe_margin = 0.001
 script = ExtResource( 1 )
-_sections_unfolded = [ "Angular", "Collision", "Linear", "Transform", "Visibility" ]
+_sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Pause", "Transform", "Visibility", "collision" ]
 
 [node name="Body" type="CollisionShape" parent="." index="0"]
 
@@ -95,6 +97,8 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
+text = "+"
+align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1

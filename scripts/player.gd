@@ -8,9 +8,7 @@ var view_sensitivity = 0.25
 var yaw = 0
 var pitch = 0
 
-const air_accel = 0.02
-
-var gravity = -1
+var gravity = -.8
 var velocity = Vector3()
 slave var slave_tf = Basis()
 slave var slave_vel = Vector3()
@@ -20,10 +18,13 @@ var timer = 0
 # Walking speed and jumping height are defined later.
 var walk_speed = 3
 var jump_speed = 15
+const air_accel = .5
 
 var health = 100
 var stamina = 10000
 var ray_length = 10
+
+var debug_node
 
 
 func _ready():
@@ -32,21 +33,20 @@ func _ready():
 	# Capture mouse once game is started:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-	#set_physics_process(true)
-	get_node("Crosshair").set_text("+")
-	
+	debug_node = get_node("/root/world/Debug")
+
 	if is_network_master():
 		get_node("Yaw/Camera").make_current()
 
 func _input(event):
 	if is_network_master():
-		
+
 		if event is InputEventMouseMotion:
 			yaw = fmod(yaw - event.relative.x * view_sensitivity, 360)
 			pitch = max(min(pitch - event.relative.y * view_sensitivity, 85), -85)
 			get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
 			get_node("Yaw/Camera").set_rotation(Vector3(deg2rad(pitch), 0, 0))
-	
+
 		# Toggle mouse capture:
 		if Input.is_action_pressed("toggle_mouse_capture"):
 			if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
@@ -55,7 +55,7 @@ func _input(event):
 			else:
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 				view_sensitivity = 0.25
-	
+
 		# Quit the game:
 		if Input.is_action_pressed("quit"):
 			quit()
@@ -86,8 +86,7 @@ func control_player(delta):
 		direction += aim[0]
 
 	direction = direction.normalized()
-	var ray = get_node("Ray")
-	
+
 	var friction
 
 	if is_on_floor():
@@ -108,7 +107,9 @@ func control_player(delta):
 		velocity.y += gravity
 		velocity += direction * air_accel
 
-	move_and_slide(velocity, Vector3(0, 1, 0))
+	debug_node.set_text("%8.f,%8.f,%8.f" % [velocity.x, velocity.y, velocity.z])
+
+	velocity = move_and_slide(velocity, Vector3(0, 1, 0))
 
 func _exit_scene():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
