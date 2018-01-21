@@ -20,7 +20,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" index="0" groups=[
+[node name="RigidBody" type="RigidBody" groups=[
 "player",
 ]]
 
@@ -77,9 +77,9 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Yaw" type="Spatial" parent="." index="3"]
 
-_sections_unfolded = [ "Transform", "Visibility" ]
+[node name="Pitch" type="Spatial" parent="Yaw" index="0"]
 
-[node name="Camera" type="Camera" parent="Yaw" index="0"]
+[node name="Camera" type="Camera" parent="Yaw/Pitch" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
 keep_aspect = 0

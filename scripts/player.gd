@@ -35,7 +35,7 @@ func _ready():
 	debug_node = get_node("/root/world/Debug")
 
 	if is_network_master():
-		get_node("Yaw/Camera").make_current()
+		get_node("Yaw/Pitch/Camera").make_current()
 
 func _input(event):
 	if is_network_master():
@@ -44,7 +44,7 @@ func _input(event):
 			yaw = fmod(yaw - event.relative.x * view_sensitivity, 360)
 			pitch = max(min(pitch - event.relative.y * view_sensitivity, 85), -85)
 			get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
-			get_node("Yaw/Camera").set_rotation(Vector3(deg2rad(pitch), 0, 0))
+			get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(pitch), 0, 0))
 
 		# Toggle mouse capture:
 		if Input.is_action_pressed("toggle_mouse_capture"):
@@ -127,10 +127,7 @@ func control_player(state):
 		lin_v.z *= air_friction
 		state.set_linear_velocity(lin_v)
 
-	# print(state.get_linear_velocity())
-
 	var vel = get_linear_velocity()
-	debug_node.set_text("%8.f,%8.f,%8.f" % [vel.x, vel.y, vel.z])
 
 	state.integrate_forces()
 

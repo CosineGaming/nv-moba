@@ -3,7 +3,7 @@
 [ext_resource path="res://scripts/lobby.gd" type="Script" id=1]
 [ext_resource path="res://scripts/hero_select.gd" type="Script" id=2]
 
-[node name="Control" type="Control" index="0"]
+[node name="Control" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -273,16 +273,36 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="HeroSelect" type="OptionButton" parent="." index="11"]
+[node name="HeroSelectLabel" type="Label" parent="." index="11"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 460.0
+margin_top = 66.0
+margin_right = 538.0
+margin_bottom = 80.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Hero Select:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="HeroSelect" type="OptionButton" parent="." index="12"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 457.0
-margin_top = 67.0
+margin_top = 94.0
 margin_right = 645.0
-margin_bottom = 87.0
+margin_bottom = 114.0
 rect_rotation = -0.0115615
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
