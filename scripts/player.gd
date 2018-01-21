@@ -20,7 +20,7 @@ var walk_speed = 3
 var jump_speed = 15
 const air_accel = .5
 
-var weight = 1
+var weight = .1
 var health = 100
 var stamina = 10000
 var ray_length = 10
@@ -119,6 +119,9 @@ func control_player(delta):
 	for i in range(get_slide_count()):
 		var collision = get_slide_collision(i)
 		if collision.collider.is_in_group("objective"):
+
+			var rel_pos = collision.position - collision.collider.get_translation()
+			debug_node.set_text("%8.f,%8.f,%8.f" % [rel_pos.x, rel_pos.y, rel_pos.z])
 			collision.collider.apply_impulse(collision.position, Vector3(0, -weight, 0))
 
 func _exit_scene():
