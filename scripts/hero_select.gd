@@ -1,5 +1,10 @@
 extends OptionButton
 
+const hero_names = [
+	"Wallriding mfer",
+	"WallMAKING mfer",
+]
+
 func _ready():
-	add_item("Wallriding mfer", 0)
-	add_item("WallMAKING mfer", 1)
+	for hero_index in range(hero_names.size()):
+		add_item(hero_names[hero_index], hero_index)

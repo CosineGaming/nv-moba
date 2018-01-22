@@ -59,6 +59,7 @@ func collect_info():
 
 remote func register_player(new_peer, info):
 	player_info[new_peer] = info
+	render_player_list()
 	if (get_tree().is_network_server()):
 		# Send current players' info to new player
 		for old_peer in player_info:
@@ -71,6 +72,15 @@ remote func register_player(new_peer, info):
 				rpc_id(old_peer, "register_player", new_peer, info)
 		if (player_info.size() == MAX_PLAYERS):
 			start_game()
+
+func render_player_list():
+	var list = ""
+	var hero_names = get_node("HeroSelect").hero_names
+	for p in player_info:
+		list += "%-12s" % player_info[p].username
+		list += "%-12s" % hero_names[player_info[p].hero]
+		list += "\n"
+	get_node("PlayerList").set_text(list)
 
 func start_game():
 	rpc("pre_configure_game")

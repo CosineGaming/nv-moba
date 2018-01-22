@@ -1,9 +1,22 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/lobby.gd" type="Script" id=1]
 [ext_resource path="res://scripts/hero_select.gd" type="Script" id=2]
 
-[node name="Control" type="Control"]
+[sub_resource type="DynamicFontData" id=2]
+
+font_path = "res://assets/DejaVuSansMono.ttf"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="DynamicFont" id=1]
+
+size = 16
+use_mipmaps = false
+use_filter = false
+font_data = SubResource( 2 )
+_sections_unfolded = [ "Font", "Resource", "Settings" ]
+
+[node name="Control" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -19,6 +32,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 1 )
+_sections_unfolded = [ "Anchor" ]
 
 [node name="Server" type="Button" parent="." index="0"]
 
@@ -320,5 +334,63 @@ align = 0
 selected = -1
 items = [  ]
 script = ExtResource( 2 )
+
+[node name="HSeparator3" type="HSeparator" parent="." index="13"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 19.0
+margin_top = 254.0
+margin_right = 645.0
+margin_bottom = 258.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="PlayerListLabel" type="Label" parent="." index="14"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 14.0
+margin_top = 270.0
+margin_right = 136.0
+margin_bottom = 284.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Connected Players:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="PlayerList" type="Label" parent="." index="15"]
+
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -7.0
+margin_top = 270.0
+margin_right = 639.0
+margin_bottom = 460.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 1 )
+text = "Waiting for players to connect...."
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "BBCode", "custom_fonts" ]
 
 
