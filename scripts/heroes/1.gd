@@ -21,7 +21,7 @@ func _process(delta):
 				is_placing_wall = true
 		if Input.is_action_just_pressed("hero_1_confirm_wall"):
 			finalize_wall(placing_wall_node)
-			rpc("place_wall", placing_wall_node.get_transform())
+			rpc("slave_place_wall", placing_wall_node.get_transform())
 			placing_wall_node = null
 			is_placing_wall = false
 
@@ -35,10 +35,9 @@ func _process(delta):
 			var up = -aim[2] # Wall should be horizontal to my view
 			placing_wall_node.look_at(towards, up)
 
-slave func place_wall(tf):
+slave func slave_place_wall(tf):
 	var wall = add_wall()
 	finalize_wall(wall, tf)
-	check_wall_count()
 
 # Creates wall, adds to world, and returns the node
 func add_wall():
