@@ -20,6 +20,8 @@ func _ready():
 
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
+	
+	get_node("HeroSelect").connect("item_selected", self, "select_hero")
 
 func _client_init():
 	collect_info()
@@ -72,6 +74,13 @@ remote func register_player(new_peer, info):
 				rpc_id(old_peer, "register_player", new_peer, info)
 		if (player_info.size() == MAX_PLAYERS):
 			start_game()
+
+func select_hero(hero):
+	rpc("set_hero", get_tree().get_network_unique_id(), hero)
+
+sync func set_hero(peer, hero):
+	player_info[peer].hero = hero
+	render_player_list()
 
 func render_player_list():
 	var list = ""
