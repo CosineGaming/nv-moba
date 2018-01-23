@@ -15,7 +15,7 @@ var air_friction = 0.98
 var player_info # Set by lobby
 
 var switch_charge = 0
-var movement_charge = 0.0015
+var movement_charge = 0.15 # In percent per meter (except when heroes change that)
 
 var debug_node
 
@@ -61,18 +61,21 @@ func _input(event):
 
 		# Toggle mouse capture:
 		if Input.is_action_pressed("toggle_mouse_capture"):
-			if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-				view_sensitivity = 0
-			else:
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-				view_sensitivity = 0.25
+			toggle_mouse_capture()
 
 		if Input.is_action_just_pressed("switch_hero"):
 			switch_hero_interface()
 		# Quit the game:
 		if Input.is_action_pressed("quit"):
 			quit()
+
+func toggle_mouse_capture():
+	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		view_sensitivity = 0
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		view_sensitivity = 0.25
 
 func set_rotation():
 	get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
@@ -140,16 +143,31 @@ func control_player(state):
 		lin_v.z *= air_friction
 		state.set_linear_velocity(lin_v)
 
-	var vel = get_linear_velocity()
-	switch_charge += movement_charge * vel.length()
-	get_node("MasterOnly/SwitchCharge").set_text("%.f%%" % switch_charge)
-
 	state.integrate_forces()
 
+func _process(delta):
+	# All player code not caused by input, and not causing movement
+	var vel = get_linear_velocity()
+	switch_charge += movement_charge * vel.length() * delta
+	var switch_node = get_node("MasterOnly/SwitchCharge")
+	switch_node.set_text("%.f%%" % switch_charge)
+	if switch_charge >= 100:
+		switch_node.set_text("100%\nQ - Switch hero")
+
 func switch_hero_interface():
-	# TODO: Make a real interface
-	player_info.hero += 1
-	rpc("switch_hero", player_info.hero)
+	# Interface needs the mouse!
+	toggle_mouse_capture()
+	# Pause so if we have walls and such nothing funny happens
+	get_tree().set_pause(true)
+	var interface = preload("res://scenes/HeroSelect.tscn").instance()
+	add_child(interface)
+	interface.get_node("Confirm").connect("pressed", self, "switch_hero_master")
+
+func switch_hero_master():
+	rpc("switch_hero", get_node("HeroSelect/Hero").get_selected_id())
+	# Remove the mouse and enable looking again
+	toggle_mouse_capture()
+	get_tree().set_pause(false)
 
 sync func switch_hero(hero):
 	var new_hero = load("res://scenes/heroes/%d.tscn" % hero).instance()
