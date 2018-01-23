@@ -14,8 +14,8 @@ var floor_friction = 0.92
 var air_friction = 0.98
 var player_info # Set by lobby
 
-var health = 100
-var stamina = 10000
+var switch_charge = 0
+var movement_charge = 0.0015
 
 var debug_node
 
@@ -34,6 +34,8 @@ func _ready():
 	if is_network_master():
 		get_node("Yaw/Pitch/Camera").make_current()
 		spawn()
+	else:
+		remove_child(get_node("MasterOnly"))
 
 func spawn():
 	var placement = Vector3()
@@ -55,8 +57,7 @@ func _input(event):
 		if event is InputEventMouseMotion:
 			yaw = fmod(yaw - event.relative.x * view_sensitivity, 360)
 			pitch = max(min(pitch - event.relative.y * view_sensitivity, 85), -85)
-			get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
-			get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(pitch), 0, 0))
+			set_rotation()
 
 		# Toggle mouse capture:
 		if Input.is_action_pressed("toggle_mouse_capture"):
@@ -67,19 +68,37 @@ func _input(event):
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 				view_sensitivity = 0.25
 
+		if Input.is_action_just_pressed("switch_hero"):
+			switch_hero_interface()
 		# Quit the game:
 		if Input.is_action_pressed("quit"):
 			quit()
 
+func set_rotation():
+	get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
+	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(pitch), 0, 0))
 
-master func _integrate_forces(state):
-	control_player(state)
-	rpc_unreliable("set_status", get_transform(), get_linear_velocity(), get_angular_velocity())
+func _integrate_forces(state):
+	if is_network_master():
+		control_player(state)
+		rpc_unreliable("set_status", get_status())
 
-slave func set_status(tf, lv, av):
-	set_transform(tf)
-	set_linear_velocity(lv)
-	set_angular_velocity(av)
+slave func set_status(s):
+	set_transform(s[0])
+	set_linear_velocity(s[1])
+	set_angular_velocity(s[2])
+	yaw = s[3]
+	pitch = s[4]
+	set_rotation() # Confirm yaw + pitch changes
+
+func get_status():
+	return [
+		get_transform(),
+		get_linear_velocity(),
+		get_angular_velocity(),
+		yaw,
+		pitch,
+	]
 
 func control_player(state):
 
@@ -122,8 +141,27 @@ func control_player(state):
 		state.set_linear_velocity(lin_v)
 
 	var vel = get_linear_velocity()
+	switch_charge += movement_charge * vel.length()
+	get_node("MasterOnly/SwitchCharge").set_text("%.f%%" % switch_charge)
 
 	state.integrate_forces()
+
+func switch_hero_interface():
+	# TODO: Make a real interface
+	player_info.hero += 1
+	rpc("switch_hero", player_info.hero)
+
+sync func switch_hero(hero):
+	var new_hero = load("res://scenes/heroes/%d.tscn" % hero).instance()
+	var net_id = get_tree().get_network_unique_id()
+	set_name("%d-delete" % net_id) # Can't have duplicate names
+	new_hero.set_name("%d" % net_id)
+	new_hero.set_network_master(net_id)
+	new_hero.player_info = player_info
+	get_node("/root/world/players").call_deferred("add_child", new_hero)
+	# We must wait until after _ready is called, so that we don't end up at spawn
+	new_hero.call_deferred("set_status", get_status())
+	queue_free()
 
 func _exit_scene():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
