@@ -137,6 +137,7 @@ remote func pre_configure_game():
 		var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
 		player.set_name(str(p))
 		player.set_network_master(p)
+		player.player_info = player_info[p]
 		get_node("/root/world/players").call_deferred("add_child", player)
 
 	rpc_id(1, "done_preconfiguring", self_peer_id)

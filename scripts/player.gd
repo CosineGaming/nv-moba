@@ -6,14 +6,13 @@ var view_sensitivity = 0.25
 var yaw = 0
 var pitch = 0
 
-var timer = 0
-
 # Walking speed and jumping height are defined later.
 var walk_speed = 2
 var jump_speed = 3
 const air_accel = .6
 var floor_friction = 0.92
 var air_friction = 0.98
+var player_info # Set by lobby
 
 var health = 100
 var stamina = 10000
@@ -34,6 +33,21 @@ func _ready():
 
 	if is_network_master():
 		get_node("Yaw/Pitch/Camera").make_current()
+		spawn()
+
+func spawn():
+	var placement = Vector3()
+	var x_varies = 10
+	var y_varies = 20
+	# No Z, because that's the left-right question
+	if player_info.is_right_team:
+		placement = get_node("/root/world/RightSpawn").get_translation()
+	else:
+		placement = get_node("/root/world/LeftSpawn").get_translation()
+	# So we don't all spawn on top of each other
+	placement.x += rand_range(0, x_varies)
+	placement.y += rand_range(0, y_varies)
+	set_translation(placement)
 
 func _input(event):
 	if is_network_master():
