@@ -335,7 +335,46 @@ selected = -1
 items = [  ]
 script = ExtResource( 2 )
 
-[node name="HSeparator3" type="HSeparator" parent="." index="13"]
+[node name="TeamLabel" type="Label" parent="." index="13"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 459.0
+margin_top = 132.0
+margin_right = 558.0
+margin_bottom = 146.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Assigned team:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Team" type="Label" parent="." index="14"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 460.0
+margin_top = 157.0
+margin_right = 500.0
+margin_bottom = 171.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="HSeparator3" type="HSeparator" parent="." index="15"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -351,7 +390,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="PlayerListLabel" type="Label" parent="." index="14"]
+[node name="PlayerListLabel" type="Label" parent="." index="16"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -371,7 +410,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="PlayerList" type="Label" parent="." index="15"]
+[node name="PlayerList" type="Label" parent="." index="17"]
 
 anchor_left = 0.5
 anchor_top = 0.5

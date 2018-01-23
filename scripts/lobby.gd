@@ -58,20 +58,29 @@ func _connected_ok():
 func collect_info():
 	my_info.username = get_node("Username").get_text()
 	my_info.hero = get_node("HeroSelect").get_selected_id()
+	my_info.is_right_team = false # Server assigns team, wait for that
 
 remote func register_player(new_peer, info):
 	player_info[new_peer] = info
 	render_player_list()
 	if (get_tree().is_network_server()):
+		var right_team_count = 0
 		# Send current players' info to new player
 		for old_peer in player_info:
 			# Send new player, old player's info
 			rpc_id(new_peer, "register_player", old_peer, player_info[old_peer])
-			# You'd think this part could be met with a simple `rpc(`, but actually it can't
-			# My best guess is this is because we haven't registered the names yet, but I'm not sure (TODO)
-			if old_peer != 1 and old_peer != new_peer:
-				# Send old player, new player's info (not us, no infinite loop)
-				rpc_id(old_peer, "register_player", new_peer, info)
+			if old_peer != new_peer:
+				# We need to assign team later, so count current
+				if player_info[old_peer].is_right_team:
+					print(right_team_count)
+					right_team_count += 1
+				# You'd think this part could be met with a simple `rpc(`, but actually it can't
+				# My best guess is this is because we haven't registered the names yet, but I'm not sure (TODO)
+				if old_peer != 1:
+					# Send old player, new player's info (not us, no infinite loop)
+					rpc_id(old_peer, "register_player", new_peer, info)
+		var assign_right_team = right_team_count * 2 <= player_info.size()
+		rpc("assign_team", new_peer, assign_right_team)
 		if (player_info.size() == MAX_PLAYERS):
 			start_game()
 
@@ -82,12 +91,25 @@ sync func set_hero(peer, hero):
 	player_info[peer].hero = hero
 	render_player_list()
 
+sync func assign_team(peer, is_right_team):
+	player_info[peer].is_right_team = is_right_team
+	if peer == get_tree().get_network_unique_id():
+		if is_right_team:
+			get_node("Team").set_text("Right Team")
+		else:
+			get_node("Team").set_text("Left Team")
+	render_player_list()
+
 func render_player_list():
 	var list = ""
 	var hero_names = get_node("HeroSelect").hero_names
 	for p in player_info:
-		list += "%-12s" % player_info[p].username
-		list += "%-12s" % hero_names[player_info[p].hero]
+		list += "%-15s" % player_info[p].username
+		list += "%-20s" % hero_names[player_info[p].hero]
+		if player_info[p].is_right_team:
+			list += "Right Team"
+		else:
+			list += "Left Team"
 		list += "\n"
 	get_node("PlayerList").set_text(list)
 
