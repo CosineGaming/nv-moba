@@ -5,6 +5,7 @@
 .import
 *.import
 *.blend1
+nohup.out
 
 ._*
 ehthumbs.db

@@ -99,7 +99,7 @@ disabled = false
 
 [node name="Ball" type="RigidBody" parent="." index="3"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -79.2541, 6.09969, 4.40885 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4344, 6.09969, 4.40885 )
 input_ray_pickable = true
 input_capture_on_drag = false
 collision_layer = 1
@@ -113,7 +113,7 @@ custom_integrator = false
 continuous_cd = false
 contacts_reported = 0
 contact_monitor = false
-sleeping = true
+sleeping = false
 can_sleep = true
 axis_lock_linear_x = false
 axis_lock_linear_y = false
