@@ -9,9 +9,9 @@ func _process(delta):
 			rpc("switch_gravity")
 			is_repelling = !is_repelling
 			if is_repelling:
-				get_node("RepellingHUD").set_text("/\\")
+				get_node("MasterOnly/RepellingHUD").set_text("/\\")
 			else:
-				get_node("RepellingHUD").set_text("\\/")
+				get_node("MasterOnly/RepellingHUD").set_text("\\/")
 
 sync func switch_gravity():
 	var area = get_node("Area")
