@@ -1,5 +1,3 @@
-# Copyright (c) 2015 Calinou
-# This source code form is governed by the MIT license.
 # Original: https://raw.githubusercontent.com/Calinou/fps-test/master/scripts/player.gd
 
 extends RigidBody
@@ -93,25 +91,7 @@ func control_player(state):
 		var floor_velocity = Vector3()
 		var object = ray.get_collider()
 
-		if object is RigidBody or object is StaticBody:
-			var point = ray.get_collision_point() - object.get_translation()
-			var floor_angular_vel = Vector3()
-			if object is RigidBody:
-				floor_velocity = object.get_linear_velocity()
-				floor_angular_vel = object.get_angular_velocity()
-			elif object is StaticBody:
-				floor_velocity = object.get_constant_linear_velocity()
-				floor_angular_vel = object.get_constant_angular_velocity()
-			# Surely there should be a function to convert Euler angles to a 3x3 matrix
-			var tf = Basis(Vector3(1, 0, 0), floor_angular_vel.x)
-			tf = tf.rotated(Vector3(0, 1, 0), floor_angular_vel.y)
-			tf = tf.rotated(Vector3(0, 0, 1), floor_angular_vel.z)
-			floor_velocity += tf.xform_inv(point) - point
-			yaw = fmod(yaw + rad2deg(floor_angular_vel.y) * state.get_step(), 360)
-			get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
-
-		var diff = floor_velocity + direction * walk_speed
-		state.apply_impulse(Vector3(), diff * get_mass())
+		state.apply_impulse(Vector3(), direction * walk_speed * get_mass())
 		var lin_v = state.get_linear_velocity()
 		lin_v.x *= floor_friction
 		lin_v.z *= floor_friction
