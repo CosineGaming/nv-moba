@@ -14,7 +14,14 @@ Side mechanics ideas:
 - After enough movement, player can switch characters (switching is a mechanic, not a meta-game! no one-tricks)
 - Speed up slowly over time. Reset on switch
 
-Ideas for characters:
+Current heroes:
+- Active:
+  - Wallriding mfer
+More offensive
+  - WallMAKING mfer
+  - An ATTRACTIVE mfer
+
+Ideas for Heroes:
 
 - More active
   - Blink (Tracer) - no cooldown, but loses all speed on hitting walls
@@ -26,6 +33,7 @@ Ideas for characters:
   - Flop - Changes side of see-saw for each team (should it be mechanic instead??)
   - Build - Build Zineth-like rails for anyone to use
   - Teleportation - (for others! or maybe including the enemy too!)
+  - Portal 2-like gels (bounce, speed, slow?)
 - More offensive
   - Lay walls
   - Lay traps
