@@ -79,7 +79,7 @@ remote func register_player(new_peer, info):
 				if old_peer != 1:
 					# Send old player, new player's info (not us, no infinite loop)
 					rpc_id(old_peer, "register_player", new_peer, info)
-		var assign_right_team = right_team_count * 2 <= player_info.size()
+		var assign_right_team = right_team_count * 2 < player_info.size()
 		rpc("assign_team", new_peer, assign_right_team)
 		if (player_info.size() == MAX_PLAYERS):
 			start_game()

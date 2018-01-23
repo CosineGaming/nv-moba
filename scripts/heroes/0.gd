@@ -8,6 +8,10 @@ var since_on_wall = 0
 var last_wall_normal = Vector3()
 var wallride_forgiveness = .150
 
+func _ready():
+	._ready()
+	walk_speed *= 1.5
+
 func control_player(state):
 	.control_player(state)
 	wallride(state)

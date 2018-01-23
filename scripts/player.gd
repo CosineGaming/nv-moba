@@ -7,7 +7,7 @@ var yaw = 0
 var pitch = 0
 
 # Walking speed and jumping height are defined later.
-var walk_speed = 2
+var walk_speed = 1
 var jump_speed = 3
 const air_accel = .6
 var floor_friction = 0.92
