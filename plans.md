@@ -1,9 +1,23 @@
-Big ideas:
+All TODO / design direction that's not in the README
+====================================================
+
+Big TODOs:
+
+- Keep implementing more heroes
+- Start making maps and figuring out what works / what you like
+- Make a real user interface
+- Voice chat
 
 Smaller TODOs:
-- Make see-saw not as buggy
-  - Do we need to return players to being rigidbodies? we probably do for that see-saw but i don't wanna :(
+
+- Allow non-playing server to keep running and connecting people
+
+Bugs:
+
+- HUDs for heroes show on all connected players' screens
+
+Landmarks:
 
 When you have a workable demo: @mention @turion@mastodon.art
 
-
+Design ideas too long for the README:

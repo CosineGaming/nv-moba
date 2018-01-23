@@ -5,19 +5,20 @@ A Nonviolent MOBA
 
 Main mechanics ideas:
 
-- Teams start side-by-side and must get to objective
-- Objective is a see-saw: have more mass on your side of point
+- [x] Teams start side-by-side and must get to objective
+- [x] Objective is a see-saw: have more mass on your side of point
 
 Side mechanics ideas:
 
-- Maze-like map
-- After enough movement, player can switch characters (switching is a mechanic, not a meta-game! no one-tricks)
-- Speed up slowly over time. Reset on switch
+- [ ] Maze-like map
+- [x] After enough movement, player can switch characters (switching is a mechanic, not a meta-game! no one-tricks)
+- [ ] Speed up slowly over time. Reset on switch
 
 Current heroes:
+
 - Active:
   - Wallriding mfer
-More offensive
+- Offensive:
   - WallMAKING mfer
   - An ATTRACTIVE mfer
 
