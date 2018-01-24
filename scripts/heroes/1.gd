@@ -19,11 +19,6 @@ func _process(delta):
 				# Make a floating placement wall
 				placing_wall_node = add_wall()
 				is_placing_wall = true
-		if Input.is_action_just_pressed("hero_1_confirm_wall"):
-			finalize_wall(placing_wall_node)
-			rpc("slave_place_wall", placing_wall_node.get_transform())
-			placing_wall_node = null
-			is_placing_wall = false
 
 		if is_placing_wall:
 			# Find the point we're looking at, and put the wall there
@@ -34,6 +29,12 @@ func _process(delta):
 			var towards = look_ray.get_collision_normal() + pos
 			var up = -aim[2] # Wall should be horizontal to my view
 			placing_wall_node.look_at(towards, up)
+
+			if Input.is_action_just_pressed("hero_1_confirm_wall"):
+				finalize_wall(placing_wall_node)
+				rpc("slave_place_wall", placing_wall_node.get_transform())
+				placing_wall_node = null
+				is_placing_wall = false
 
 slave func slave_place_wall(tf):
 	var wall = add_wall()

@@ -3,6 +3,7 @@ extends "res://scripts/player.gd"
 const wallride_speed_necessary = 2
 const wallride_leap_height = 14
 const wallride_leap_side = 8
+const wallride_leap_build = 0.01
 
 var since_on_wall = 0
 var last_wall_normal = Vector3()
@@ -47,8 +48,9 @@ func wallride(state):
 			apply_impulse(Vector3(), air_accel * aim[2] * get_mass())
 		# Allow jumping (for wall hopping!)
 		if Input.is_action_just_pressed("jump"):
-			var jump_impulse = wallride_leap_side * last_wall_normal
-			jump_impulse.y += wallride_leap_height
+			var build_factor = 1 + switch_charge * wallride_leap_build
+			var jump_impulse = build_factor * wallride_leap_side * last_wall_normal
+			jump_impulse.y += build_factor * wallride_leap_height
 			set_gravity_scale(1) # Jumping requires gravity
 			state.apply_impulse(Vector3(), jump_impulse * get_mass())
 	else:
