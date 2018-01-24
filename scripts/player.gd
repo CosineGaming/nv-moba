@@ -21,6 +21,8 @@ var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.15 # In percent per meter (except when heroes change that)
 
+const fall_height = -25
+
 var debug_node
 
 slave var slave_transform = Basis()
@@ -53,7 +55,9 @@ func spawn():
 	# So we don't all spawn on top of each other
 	placement.x += rand_range(0, x_varies)
 	placement.y += rand_range(0, y_varies)
+	set_transform(Basis())
 	set_translation(placement)
+	set_linear_velocity(Vector3())
 
 func _input(event):
 	if is_network_master():
@@ -163,6 +167,10 @@ func _process(delta):
 	if switch_charge > switch_charge_cap:
 		# There is however a cap
 		switch_charge = switch_charge_cap
+
+	if get_translation().y < fall_height:
+		spawn()
+		switch_hero_interface()
 
 func switch_hero_interface():
 	# Interface needs the mouse!
