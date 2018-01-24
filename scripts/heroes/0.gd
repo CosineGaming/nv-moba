@@ -10,7 +10,10 @@ var wallride_forgiveness = .150
 
 func _ready():
 	._ready()
-	walk_speed *= 1.5
+	walk_speed *= 1
+	air_accel *= 1.5
+	walk_speed_build *= 2
+	air_speed_build *= 3
 
 func control_player(state):
 	.control_player(state)

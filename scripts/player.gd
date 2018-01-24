@@ -7,14 +7,18 @@ var yaw = 0
 var pitch = 0
 
 # Walking speed and jumping height are defined later.
-var walk_speed = 1
-var jump_speed = 3
-const air_accel = .6
-var floor_friction = 0.92
-var air_friction = 0.98
+var walk_speed = 0.8 # Actually acceleration; m/s/s
+var jump_speed = 3 # m/s
+var air_accel = .3 # m/s/s
+var floor_friction = 1-0.08
+var air_friction = 1-0.03
 var player_info # Set by lobby
 
+var walk_speed_build = 0.006 # `walk_speed` per `switch_charge`
+var air_speed_build = 0.006 # `air_accel` per `switch_chare`
+
 var switch_charge = 0
+var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.15 # In percent per meter (except when heroes change that)
 
 var debug_node
@@ -127,7 +131,8 @@ func control_player(state):
 		var floor_velocity = Vector3()
 		var object = ray.get_collider()
 
-		state.apply_impulse(Vector3(), direction * walk_speed * get_mass())
+		var accel = (1 + switch_charge * walk_speed_build) * walk_speed
+		state.apply_impulse(Vector3(), direction * accel * get_mass())
 		var lin_v = state.get_linear_velocity()
 		lin_v.x *= floor_friction
 		lin_v.z *= floor_friction
@@ -137,7 +142,8 @@ func control_player(state):
 			state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
 
 	else:
-		state.apply_impulse(Vector3(), direction * air_accel * get_mass())
+		var accel = (1 + switch_charge * air_speed_build) * air_accel
+		state.apply_impulse(Vector3(), direction * accel * get_mass())
 		var lin_v = state.get_linear_velocity()
 		lin_v.x *= air_friction
 		lin_v.z *= air_friction
@@ -152,7 +158,11 @@ func _process(delta):
 	var switch_node = get_node("MasterOnly/SwitchCharge")
 	switch_node.set_text("%.f%%" % switch_charge)
 	if switch_charge >= 100:
-		switch_node.set_text("100%\nQ - Switch hero")
+		# Let switch_charge keep building, because we use it for walk_speed and things
+		switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+	if switch_charge > switch_charge_cap:
+		# There is however a cap
+		switch_charge = switch_charge_cap
 
 func switch_hero_interface():
 	# Interface needs the mouse!
