@@ -20,7 +20,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" groups=[
+[node name="RigidBody" type="RigidBody" index="0" groups=[
 "player",
 ]]
 
@@ -79,9 +79,11 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Pitch" type="Spatial" parent="Yaw" index="0"]
 
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
+_sections_unfolded = [ "Transform" ]
+
 [node name="Camera" type="Camera" parent="Yaw/Pitch" index="0"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
 keep_aspect = 0
 cull_mask = 1048575
 environment = null
@@ -98,7 +100,6 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Ray" type="RayCast" parent="Yaw/Pitch" index="1"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
 enabled = true
 exclude_parent = true
 cast_to = Vector3( 0, 0, -100 )
