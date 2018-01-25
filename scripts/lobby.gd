@@ -128,7 +128,7 @@ remote func pre_configure_game():
 	var self_peer_id = get_tree().get_network_unique_id()
 
 	get_node("/root/Control").queue_free()
-	var world = load("res://scenes/levels/1.tscn").instance()
+	var world = load("res://scenes/levels/0.tscn").instance()
 	get_node("/root").add_child(world)
 
 	# Load all players (including self)
@@ -138,7 +138,7 @@ remote func pre_configure_game():
 		player.set_name(str(p))
 		player.set_network_master(p)
 		player.player_info = player_info[p]
-		get_node("/root/world/players").call_deferred("add_child", player)
+		get_node("/root/Level/Players").call_deferred("add_child", player)
 
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 

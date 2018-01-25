@@ -35,7 +35,7 @@ func _ready():
 	# Capture mouse once game is started:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-	debug_node = get_node("/root/world/Debug")
+	debug_node = get_node("/root/Level/Debug")
 
 	if is_network_master():
 		get_node("Yaw/Pitch/Camera").make_current()
@@ -49,9 +49,9 @@ func spawn():
 	var y_varies = 20
 	# No Z, because that's the left-right question
 	if player_info.is_right_team:
-		placement = get_node("/root/world/RightSpawn").get_translation()
+		placement = get_node("/root/Level/RightSpawn").get_translation()
 	else:
-		placement = get_node("/root/world/LeftSpawn").get_translation()
+		placement = get_node("/root/Level/LeftSpawn").get_translation()
 	# So we don't all spawn on top of each other
 	placement.x += rand_range(0, x_varies)
 	placement.y += rand_range(0, y_varies)
@@ -194,7 +194,7 @@ sync func switch_hero(hero):
 	new_hero.set_name("%d" % net_id)
 	new_hero.set_network_master(net_id)
 	new_hero.player_info = player_info
-	get_node("/root/world/players").call_deferred("add_child", new_hero)
+	get_node("/root/Level/Players").call_deferred("add_child", new_hero)
 	# We must wait until after _ready is called, so that we don't end up at spawn
 	new_hero.call_deferred("set_status", get_status())
 	queue_free()

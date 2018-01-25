@@ -43,7 +43,7 @@ slave func slave_place_wall(tf):
 # Creates wall, adds to world, and returns the node
 func add_wall():
 	var wall = preload("res://scenes/wall.tscn").instance()
-	get_node("/root/world").add_child(wall)
+	get_node("/root/Level").add_child(wall)
 	return wall
 
 func finalize_wall(wall, tf=null):
