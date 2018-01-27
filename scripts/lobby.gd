@@ -37,7 +37,7 @@ func _singleplayer_init():
 	peer.create_server(SERVER_PORT, 1)
 	get_tree().set_network_peer(peer)
 	player_info[1] = my_info
-	pre_configure_game()
+	start_game()
 
 func _server_init():
 	collect_info()
@@ -114,9 +114,8 @@ func render_player_list():
 	get_node("PlayerList").set_text(list)
 
 func start_game():
-	rpc("pre_configure_game")
-	if SERVER_PLAYING:
-		pre_configure_game()
+	var level = get_node("ServerStart/LevelSelect").get_selected_id()
+	rpc("pre_configure_game", level)
 
 var players_done = []
 remote func done_preconfiguring(who):
@@ -124,11 +123,11 @@ remote func done_preconfiguring(who):
 	if (players_done.size() == player_info.size()):
 		rpc("post_configure_game")
 
-remote func pre_configure_game():
+sync func pre_configure_game(level):
 	var self_peer_id = get_tree().get_network_unique_id()
 
 	get_node("/root/Control").queue_free()
-	var world = load("res://scenes/levels/0.tscn").instance()
+	var world = load("res://scenes/levels/%d.tscn" % level).instance()
 	get_node("/root").add_child(world)
 
 	# Load all players (including self)
