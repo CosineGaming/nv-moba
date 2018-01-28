@@ -13,4 +13,8 @@ script = ExtResource( 2 )
 
 _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
 
+[node name="Crosshair" parent="MasterOnly" index="0"]
+
+text = ""
+
 
