@@ -21,7 +21,7 @@ var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.15 # In percent per meter (except when heroes change that)
 
-const fall_height = -25
+const fall_height = -50
 
 var debug_node
 
@@ -157,20 +157,21 @@ func control_player(state):
 
 func _process(delta):
 	# All player code not caused by input, and not causing movement
-	var vel = get_linear_velocity()
-	switch_charge += movement_charge * vel.length() * delta
-	var switch_node = get_node("MasterOnly/SwitchCharge")
-	switch_node.set_text("%.f%%" % switch_charge)
-	if switch_charge >= 100:
-		# Let switch_charge keep building, because we use it for walk_speed and things
-		switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
-	if switch_charge > switch_charge_cap:
-		# There is however a cap
-		switch_charge = switch_charge_cap
+	if is_network_master():
+		var vel = get_linear_velocity()
+		switch_charge += movement_charge * vel.length() * delta
+		var switch_node = get_node("MasterOnly/SwitchCharge")
+		switch_node.set_text("%.f%%" % switch_charge)
+		if switch_charge >= 100:
+			# Let switch_charge keep building, because we use it for walk_speed and things
+			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+		if switch_charge > switch_charge_cap:
+			# There is however a cap
+			switch_charge = switch_charge_cap
 
-	if get_translation().y < fall_height:
-		spawn()
-		switch_hero_interface()
+		if get_translation().y < fall_height:
+			spawn()
+			switch_hero_interface()
 
 func switch_hero_interface():
 	# Interface needs the mouse!
@@ -189,7 +190,7 @@ func switch_hero_master():
 
 sync func switch_hero(hero):
 	var new_hero = load("res://scenes/heroes/%d.tscn" % hero).instance()
-	var net_id = get_tree().get_network_unique_id()
+	var net_id = int(get_name())
 	set_name("%d-delete" % net_id) # Can't have duplicate names
 	new_hero.set_name("%d" % net_id)
 	new_hero.set_network_master(net_id)
