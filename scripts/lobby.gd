@@ -1,4 +1,4 @@
-extends Control
+extends "res://scripts/args.gd"
 
 # class member variables go here, for example:
 # var a = 2
@@ -10,7 +10,56 @@ var SERVER_PLAYING = true
 var player_info = {}
 var my_info = {}
 
+func setup_options():
+	var opts = Options.new()
+	opts.set_banner(('A non-violent MOBA inspired by Overwatch and Zineth'))
+	opts.add('-singleplayer', false, 'Whether to run singeplayer, starting immediately')
+	opts.add('-server', false, 'Whether to run as server')
+	opts.add('-client', false, 'Immediately connect as client')
+	opts.add('-silent-server', false, 'If the server is not playing, merely serving')
+	opts.add('-hero', 'r', 'Your choice of hero (index)')
+	opts.add('-level', 'r', 'Your choice of level (index) - server only!')
+	opts.add('-start-game', false, 'Join as a client and immediately start the game')
+	opts.add('-h', false, "Print help")
+	return opts
+
+func option_sel(button_name, option):
+	var button = get_node(button_name)
+	print("-->")
+	if option == "r":
+		option = randi() % button.get_item_count()
+		print(randi() % 3)
+	else:
+		option = int(option)
+	button.select(option)
+
 func _ready():
+
+	var o = setup_options()
+	o.parse()
+	
+	randomize()
+
+	if o.get_value("-silent-server"):
+		SERVER_PLAYING = false # TODO: Uncaps :(
+	if o.get_value("-hero"):
+		option_sel("HeroSelect", o.get_value("-hero"))
+		print(get_node("HeroSelect").get_selected_id())
+	if o.get_value("-level"):
+		option_sel("ServerStart/LevelSelect", o.get_value("-level"))
+	if o.get_value("-server"):
+		call_deferred("_server_init")
+	if o.get_value("-client"):
+		call_deferred("_client_init")
+	if o.get_value("-start-game"):
+		my_info.start_game = true
+		call_deferred("_client_init")
+	if o.get_value("-singleplayer"):
+		call_deferred("_singleplayer_init")
+	if o.get_value('-h'):
+		o.print_help()
+		quit()
+
 	# Called every time the node is added to the scene.
 	# Initialization here
 	get_node("Server").connect("pressed", self, "_server_init")
@@ -54,11 +103,16 @@ func _player_connected(id):
 
 func _connected_ok():
 	rpc("register_player", get_tree().get_network_unique_id(), my_info)
+	if "start_game" in my_info:
+		rpc_id(1, "start_game")
 
 func collect_info():
-	my_info.username = get_node("Username").get_text()
-	my_info.hero = get_node("HeroSelect").get_selected_id()
-	my_info.is_right_team = false # Server assigns team, wait for that
+	if not "username" in my_info:
+		my_info.username = get_node("Username").get_text()
+	if not "hero" in my_info:
+		my_info.hero = get_node("HeroSelect").get_selected_id()
+	if not "is_right_team" in my_info:
+		my_info.is_right_team = false # Server assigns team, wait for that
 
 remote func register_player(new_peer, info):
 	player_info[new_peer] = info
@@ -113,7 +167,7 @@ func render_player_list():
 		list += "\n"
 	get_node("PlayerList").set_text(list)
 
-func start_game():
+sync func start_game():
 	var level = get_node("ServerStart/LevelSelect").get_selected_id()
 	rpc("pre_configure_game", level)
 

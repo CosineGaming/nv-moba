@@ -60,6 +60,7 @@ align = 1
 
 [node name="ServerStart" type="Button" parent="." index="1"]
 
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -104,7 +105,7 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Platforms"
+text = "Platform map"
 flat = false
 align = 0
 selected = 0
