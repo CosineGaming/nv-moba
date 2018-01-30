@@ -103,7 +103,7 @@ func _player_connected(id):
 
 func _connected_ok():
 	rpc("register_player", get_tree().get_network_unique_id(), my_info)
-	if "start_game" in my_info:
+	if "start_game" in my_info and my_info.start_game:
 		rpc_id(1, "start_game")
 
 func collect_info():
@@ -113,6 +113,8 @@ func collect_info():
 		my_info.hero = get_node("HeroSelect").get_selected_id()
 	if not "is_right_team" in my_info:
 		my_info.is_right_team = false # Server assigns team, wait for that
+	if not "start_game" in my_info:
+		my_info.start_game = get_node("ForceStart").pressed
 
 remote func register_player(new_peer, info):
 	player_info[new_peer] = info

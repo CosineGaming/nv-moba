@@ -16,7 +16,7 @@ use_filter = false
 font_data = SubResource( 1 )
 _sections_unfolded = [ "Font", "Resource", "Settings" ]
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -178,10 +178,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 175.0
-margin_top = 106.0
-margin_right = 401.0
-margin_bottom = 124.0
+margin_left = 207.0
+margin_top = 83.0
+margin_right = 405.0
+margin_bottom = 101.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -205,7 +205,50 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="HSeparator2" type="HSeparator" parent="." index="6"]
+[node name="ForceStart" type="CheckBox" parent="." index="6"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 172.0
+margin_top = 111.0
+margin_right = 196.0
+margin_bottom = 135.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = true
+enabled_focus_mode = 2
+shortcut = null
+group = null
+flat = false
+align = 0
+
+[node name="ForceStartLabel" type="Label" parent="ForceStart" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 29.0
+margin_top = 5.0
+margin_right = 69.0
+margin_bottom = 19.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Force game to start"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="HSeparator2" type="HSeparator" parent="." index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -221,7 +264,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="Singleplayer" type="Button" parent="." index="7"]
+[node name="Singleplayer" type="Button" parent="." index="8"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -245,7 +288,7 @@ text = "Singleplayer"
 flat = false
 align = 1
 
-[node name="VSeparator" type="VSeparator" parent="." index="8"]
+[node name="VSeparator" type="VSeparator" parent="." index="9"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -261,7 +304,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="Label" type="Label" parent="." index="9"]
+[node name="Label" type="Label" parent="." index="10"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -281,7 +324,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Username" type="TextEdit" parent="." index="10"]
+[node name="Username" type="TextEdit" parent="." index="11"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -314,7 +357,7 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="HeroSelectLabel" type="Label" parent="." index="11"]
+[node name="HeroSelectLabel" type="Label" parent="." index="12"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -334,7 +377,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="HeroSelect" type="OptionButton" parent="." index="12"]
+[node name="HeroSelect" type="OptionButton" parent="." index="13"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -362,7 +405,7 @@ selected = -1
 items = [  ]
 script = ExtResource( 2 )
 
-[node name="TeamLabel" type="Label" parent="." index="13"]
+[node name="TeamLabel" type="Label" parent="." index="14"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -382,7 +425,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Team" type="Label" parent="." index="14"]
+[node name="Team" type="Label" parent="." index="15"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -401,7 +444,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="HSeparator3" type="HSeparator" parent="." index="15"]
+[node name="HSeparator3" type="HSeparator" parent="." index="16"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -417,7 +460,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="PlayerListLabel" type="Label" parent="." index="16"]
+[node name="PlayerListLabel" type="Label" parent="." index="17"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -437,7 +480,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="PlayerList" type="Label" parent="." index="17"]
+[node name="PlayerList" type="Label" parent="." index="18"]
 
 anchor_left = 0.5
 anchor_top = 0.5
