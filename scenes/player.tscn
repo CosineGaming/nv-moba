@@ -20,7 +20,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" index="0" groups=[
+[node name="RigidBody" type="RigidBody" groups=[
 "player",
 ]]
 
@@ -97,14 +97,6 @@ size = 1.0
 near = 0.05
 far = 100.0
 _sections_unfolded = [ "Transform", "Visibility" ]
-
-[node name="Ray" type="RayCast" parent="Yaw/Pitch" index="1"]
-
-enabled = true
-exclude_parent = true
-cast_to = Vector3( 0, 0, -100 )
-collision_mask = 1
-_sections_unfolded = [ "Transform" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="." index="4"]
 
