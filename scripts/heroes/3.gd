@@ -14,6 +14,9 @@ func _ready():
 	# Initialization here
 	pass
 
+func _exit_tree():
+	unmerge() # Checks if necessary automatically
+
 func _process(delta):
 	if is_network_master():
 		allow_merge_time += delta
@@ -28,40 +31,54 @@ func _process(delta):
 		if merged and Input.is_action_just_pressed("hero_3_unmerge"):
 				rpc("unmerge")
 
-sync func merge(node_name):
-	var other = get_node("/root/Level/Players").get_node(node_name)
-	hide()
-	print(other.get_name())
-	# Disable collisions
-	old_layer = collision_layer
-	old_mask = collision_mask
-	collision_layer = 0
-	collision_mask = 0
-	gravity_scale = 0
+func set_collisions(on):
+	if on:
+		collision_layer = old_layer
+		collision_mask = old_mask
+		gravity_scale = 1
+	else:
+		old_layer = collision_layer
+		old_mask = collision_mask
+		collision_layer = 0
+		collision_mask = 0
+		gravity_scale = 0
+
+func set_boosted_label(node, on):
+	if on:
+		var boosted_label = $Boosted.duplicate()
+		boosted_label.show()
+		node.add_child(boosted_label)
+	else:
+		var boosted_label = node.get_node("Boosted")
+		boosted_label.queue_free()
+
+func set_boosting(is_boosting):
+	set_collisions(!is_boosting)
+	visible = !is_boosting
+	get_node("MasterOnly/Boosting").visible = is_boosting
+	if not is_boosting and is_network_master():
+		$"Yaw/Pitch/Camera".make_current()
+
+func set_boosted(node, is_boosted):
 	if is_network_master():
 		# Assume their PoV, but no control
-		other.get_node("Yaw/Pitch/Camera").make_current()
-		get_node("MasterOnly/Boosting").show()
-	if other.is_network_master():
-		var other_boosted = get_node("Boosted").duplicate()
-		other_boosted.show()
-		other.get_node("MasterOnly").add_child(other_boosted)
-	# Boost them!
-	other.walk_speed *= (1 + merge_power)
-	other.air_accel *= (1 + merge_power)
+		node.get_node("Yaw/Pitch/Camera").make_current()
+	if node.is_network_master():
+		set_boosted_label(node, is_boosted)
+	var ratio = (1 + merge_power)
+	if !is_boosted:
+		ratio = 1/ratio # Undo the effect
+	node.walk_speed *= ratio
+	node.air_accel *= ratio
+
+sync func merge(node_name):
+	set_boosting(true)
+	var other = $"/root/Level/Players".get_node(node_name)
+	set_boosted(other, true)
 	merged = other
 
 sync func unmerge():
-	show()
-	gravity_scale = 1
-	# Re-enable collisions
-	collision_layer = old_layer
-	collision_mask = old_mask
-	if is_network_master():
-		get_node("Yaw/Pitch/Camera").make_current()
-	if merged.is_network_master():
-		merged.get_node("MasterOnly/Boosting").queue_free()
-	# Undo the boost
-	merged.walk_speed /= (1 + merge_power)
-	merged.air_accel /= (1 + merge_power)
-	merged = null
+	if merged:
+		set_boosting(false)
+		set_boosted(merged, false)
+		merged = null
