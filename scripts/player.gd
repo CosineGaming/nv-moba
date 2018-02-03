@@ -31,17 +31,14 @@ export(NodePath) var tp_camera
 export(NodePath) var master_only
 
 func _ready():
-	
-	tp_camera = get_node(tp_camera)
-	master_only = get_node(master_only)
-	
+
 	set_process_input(true)
 	debug_node = get_node("/root/Level/Debug")
 	if is_network_master():
-		tp_camera.set_enabled(true)
+		get_node(tp_camera).set_enabled(true)
 		spawn()
 	else:
-		remove_child(master_only)
+		remove_child(get_node(master_only))
 
 func spawn():
 	var placement = Vector3()
@@ -76,8 +73,8 @@ func toggle_mouse_capture():
 
 # Update visual yaw + pitch components to match camera
 func set_rotation():
-	get_node("Yaw").set_rotation(Vector3(0, deg2rad(tp_camera.cam_yaw), 0))
-	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(tp_camera.cam_pitch), 0, 0))
+	get_node("Yaw").set_rotation(Vector3(0, deg2rad(get_node(tp_camera).cam_yaw), 0))
+	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(get_node(tp_camera).cam_pitch), 0, 0))
 
 func _integrate_forces(state):
 	if is_network_master():
@@ -89,16 +86,16 @@ slave func set_status(s):
 	set_transform(s[0])
 	set_linear_velocity(s[1])
 	set_angular_velocity(s[2])
-	tp_camera.cam_yaw = s[3]
-	tp_camera.cam_pitch = s[4]
+	get_node(tp_camera).cam_yaw = s[3]
+	get_node(tp_camera).cam_pitch = s[4]
 
 func get_status():
 	return [
 		get_transform(),
 		get_linear_velocity(),
 		get_angular_velocity(),
-		tp_camera.cam_yaw,
-		tp_camera.cam_pitch,
+		get_node(tp_camera).cam_yaw,
+		get_node(tp_camera).cam_pitch,
 	]
 
 func control_player(state):
