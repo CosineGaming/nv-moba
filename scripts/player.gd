@@ -57,6 +57,7 @@ func spawn():
 	set_linear_velocity(Vector3())
 
 func _input(event):
+	if is_network_master():
 		if Input.is_action_just_pressed("switch_hero"):
 			switch_hero_interface()
 		# Quit the game:
