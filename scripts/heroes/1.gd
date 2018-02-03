@@ -23,10 +23,10 @@ func _process(delta):
 		if is_placing_wall:
 			# Find the point we're looking at, and put the wall there
 			var aim = get_node("Yaw/Pitch").get_global_transform().basis
-			var camera = get_node("Yaw/Pitch/Camera")
-			var pos = camera.project_position(Vector2())
+			var look_ray = get_node("Yaw/Pitch/Ray")
+			var pos = look_ray.get_collision_point()
 			placing_wall_node.set_translation(pos)
-			var towards = camera.project_ray_normal(Vector2()) + pos
+			var towards = look_ray.get_collision_normal() + pos
 			var up = -aim[2] # Wall should be horizontal to my view
 			placing_wall_node.look_at(towards, up)
 
