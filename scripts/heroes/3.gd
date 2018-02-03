@@ -31,6 +31,10 @@ func _process(delta):
 		if merged and Input.is_action_just_pressed("hero_3_unmerge"):
 				rpc("unmerge")
 
+func control_player(state):
+	if !merged:
+		.control_player(state)
+
 func set_collisions(on):
 	if on:
 		collision_layer = old_layer
@@ -55,14 +59,14 @@ func set_boosted_label(node, on):
 func set_boosting(is_boosting):
 	set_collisions(!is_boosting)
 	visible = !is_boosting
-	get_node("MasterOnly/Boosting").visible = is_boosting
-	if not is_boosting and is_network_master():
-		$"Yaw/Pitch/Camera".make_current()
+	if is_network_master():
+		get_node("MasterOnly/Boosting").visible = is_boosting
+		get_node(tp_camera).set_enabled(!is_boosting)
 
 func set_boosted(node, is_boosted):
 	if is_network_master():
 		# Assume their PoV, but no control
-		node.get_node("Yaw/Pitch/Camera").make_current()
+		node.get_node(node.tp_camera).set_enabled(is_boosted)
 	if node.is_network_master():
 		set_boosted_label(node, is_boosted)
 	var ratio = (1 + merge_power)
