@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
+[ext_resource path="res://scripts/tp_camera.gd" type="Script" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -20,7 +21,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" groups=[
+[node name="RigidBody" type="RigidBody" index="0" groups=[
 "player",
 ]]
 
@@ -51,6 +52,8 @@ angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
 _sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Transform", "Visibility", "collision" ]
+tp_camera = NodePath("TPCamera")
+master_only = NodePath("MasterOnly")
 
 [node name="Body" type="CollisionShape" parent="." index="0"]
 
@@ -75,30 +78,7 @@ cast_to = Vector3( 0, -0.3, 0 )
 collision_mask = 1
 _sections_unfolded = [ "Transform", "Visibility" ]
 
-[node name="Yaw" type="Spatial" parent="." index="3"]
-
-[node name="Pitch" type="Spatial" parent="Yaw" index="0"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
-_sections_unfolded = [ "Transform" ]
-
-[node name="Camera" type="Camera" parent="Yaw/Pitch" index="0"]
-
-keep_aspect = 0
-cull_mask = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
-current = false
-fov = 70.0
-size = 1.0
-near = 0.05
-far = 100.0
-_sections_unfolded = [ "Transform", "Visibility" ]
-
-[node name="MeshInstance" type="MeshInstance" parent="." index="4"]
+[node name="MeshInstance" type="MeshInstance" parent="." index="3"]
 
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.95, 0 )
 layers = 1
@@ -113,6 +93,13 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
+_sections_unfolded = [ "Transform" ]
+
+[node name="Yaw" type="Spatial" parent="." index="4"]
+
+[node name="Pitch" type="Spatial" parent="Yaw" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="MasterOnly" type="Node" parent="." index="5"]
@@ -158,5 +145,30 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="TPCamera" type="Spatial" parent="." index="6"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+cam = NodePath("Camera")
+pivot = NodePath("Pivot")
+
+[node name="Pivot" type="Spatial" parent="TPCamera" index="0"]
+
+[node name="Camera" type="Camera" parent="TPCamera" index="1"]
+
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
 
 

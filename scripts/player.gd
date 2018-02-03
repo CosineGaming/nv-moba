@@ -3,8 +3,6 @@
 extends RigidBody
 
 var view_sensitivity = 0.25
-var yaw = 0
-var pitch = 0
 
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
@@ -29,19 +27,21 @@ slave var slave_transform = Basis()
 slave var slave_lin_v = Vector3()
 slave var slave_ang_v = Vector3()
 
+export(NodePath) var tp_camera
+export(NodePath) var master_only
+
 func _ready():
+	
+	tp_camera = get_node(tp_camera)
+	master_only = get_node(master_only)
+	
 	set_process_input(true)
-
-	# Capture mouse once game is started:
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
 	debug_node = get_node("/root/Level/Debug")
-
 	if is_network_master():
-		get_node("Yaw/Pitch/Camera").make_current()
+		tp_camera.set_enabled(true)
 		spawn()
 	else:
-		remove_child(get_node("MasterOnly"))
+		remove_child(master_only)
 
 func spawn():
 	var placement = Vector3()
@@ -60,17 +60,6 @@ func spawn():
 	set_linear_velocity(Vector3())
 
 func _input(event):
-	if is_network_master():
-
-		if event is InputEventMouseMotion:
-			yaw = fmod(yaw - event.relative.x * view_sensitivity, 360)
-			pitch = max(min(pitch - event.relative.y * view_sensitivity, 85), -85)
-			set_rotation()
-
-		# Toggle mouse capture:
-		if Input.is_action_pressed("toggle_mouse_capture"):
-			toggle_mouse_capture()
-
 		if Input.is_action_just_pressed("switch_hero"):
 			switch_hero_interface()
 		# Quit the game:
@@ -85,30 +74,31 @@ func toggle_mouse_capture():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		view_sensitivity = 0.25
 
+# Update visual yaw + pitch components to match camera
 func set_rotation():
-	get_node("Yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
-	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(pitch), 0, 0))
+	get_node("Yaw").set_rotation(Vector3(0, deg2rad(tp_camera.cam_yaw), 0))
+	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(tp_camera.cam_pitch), 0, 0))
 
 func _integrate_forces(state):
 	if is_network_master():
 		control_player(state)
 		rpc_unreliable("set_status", get_status())
+		set_rotation()
 
 slave func set_status(s):
 	set_transform(s[0])
 	set_linear_velocity(s[1])
 	set_angular_velocity(s[2])
-	yaw = s[3]
-	pitch = s[4]
-	set_rotation() # Confirm yaw + pitch changes
+	tp_camera.cam_yaw = s[3]
+	tp_camera.cam_pitch = s[4]
 
 func get_status():
 	return [
 		get_transform(),
 		get_linear_velocity(),
 		get_angular_velocity(),
-		yaw,
-		pitch,
+		tp_camera.cam_yaw,
+		tp_camera.cam_pitch,
 	]
 
 func control_player(state):
