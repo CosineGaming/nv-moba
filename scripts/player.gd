@@ -74,7 +74,7 @@ func toggle_mouse_capture():
 # Update visual yaw + pitch components to match camera
 func set_rotation():
 	get_node("Yaw").set_rotation(Vector3(0, deg2rad(get_node(tp_camera).cam_yaw), 0))
-	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(get_node(tp_camera).cam_pitch), 0, 0))
+	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-get_node(tp_camera).cam_pitch), 0, 0))
 
 func _integrate_forces(state):
 	if is_network_master():
