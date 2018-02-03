@@ -80,7 +80,7 @@ func _integrate_forces(state):
 	if is_network_master():
 		control_player(state)
 		rpc_unreliable("set_status", get_status())
-		set_rotation()
+	set_rotation()
 
 slave func set_status(s):
 	set_transform(s[0])
