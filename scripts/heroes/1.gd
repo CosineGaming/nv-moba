@@ -4,7 +4,7 @@ var walls = []
 var placing_wall_node
 var is_placing_wall = false
 
-const max_walls = 3
+const max_walls = 7
 
 func _process(delta):
 	if is_network_master():
