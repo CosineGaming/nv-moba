@@ -222,6 +222,8 @@ sync func switch_hero(hero):
 
 func _exit_scene():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _exit_tree():
 	if "record" in player_info:
 		write_recording()
 

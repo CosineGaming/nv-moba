@@ -21,7 +21,7 @@ func setup_options():
 	opts.add('-level', 'r', 'Your choice of level (index) - server only!')
 	opts.add('-start-game', false, 'Join as a client and immediately start the game')
 	opts.add('-ai', true, 'Run this client as AI')
-	opts.add('-record', true, 'Record this play for AI later')
+	opts.add('-no-record', true, "Don't record this play for AI later")
 	opts.add('-h', false, "Print help")
 	return opts
 
@@ -60,7 +60,7 @@ func _ready():
 		call_deferred("_singleplayer_init")
 	if o.get_value("-ai"):
 		my_info.is_ai = true
-	if o.get_value("-record"):
+	if not o.get_value("-no-record"):
 		my_info.record = true
 	if o.get_value('-h'):
 		o.print_help()
