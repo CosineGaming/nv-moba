@@ -40,6 +40,9 @@ func _ready():
 		spawn()
 	else:
 		remove_child(get_node(master_only))
+	
+	if "is_ai" in player_info and player_info.is_ai:
+		add_child(preload("res://scenes/ai.tscn").instance())
 
 func spawn():
 	var placement = Vector3()

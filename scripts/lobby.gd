@@ -203,8 +203,6 @@ remote func done_preconfiguring(who):
 sync func spawn_player(p):
 	var hero = player_info[p].hero
 	var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
-	if "is_ai" in player_info[p] and player_info[p].is_ai:
-		player = load("res://scenes/ai/heroes/" + str(hero) + ".tscn").instance()
 	player.set_name(str(p))
 	player.set_network_master(p)
 	player.player_info = player_info[p]
