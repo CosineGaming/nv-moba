@@ -83,6 +83,9 @@ sync func merge(node_name):
 
 sync func unmerge():
 	if merged:
-		set_boosting(false)
 		set_boosted(merged, false)
+		set_boosting(false)
+		var pos = merged.get_translation()
+		pos.z += 1
+		set_translation(pos)
 		merged = null
