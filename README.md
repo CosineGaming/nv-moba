@@ -12,7 +12,7 @@ Side mechanics ideas:
 
 - [ ] Maze-like map
 - [x] After enough movement, player can switch characters (switching is a mechanic, not a meta-game! no one-tricks)
-- [ ] Speed up slowly over time. Reset on switch
+- [x] Speed up slowly over time. Reset on switch
 
 Current heroes:
 
@@ -21,15 +21,16 @@ Current heroes:
 - Offensive:
   - WallMAKING mfer
   - An ATTRACTIVE mfer
+- Support:
+  - Margarine
 
 Ideas for Heroes:
 
 - More active
   - Blink (Tracer) - no cooldown, but loses all speed on hitting walls
   - Heavy guy - Slow, but very heavy for the see-saw
-  - Flying, of course
+  - Climb and glide abilities
 - More supportive
-  - Merge - combines with someone to boost their speed
   - Boost - Area of effect or zarya-like cast, speeds people up
   - Flop - Changes side of see-saw for each team (should it be mechanic instead??)
   - Build - Build Zineth-like rails for anyone to use

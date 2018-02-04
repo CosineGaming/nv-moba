@@ -1,7 +1,20 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/lobby.gd" type="Script" id=1]
 [ext_resource path="res://scripts/hero_select.gd" type="Script" id=2]
+
+[sub_resource type="DynamicFontData" id=3]
+
+font_path = "res://assets/DejaVuSansMono.ttf"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="DynamicFont" id=4]
+
+size = 30
+use_mipmaps = false
+use_filter = false
+font_data = SubResource( 3 )
+_sections_unfolded = [ "Extra Spacing", "Font", "Resource", "Settings" ]
 
 [sub_resource type="DynamicFontData" id=1]
 
@@ -16,7 +29,7 @@ use_filter = false
 font_data = SubResource( 1 )
 _sections_unfolded = [ "Font", "Resource", "Settings" ]
 
-[node name="Control" type="Control" index="0"]
+[node name="Control" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -34,7 +47,29 @@ size_flags_vertical = 1
 script = ExtResource( 1 )
 _sections_unfolded = [ "Anchor" ]
 
-[node name="Server" type="Button" parent="." index="0"]
+[node name="Title" type="Label" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 7.0
+margin_top = -72.0
+margin_right = 195.0
+margin_bottom = -32.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 4 )
+text = "VANAGLORIA"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "custom_fonts" ]
+
+[node name="Server" type="Button" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -58,7 +93,7 @@ text = "Server"
 flat = false
 align = 1
 
-[node name="ServerStart" type="Button" parent="." index="1"]
+[node name="ServerStart" type="Button" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -110,7 +145,7 @@ align = 0
 selected = 0
 items = [ "Platform map", null, false, 0, null, "City-like thing", null, false, 1, null, "Slide", null, false, 2, null ]
 
-[node name="HSeparator" type="HSeparator" parent="." index="2"]
+[node name="HSeparator" type="HSeparator" parent="." index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -126,7 +161,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="Client" type="Button" parent="." index="3"]
+[node name="Client" type="Button" parent="." index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -150,7 +185,7 @@ text = "Client"
 flat = false
 align = 1
 
-[node name="IPLabel" type="Label" parent="." index="4"]
+[node name="IPLabel" type="Label" parent="." index="5"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -171,7 +206,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Visibility" ]
 
-[node name="IP" type="TextEdit" parent="." index="5"]
+[node name="IP" type="TextEdit" parent="." index="6"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -204,7 +239,7 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="ForceStart" type="CheckBox" parent="." index="6"]
+[node name="ForceStart" type="CheckBox" parent="." index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -247,7 +282,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="HSeparator2" type="HSeparator" parent="." index="7"]
+[node name="HSeparator2" type="HSeparator" parent="." index="8"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -263,7 +298,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="Singleplayer" type="Button" parent="." index="8"]
+[node name="Singleplayer" type="Button" parent="." index="9"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -287,7 +322,7 @@ text = "Singleplayer"
 flat = false
 align = 1
 
-[node name="VSeparator" type="VSeparator" parent="." index="9"]
+[node name="VSeparator" type="VSeparator" parent="." index="10"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -303,7 +338,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="Label" type="Label" parent="." index="10"]
+[node name="Label" type="Label" parent="." index="11"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -323,7 +358,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Username" type="TextEdit" parent="." index="11"]
+[node name="Username" type="TextEdit" parent="." index="12"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -356,7 +391,7 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="HeroSelectLabel" type="Label" parent="." index="12"]
+[node name="HeroSelectLabel" type="Label" parent="." index="13"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -376,7 +411,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="HeroSelect" type="OptionButton" parent="." index="13"]
+[node name="HeroSelect" type="OptionButton" parent="." index="14"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -404,7 +439,7 @@ selected = -1
 items = [  ]
 script = ExtResource( 2 )
 
-[node name="TeamLabel" type="Label" parent="." index="14"]
+[node name="TeamLabel" type="Label" parent="." index="15"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -424,7 +459,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Team" type="Label" parent="." index="15"]
+[node name="Team" type="Label" parent="." index="16"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -443,7 +478,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="HSeparator3" type="HSeparator" parent="." index="16"]
+[node name="HSeparator3" type="HSeparator" parent="." index="17"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -459,7 +494,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="PlayerListLabel" type="Label" parent="." index="17"]
+[node name="PlayerListLabel" type="Label" parent="." index="18"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -479,7 +514,7 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="PlayerList" type="Label" parent="." index="18"]
+[node name="PlayerList" type="Label" parent="." index="19"]
 
 anchor_left = 0.5
 anchor_top = 0.5

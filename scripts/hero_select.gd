@@ -1,10 +1,10 @@
 extends OptionButton
 
 const hero_names = [
-	"Wallriding mfer",
-	"WallMAKING mfer",
-	"an ATTRACTIVE mfer",
-	"Margarine"
+	"INDUSTRIA",
+	"IRA",
+	"AVARITIA",
+	"CARITAS"
 ]
 
 func _ready():

@@ -9,6 +9,7 @@ var SERVER_PLAYING = true
 
 var player_info = {}
 var my_info = {}
+var begun = false
 
 func setup_options():
 	var opts = Options.new()
@@ -142,8 +143,12 @@ remote func register_player(new_peer, info):
 					rpc_id(old_peer, "register_player", new_peer, info)
 		var assign_right_team = right_team_count * 2 < player_info.size()
 		rpc("assign_team", new_peer, assign_right_team)
-		if (player_info.size() == MAX_PLAYERS):
+		if not begun and player_info.size() == MAX_PLAYERS:
 			start_game()
+		if begun:
+			var level = get_node("ServerStart/LevelSelect").get_selected_id()
+			rpc_id(new_peer, "pre_configure_game", level)
+			rpc("spawn_player", new_peer)
 
 sync func unregister_player(peer):
 	player_info.erase(peer)
@@ -179,6 +184,7 @@ func render_player_list():
 	get_node("PlayerList").set_text(list)
 
 sync func start_game():
+	begun = true
 	var level = get_node("ServerStart/LevelSelect").get_selected_id()
 	rpc("pre_configure_game", level)
 
@@ -187,6 +193,16 @@ remote func done_preconfiguring(who):
 	players_done.append(who)
 	if (players_done.size() == player_info.size()):
 		rpc("post_configure_game")
+
+sync func spawn_player(p):
+	var hero = player_info[p].hero
+	var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
+	if "is_ai" in player_info[p] and player_info[p].is_ai:
+		player = load("res://scenes/ai/heroes/" + str(hero) + ".tscn").instance()
+	player.set_name(str(p))
+	player.set_network_master(p)
+	player.player_info = player_info[p]
+	get_node("/root/Level/Players").call_deferred("add_child", player)
 
 sync func pre_configure_game(level):
 	var self_peer_id = get_tree().get_network_unique_id()
@@ -201,12 +217,8 @@ sync func pre_configure_game(level):
 
 	# Load all players (including self)
 	for p in player_info:
-		var hero = player_info[p].hero
-		var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
-		player.set_name(str(p))
-		player.set_network_master(p)
-		player.player_info = player_info[p]
-		get_node("/root/Level/Players").call_deferred("add_child", player)
+		player_info[p].level = level
+		spawn_player(p)
 
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 
