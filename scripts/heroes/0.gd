@@ -1,7 +1,7 @@
 extends "res://scripts/player.gd"
 
-const wallride_speed_necessary = 2
-const wallride_leap_height = 25
+const wallride_speed_necessary = 1.5
+const wallride_leap_height = 48
 const wallride_leap_side = 6
 const wallride_leap_build = 0.01
 
@@ -11,8 +11,9 @@ var wallride_forgiveness = .150
 
 func _ready():
 	._ready()
-	walk_speed *= 1
-	air_accel *= 1.5
+	walk_speed *= 1.2
+	air_accel *= 3
+	jump_speed *= 1
 	walk_speed_build *= 2
 	air_speed_build *= 3
 

@@ -6,8 +6,8 @@ var view_sensitivity = 0.25
 
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
-var jump_speed = 3 # m/s
-var air_accel = .3 # m/s/s
+var jump_speed = 1 # m/s
+var air_accel = .1 # m/s/s
 var floor_friction = 1-0.08
 var air_friction = 1-0.03
 var player_info # Set by lobby
