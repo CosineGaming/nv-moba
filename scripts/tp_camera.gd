@@ -31,13 +31,11 @@ func _ready():
 func set_enabled(enabled):
 	if enabled:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED);
-		set_process(true);
 		cam.make_current()
-		is_enabled = true;
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE);
-		set_process(false);
-		is_enabled = false;
+	set_process(enabled);
+	is_enabled = enabled;
 
 func clear_exception():
 	collision_exception.clear();

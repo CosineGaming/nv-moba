@@ -29,7 +29,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" index="0" groups=[
+[node name="RigidBody" type="RigidBody" groups=[
 "player",
 ]]
 
@@ -47,7 +47,7 @@ continuous_cd = true
 contacts_reported = 0
 contact_monitor = false
 sleeping = false
-can_sleep = true
+can_sleep = false
 axis_lock_linear_x = false
 axis_lock_linear_y = false
 axis_lock_linear_z = false
