@@ -6,7 +6,5 @@
 [node name="RigidBody" index="0" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
-tp_camera = null
-master_only = null
 
 

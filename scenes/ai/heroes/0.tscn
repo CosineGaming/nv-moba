@@ -4,7 +4,4 @@
 
 [node name="RigidBody" instance=ExtResource( 1 )]
 
-tp_camera = NodePath("TPCamera")
-master_only = NodePath("MasterOnly")
-
 

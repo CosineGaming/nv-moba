@@ -20,8 +20,8 @@ func setup_options():
 	opts.add('-hero', 'r', 'Your choice of hero (index)')
 	opts.add('-level', 'r', 'Your choice of level (index) - server only!')
 	opts.add('-start-game', false, 'Join as a client and immediately start the game')
-	opts.add('-ai', false, 'Run this client as AI')
-	opts.add('-record', false, 'Record this play for AI later')
+	opts.add('-ai', true, 'Run this client as AI')
+	opts.add('-record', true, 'Record this play for AI later')
 	opts.add('-h', false, "Print help")
 	return opts
 
@@ -209,8 +209,11 @@ sync func pre_configure_game(level):
 	for p in player_info:
 		var hero = player_info[p].hero
 		var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
+		if "is_ai" in player_info[p]:
+			player = load("res://scenes/ai/heroes/" + str(hero) + ".tscn").instance()
 		player.set_name(str(p))
 		player.set_network_master(p)
+		player_info[p].level = level
 		player.player_info = player_info[p]
 		get_node("/root/Level/Players").call_deferred("add_child", player)
 
