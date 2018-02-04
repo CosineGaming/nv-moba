@@ -22,13 +22,14 @@ var movement_charge = 0.15 # In percent per meter (except when heroes change tha
 const fall_height = -50
 
 var debug_node
+var recording = { "time": 0, "states": [], "events": [], "spawn": Vector3() }
 
 slave var slave_transform = Basis()
 slave var slave_lin_v = Vector3()
 slave var slave_ang_v = Vector3()
 
-export(NodePath) var tp_camera
-export(NodePath) var master_only
+var tp_camera = "TPCamera"
+var master_only = "MasterOnly"
 
 func _ready():
 
@@ -52,10 +53,27 @@ func spawn():
 	# So we don't all spawn on top of each other
 	placement.x += rand_range(0, x_varies)
 	placement.z += rand_range(0, z_varies)
-	recording.spawn = placement
+	recording.spawn = var2str(placement)
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
+	
+func event_to_obj(event):
+	var d = {}
+	if event is InputEventMouseMotion:
+		d.relative = {}
+		d.relative.x = event.relative.x
+		d.relative.y = event.relative.y
+		d.type = "motion"
+	if event is InputEventKey:
+		d.scancode = event.scancode
+		d.pressed = event.pressed
+		d.type = "key"
+	if event is InputEventMouseButton:
+		d.button_index = event.button_index
+		d.pressed = event.pressed
+		d.type = "mb"
+	return d
 
 func _input(event):
 	if is_network_master():
@@ -64,6 +82,8 @@ func _input(event):
 		# Quit the game:
 		if Input.is_action_pressed("quit"):
 			quit()
+		if "record" in player_info:
+			recording.events.append([recording.time, event_to_obj(event)])
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
@@ -78,10 +98,18 @@ func set_rotation():
 	get_node("Yaw").set_rotation(Vector3(0, deg2rad(get_node(tp_camera).cam_yaw), 0))
 	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-get_node(tp_camera).cam_pitch), 0, 0))
 
+func record_status(status):
+	if "record" in player_info:
+		for i in range(status.size()):
+			status[i] = var2str(status[i])
+		recording.states.append([recording.time, status])
+
 func _integrate_forces(state):
 	if is_network_master():
 		control_player(state)
-		rpc_unreliable("set_status", get_status())
+		var status = get_status()
+		rpc_unreliable("set_status", status)
+		record_status(status)
 	set_rotation()
 
 slave func set_status(s):
@@ -161,6 +189,9 @@ func _process(delta):
 		if get_translation().y < fall_height:
 			spawn()
 			switch_hero_interface()
+		
+		if "record" in player_info:
+			recording.time += delta
 
 		if "record" in player_info:
 			recording.time += delta
@@ -196,9 +227,22 @@ sync func switch_hero(hero):
 func _exit_scene():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+func _exit_tree():
+	if "record" in player_info:
+		write_recording()
+
 # Functions
 # =========
 
+func write_recording():
+	var save = File.new()
+	var fname = "res://recordings/%d-%d-%d.rec" % [player_info.level, player_info.hero, randi() % 10000]
+	save.open(fname, File.WRITE)
+	save.store_line(to_json(recording))
+	save.close()
+
 # Quits the game:
 func quit():
+	if "record" in player_info:
+		write_recording()
 	get_tree().quit()

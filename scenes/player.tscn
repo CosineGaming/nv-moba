@@ -60,8 +60,6 @@ angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
 _sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Transform", "Visibility", "collision" ]
-tp_camera = NodePath("TPCamera")
-master_only = NodePath("MasterOnly")
 
 [node name="Body" type="CollisionShape" parent="." index="0"]
 
