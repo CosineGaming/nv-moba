@@ -42,8 +42,8 @@ func _ready():
 
 func spawn():
 	var placement = Vector3()
-	var x_varies = 10
-	var y_varies = 20
+	var x_varies = 5
+	var z_varies = 5
 	# No Z, because that's the left-right question
 	if player_info.is_right_team:
 		placement = get_node("/root/Level/RightSpawn").get_translation()
@@ -51,7 +51,8 @@ func spawn():
 		placement = get_node("/root/Level/LeftSpawn").get_translation()
 	# So we don't all spawn on top of each other
 	placement.x += rand_range(0, x_varies)
-	placement.y += rand_range(0, y_varies)
+	placement.z += rand_range(0, z_varies)
+	recording.spawn = placement
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
