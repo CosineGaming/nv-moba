@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/ai/ai-player.tscn" type="PackedScene" id=1]
+
+[node name="RigidBody" instance=ExtResource( 1 )]
+
+tp_camera = NodePath("TPCamera")
+master_only = NodePath("MasterOnly")
+
+

@@ -22,6 +22,7 @@ var movement_charge = 0.15 # In percent per meter (except when heroes change tha
 const fall_height = -50
 
 var debug_node
+var recording = { "time": 0, "events": [], "spawn": Vector3() }
 
 slave var slave_transform = Basis()
 slave var slave_lin_v = Vector3()
@@ -52,9 +53,44 @@ func spawn():
 	# So we don't all spawn on top of each other
 	placement.x += rand_range(0, x_varies)
 	placement.y += rand_range(0, y_varies)
+	recording.spawn = placement
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
+
+func event_to_obj(event):
+	var d = {}
+	if event is InputEventMouseMotion:
+		d.relative = {}
+		d.relative.x = event.relative.x
+		d.relative.y = event.relative.y
+		d.type = "motion"
+	if event is InputEventKey:
+		d.scancode = event.scancode
+		d.pressed = event.pressed
+		d.type = "key"
+	if event is InputEventMouseButton:
+		d.button_index = event.button_index
+		d.pressed = event.pressed
+		d.type = "mb"
+	return d
+
+func apply_dict(from, to):
+	if typeof(from) != TYPE_DICTIONARY:
+		return from
+	else:
+		for key in from:
+			to[key] = apply_dict(from[key], to[key])
+		return to
+
+func obj_to_event(d):
+	var e
+	if d.type == "motion": e = InputEventMouseMotion.new()
+	if d.type == "key": e = InputEventKey.new()
+	if d.type == "mb": e = InputEventMouseButton.new()
+	d.erase("type") # Not in the event
+	apply_dict(d, e)
+	return e
 
 func _input(event):
 	if is_network_master():
@@ -63,6 +99,8 @@ func _input(event):
 		# Quit the game:
 		if Input.is_action_pressed("quit"):
 			quit()
+		if "record" in player_info:
+			recording.events.append([recording.time, event_to_obj(event)])
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
@@ -194,6 +232,15 @@ func _exit_scene():
 # Functions
 # =========
 
+func write_recording():
+	var save = File.new()
+	var fname = "res://recordings/%d-%d-%d.rec" % [player_info.level, player_info.hero, randi() % 10000]
+	save.open(fname, File.WRITE)
+	save.store_line(to_json(recording))
+	save.close()
+
 # Quits the game:
 func quit():
+	if "record" in player_info:
+		write_recording()
 	get_tree().quit()
