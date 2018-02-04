@@ -162,14 +162,18 @@ func _process(delta):
 			spawn()
 			switch_hero_interface()
 
+		if "record" in player_info:
+			recording.time += delta
+
 func switch_hero_interface():
-	# Interface needs the mouse!
-	toggle_mouse_capture()
-	# Pause so if we have walls and such nothing funny happens
-	get_tree().set_pause(true)
-	var interface = preload("res://scenes/HeroSelect.tscn").instance()
-	add_child(interface)
-	interface.get_node("Confirm").connect("pressed", self, "switch_hero_master")
+	if switch_charge >= 100:
+		# Interface needs the mouse!
+		toggle_mouse_capture()
+		# Pause so if we have walls and such nothing funny happens
+		get_tree().set_pause(true)
+		var interface = preload("res://scenes/HeroSelect.tscn").instance()
+		add_child(interface)
+		interface.get_node("Confirm").connect("pressed", self, "switch_hero_master")
 
 func switch_hero_master():
 	rpc("switch_hero", get_node("HeroSelect/Hero").get_selected_id())
