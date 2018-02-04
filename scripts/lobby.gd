@@ -68,6 +68,7 @@ func _ready():
 	get_node("Singleplayer").connect("pressed", self, "_singleplayer_init")
 
 	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 	
 	get_node("HeroSelect").connect("item_selected", self, "select_hero")
@@ -100,6 +101,10 @@ func _server_init():
 
 func _player_connected(id):
 	print("Connect, my friend: " + str(id))
+
+func _player_disconnected(id):
+	if get_tree().is_network_server():
+		rpc("unregister_player", id)
 
 func _connected_ok():
 	rpc("register_player", get_tree().get_network_unique_id(), my_info)
@@ -139,6 +144,10 @@ remote func register_player(new_peer, info):
 		rpc("assign_team", new_peer, assign_right_team)
 		if (player_info.size() == MAX_PLAYERS):
 			start_game()
+
+sync func unregister_player(peer):
+	player_info.erase(peer)
+	get_node("/root/Level/Players/%d" % peer).queue_free()
 
 func select_hero(hero):
 	rpc("set_hero", get_tree().get_network_unique_id(), hero)
@@ -182,7 +191,11 @@ remote func done_preconfiguring(who):
 sync func pre_configure_game(level):
 	var self_peer_id = get_tree().get_network_unique_id()
 
-	get_node("/root/Control").queue_free()
+	# Remove the interface so as to not fuck with things
+	# But we still need the lobby (Control) alive to deal with networking!
+	for element in get_node("/root/Control").get_children():
+		element.queue_free()
+
 	var world = load("res://scenes/levels/%d.tscn" % level).instance()
 	get_node("/root").add_child(world)
 

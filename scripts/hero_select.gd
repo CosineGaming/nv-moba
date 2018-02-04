@@ -4,6 +4,7 @@ const hero_names = [
 	"Wallriding mfer",
 	"WallMAKING mfer",
 	"an ATTRACTIVE mfer",
+	"Margarine"
 ]
 
 func _ready():
