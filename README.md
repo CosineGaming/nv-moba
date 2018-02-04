@@ -1,5 +1,5 @@
-A Nonviolent MOBA
-=================
+VANAGLORIA (working title)
+==========================
 
 > A team game with an emphasis on movement (with no shooting), inspired by Overwatch and Zineth
 
@@ -68,5 +68,5 @@ I'd love to have contributions!
 
 Please open an issue first. As games are a creative project, I reserve the right to control the direction of the project.
 
-Also, I need a name!!!
+Let me know if you have a better idea for a name :)
 

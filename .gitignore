@@ -6,6 +6,7 @@
 *.import
 *.blend1
 nohup.out
+recordings
 
 ._*
 ehthumbs.db

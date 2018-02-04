@@ -14,8 +14,6 @@ Smaller TODOs:
 
 Bugs:
 
-- HUDs for heroes show on all connected players' screens
-
 Landmarks:
 
 When you have a workable demo: @mention @turion@mastodon.art
