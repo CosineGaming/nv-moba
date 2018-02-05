@@ -2,19 +2,25 @@ extends Node
 
 var recording
 var time
+var set_spawn = true
 
 func _ready():
 	if is_network_master():
 		print("readdyyyyy")
 		read_recording()
 		time = 0
-		get_node("..").set_translation(str2var(recording.spawn))
 		set_physics_process(true)
 
 func _physics_process(delta):
 	if is_network_master():
-		time += delta
+		if set_spawn:
+			get_node("..").set_translation(str2var(recording.spawn))
+			print(get_node("..").get_translation())
+			set_spawn = false
 		play_keys()
+		# It's actually better to do this 2nd
+		# Since input is, on average, called 1/2way through a frame
+		time += delta
 
 func read_recording():
 
@@ -27,7 +33,6 @@ func read_recording():
 	dir.list_dir_begin()
 	while true:
 		var fname = dir.get_next()
-		print(fname)
 		if fname == "":
 			# Indicates end of directory
 			break
@@ -65,7 +70,7 @@ func play_keys():
 	# events[0] is first event
 	# events[0][0] is first event's TIME
 	while float(recording.events[0][0]) <= time:
-		# events[0][1] is first event's EVENT2
+		# events[0][1] is first event's EVENT
 		var event_obj = recording.events.pop_front()[1]
 		var event = obj_to_event(event_obj)
 		Input.parse_input_event(event)

@@ -31,6 +31,8 @@ slave var slave_ang_v = Vector3()
 var tp_camera = "TPCamera"
 var master_only = "MasterOnly"
 
+var ai_instanced = false
+
 func _ready():
 
 	set_process_input(true)
@@ -38,11 +40,11 @@ func _ready():
 	if is_network_master():
 		get_node(tp_camera).set_enabled(true)
 		spawn()
+		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
+			add_child(preload("res://scenes/ai.tscn").instance())
+			ai_instanced = true
 	else:
 		remove_child(get_node(master_only))
-	
-	if "is_ai" in player_info and player_info.is_ai:
-		add_child(preload("res://scenes/ai.tscn").instance())
 
 func spawn():
 	var placement = Vector3()
@@ -71,6 +73,7 @@ func event_to_obj(event):
 	if event is InputEventKey:
 		d.scancode = event.scancode
 		d.pressed = event.pressed
+		d.echo = event.echo
 		d.type = "key"
 	if event is InputEventMouseButton:
 		d.button_index = event.button_index
@@ -196,9 +199,6 @@ func _process(delta):
 		if "record" in player_info:
 			recording.time += delta
 
-		if "record" in player_info:
-			recording.time += delta
-
 func switch_hero_interface():
 	if switch_charge >= 100:
 		# Interface needs the mouse!
@@ -246,6 +246,4 @@ func write_recording():
 
 # Quits the game:
 func quit():
-	if "record" in player_info:
-		write_recording()
 	get_tree().quit()
