@@ -28,10 +28,8 @@ func setup_options():
 
 func option_sel(button_name, option):
 	var button = get_node(button_name)
-	print("-->")
 	if option == "r":
 		option = randi() % button.get_item_count()
-		print(randi() % 3)
 	else:
 		option = int(option)
 	button.select(option)
@@ -61,7 +59,7 @@ func _ready():
 		call_deferred("_singleplayer_init")
 	if o.get_value("-ai"):
 		my_info.is_ai = true
-	if not o.get_value("-no-record"):
+	if not o.get_value("-no-record") and not o.get_value("-ai"):
 		my_info.record = true
 	if o.get_value('-h'):
 		o.print_help()
