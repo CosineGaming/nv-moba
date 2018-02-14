@@ -6,7 +6,7 @@ var view_sensitivity = 0.25
 
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
-var jump_speed = 1 # m/s
+var jump_speed = 1.5 # m/s
 var air_accel = .1 # m/s/s
 var floor_friction = 1-0.08
 var air_friction = 1-0.03
@@ -152,7 +152,7 @@ func control_player(state):
 	direction = direction.normalized()
 	var ray = get_node("Ray")
 
-	if ray.is_colliding():
+	if get_colliding_bodies(): # We can navigate normally, we have a surface
 		var up = state.get_total_gravity().normalized()
 		var normal = ray.get_collision_normal()
 		var floor_velocity = Vector3()
@@ -166,7 +166,16 @@ func control_player(state):
 		state.set_linear_velocity(lin_v)
 
 		if Input.is_action_pressed("jump"):
-			state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
+			# This may be kinda expensive but we only check while pressing jump so it's ok
+			# Detect jumpable
+			var jump_dot = 0.8 # If normal.dot(up) > jump_dot, we can jump
+			var jumpable = false
+			for i in range(state.get_contact_count()):
+				var n = state.get_contact_local_normal(0)
+				if n.dot(Vector3(0,1,0)) > jump_dot:
+					jumpable = true
+			if jumpable:
+				state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
 
 	else:
 		var accel = (1 + switch_charge * air_speed_build) * air_accel

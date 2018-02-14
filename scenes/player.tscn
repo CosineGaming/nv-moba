@@ -10,7 +10,7 @@ height = 0.5
 
 [sub_resource type="RayShape" id=2]
 
-length = 0.3
+length = 0.1
 _sections_unfolded = [ "Resource" ]
 
 [sub_resource type="PrismMesh" id=3]
@@ -29,7 +29,7 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[node name="RigidBody" type="RigidBody" groups=[
+[node name="RigidBody" type="RigidBody" index="0" groups=[
 "player",
 ]]
 
@@ -44,8 +44,8 @@ bounce = 0.0
 gravity_scale = 1.0
 custom_integrator = false
 continuous_cd = true
-contacts_reported = 0
-contact_monitor = false
+contacts_reported = 1
+contact_monitor = true
 sleeping = false
 can_sleep = false
 axis_lock_linear_x = false
@@ -63,32 +63,34 @@ _sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Transform
 
 [node name="Body" type="CollisionShape" parent="." index="0"]
 
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.95, 0 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.75, 0 )
 shape = SubResource( 1 )
 disabled = false
 _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
 
 [node name="Leg" type="CollisionShape" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0.05, 0.35, 0 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0.05, 0.1, 0 )
 shape = SubResource( 2 )
 disabled = false
 _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Ray" type="RayCast" parent="." index="2"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0 )
 enabled = true
 exclude_parent = true
-cast_to = Vector3( 0, -0.3, 0 )
+cast_to = Vector3( 0, -0.2, 0 )
 collision_mask = 1
 _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Yaw" type="Spatial" parent="." index="3"]
 
+_sections_unfolded = [ "Transform" ]
+
 [node name="Pitch" type="Spatial" parent="Yaw" index="0"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.19053, 0 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="Yaw/Pitch" index="0"]
@@ -154,7 +156,7 @@ max_lines_visible = -1
 
 [node name="TPCamera" type="Spatial" parent="." index="5"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74343, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56913, 0 )
 script = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 cam = NodePath("Camera")
@@ -187,7 +189,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="." index="6"]
 
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.787368, 0 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.567933, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
