@@ -31,6 +31,8 @@ slave var slave_ang_v = Vector3()
 var tp_camera = "TPCamera"
 var master_only = "MasterOnly"
 
+var master_player
+
 var ai_instanced = false
 
 func _ready():
@@ -44,6 +46,7 @@ func _ready():
 			add_child(preload("res://scenes/ai.tscn").instance())
 			ai_instanced = true
 	else:
+		# Remove HUD
 		remove_child(get_node(master_only))
 
 func spawn():
@@ -90,6 +93,19 @@ func _input(event):
 			quit()
 		if "record" in player_info:
 			recording.events.append([recording.time, event_to_obj(event)])
+
+func begin():
+	master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
+	# Set color to blue (teammate) or red (enemy)
+	var color
+	if master_player.player_info.is_right_team == player_info.is_right_team:
+		color = Color(0,0,1) # Blue for friendly
+	else:
+		color = Color(1,0,0) # Red for enemy
+	var mesh = get_node("MainMesh")
+	var mat = SpatialMaterial.new()
+	mat.albedo_color = color
+	mesh.set_surface_material(0, mat)
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
@@ -256,3 +272,4 @@ func write_recording():
 # Quits the game:
 func quit():
 	get_tree().quit()
+

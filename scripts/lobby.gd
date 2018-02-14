@@ -193,10 +193,11 @@ sync func start_game():
 	rpc("pre_configure_game", level)
 
 var players_done = []
-remote func done_preconfiguring(who):
+sync func done_preconfiguring(who):
 	players_done.append(who)
-	if (players_done.size() == player_info.size()):
-		rpc("post_configure_game")
+	if players_done.size() == player_info.size():
+		# We call deferred in case singleplayer has placing the player in queue still
+		call_deferred("rpc", "post_configure_game")
 
 sync func spawn_player(p):
 	var hero = player_info[p].hero
@@ -223,6 +224,11 @@ sync func pre_configure_game(level):
 		spawn_player(p)
 
 	rpc_id(1, "done_preconfiguring", self_peer_id)
+
+sync func post_configure_game():
+	# Begin all players (including self)
+	for p in player_info:
+		get_node("/root/Level/Players/%d" % p).begin()
 
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.
