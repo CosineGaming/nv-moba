@@ -100,13 +100,13 @@ func begin():
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player.player_info.is_right_team == player_info.is_right_team:
-		color = Color(0,0,1) # Blue for friendly
+		color = Color("#073a98") # Blue for friendly
 	else:
-		color = Color(1,0,0) # Red for enemy
-	var mesh = get_node("MainMesh")
+		color = Color("#62071a") # Red for enemy
 	var mat = SpatialMaterial.new()
 	mat.albedo_color = color
-	mesh.set_surface_material(0, mat)
+	get_node("Yaw/MainMesh").set_surface_material(0, mat)
+	get_node("Yaw/Pitch/RotatedHead").set_surface_material(0, mat)
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):

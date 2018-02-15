@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/heroes/2.gd" type="Script" id=2]
+[ext_resource path="res://assets/heroes/2_head.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://assets/heroes/2.obj" type="ArrayMesh" id=4]
 
 [sub_resource type="SphereShape" id=1]
 
@@ -12,6 +14,17 @@ radius = 7.0
 collision_layer = 8
 collision_mask = 13
 script = ExtResource( 2 )
+
+[node name="RotatedHead" parent="Yaw/Pitch" index="0"]
+
+transform = Transform( 2.65431e-14, -1.62921e-07, 1, -1, -1.62921e-07, 0, 1.62921e-07, -1, -1.62921e-07, 0, 0.0591576, -0.0118318 )
+mesh = ExtResource( 3 )
+
+[node name="MainMesh" parent="Yaw" index="1"]
+
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 1.03066, 0 )
+mesh = ExtResource( 4 )
+material/0 = null
 
 [node name="Crosshair" parent="MasterOnly" index="0"]
 

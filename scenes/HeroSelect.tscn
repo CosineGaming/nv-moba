@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scripts/hero_select.gd" type="Script" id=1]
 
-[node name="HeroSelect" type="ColorRect"]
+[node name="HeroSelect" type="ColorRect" index="0"]
 
 pause_mode = 2
 anchor_left = 0.0

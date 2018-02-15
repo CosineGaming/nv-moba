@@ -3,7 +3,7 @@ extends OptionButton
 const hero_names = [
 	"INDUSTRIA",
 	"IRA",
-	"AVARITIA",
+	"LUSSURIA",
 	"CARITAS"
 ]
 
