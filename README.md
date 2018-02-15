@@ -3,6 +3,8 @@ VANAGLORIA (working title)
 
 > A team game with an emphasis on movement (with no shooting), inspired by Overwatch and Zineth
 
+![Four heroes on the first level](docs/2018-02-14-heroes.png)
+
 Main mechanics ideas:
 
 - [x] Teams start side-by-side and must get to objective
