@@ -46,6 +46,7 @@ func _ready():
 			add_child(preload("res://scenes/ai.tscn").instance())
 			ai_instanced = true
 	else:
+		get_node("PlayerName").set_text(player_info.username)
 		# Remove HUD
 		remove_child(get_node(master_only))
 
