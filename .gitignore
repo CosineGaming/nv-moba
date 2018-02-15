@@ -7,6 +7,7 @@
 *.blend1
 nohup.out
 recordings
+ai
 
 ._*
 ehthumbs.db
