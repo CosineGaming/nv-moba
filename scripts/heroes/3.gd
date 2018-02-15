@@ -1,6 +1,6 @@
 extends "res://scripts/player.gd"
 
-var merge_power = .1
+var merge_power = .75
 var merged = null
 
 var old_layer
@@ -89,3 +89,4 @@ sync func unmerge():
 		pos.z += 1
 		set_translation(pos)
 		merged = null
+

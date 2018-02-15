@@ -99,7 +99,6 @@ func cam_update():
 	var pos = Vector3();
 	
 	if cam_ray_result.size() != 0:
-		print("re-pos, ray found")
 		var a = (cam_ray_result.position-pivot.get_global_transform().origin).normalized();
 		var b = pivot.get_global_transform().origin.distance_to(cam_ray_result.position);
 		#pos = cam_ray_result.position;
