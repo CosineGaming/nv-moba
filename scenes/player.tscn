@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://scripts/tp_camera.gd" type="Script" id=2]
@@ -22,7 +22,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="CapsuleMesh" id=4]
+[sub_resource type="CapsuleMesh" id=5]
 
 radius = 0.4
 mid_height = 0.1
@@ -30,7 +30,14 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="CubeMesh" id=6]
+
+size = Vector3( 2, 2, 2 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="SpatialMaterial" id=7]
 
 render_priority = 0
 flags_transparent = false
@@ -80,7 +87,6 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Flags", "Parameters", "Vertex Color" ]
 
 [node name="RigidBody" type="RigidBody" index="0" groups=[
 "player",
@@ -161,7 +167,7 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Transform", "material" ]
 
 [node name="MainMesh" type="MeshInstance" parent="Yaw" index="1"]
 
@@ -175,9 +181,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
-material/0 = SubResource( 5 )
+material/0 = null
 _sections_unfolded = [ "Transform", "material" ]
 
 [node name="MasterOnly" type="Node" parent="." index="4"]
@@ -253,15 +259,32 @@ far = 250.0
 
 enabled = true
 exclude_parent = true
-cast_to = Vector3( 0, 0, -100 )
+cast_to = Vector3( 0, 0, -500 )
 collision_mask = 1
 _sections_unfolded = [ "Transform" ]
 
-[node name="NamePosition" type="Spatial" parent="." index="6"]
+[node name="MaterialSettings" type="MeshInstance" parent="." index="6"]
+
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 6 )
+skeleton = NodePath("..")
+material/0 = SubResource( 7 )
+_sections_unfolded = [ "material" ]
+
+[node name="NamePosition" type="Spatial" parent="." index="7"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56117, 0 )
 
-[node name="PlayerName" type="Label" parent="." index="7"]
+[node name="PlayerName" type="Label" parent="." index="8"]
 
 anchor_left = 0.0
 anchor_top = 0.0

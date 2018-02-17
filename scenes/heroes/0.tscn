@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/heroes/0_head.obj" type="ArrayMesh" id=3]
 [ext_resource path="res://assets/heroes/0.obj" type="ArrayMesh" id=4]
 
-[node name="RigidBody" instance=ExtResource( 1 )]
+[node name="RigidBody" index="0" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
 
@@ -13,6 +13,7 @@ script = ExtResource( 2 )
 
 transform = Transform( 0.376731, 0, 6.23012e-08, -6.13772e-08, 1.03258e-14, 0.382402, 0, -0.389018, 1.01502e-14, 0, 0.104562, -0.0173855 )
 mesh = ExtResource( 3 )
+material/0 = null
 
 [node name="MainMesh" parent="Yaw" index="1"]
 

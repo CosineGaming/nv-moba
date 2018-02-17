@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://scripts/heroes/0-wall.gd" type="Script" id=1]
+[ext_resource path="res://scripts/heroes/1-wall.gd" type="Script" id=1]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -13,7 +13,7 @@ subdivide_depth = 0
 
 extents = Vector3( 1.5, 1.5, 0.25 )
 
-[node name="StaticBody" type="StaticBody"]
+[node name="StaticBody" type="StaticBody" index="0"]
 
 input_ray_pickable = true
 input_capture_on_drag = false

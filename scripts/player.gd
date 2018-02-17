@@ -32,8 +32,8 @@ var tp_camera = "TPCamera"
 var master_only = "MasterOnly"
 
 var master_player
-var friend_color = Color("#073a98") # Blue
-var enemy_color = Color("#62071a") # Red
+var friend_color = Color("#4abfe5") # Blue
+var enemy_color = Color("#f04273") # Red
 
 var ai_instanced = false
 
@@ -109,7 +109,12 @@ func begin():
 		color = friend_color
 	else:
 		color = enemy_color
-	var mat = SpatialMaterial.new()
+	# We have a base MaterialSettings to use inheritance with heroes
+	# Unfortunately we cannot do this with the actual meshes,
+	# because godot decides if you change the mesh you wanted to change the material as well
+	# So "MaterialSettings" is a dummy mesh in player.tscn that's hidden
+	# We call .duplicate() so we can set this color without messing with other players' colors
+	var mat = get_node("MaterialSettings").get_surface_material(0).duplicate()
 	mat.albedo_color = color
 	get_node("Yaw/MainMesh").set_surface_material(0, mat)
 	get_node("Yaw/Pitch/RotatedHead").set_surface_material(0, mat)
@@ -175,7 +180,15 @@ func control_player(state):
 	direction = direction.normalized()
 	var ray = get_node("Ray")
 
-	if get_colliding_bodies(): # We can navigate normally, we have a surface
+	# Detect jumpable
+	var jumpable = false
+	var jump_dot = 0.8 # If normal.dot(up) > jump_dot, we can jump
+	for i in range(state.get_contact_count()):
+		var n = state.get_contact_local_normal(i)
+		if n.dot(Vector3(0,1,0)) > jump_dot:
+			jumpable = true
+
+	if jumpable: # We can navigate normally, we have a surface
 		var up = state.get_total_gravity().normalized()
 		var normal = ray.get_collision_normal()
 		var floor_velocity = Vector3()
@@ -189,16 +202,7 @@ func control_player(state):
 		state.set_linear_velocity(lin_v)
 
 		if Input.is_action_just_pressed("jump"):
-			# This may be kinda expensive but we only check while pressing jump so it's ok
-			# Detect jumpable
-			var jump_dot = 0.8 # If normal.dot(up) > jump_dot, we can jump
-			var jumpable = false
-			for i in range(state.get_contact_count()):
-				var n = state.get_contact_local_normal(0)
-				if n.dot(Vector3(0,1,0)) > jump_dot:
-					jumpable = true
-			if jumpable:
-				state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
+			state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
 
 	else:
 		var accel = (1 + switch_charge * air_speed_build) * air_accel
