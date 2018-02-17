@@ -49,15 +49,14 @@ func add_wall():
 	var wall = preload("res://scenes/wall.tscn").instance()
 	var friendly = player_info.is_right_team == master_player.player_info.is_right_team
 	var color = friend_color if friendly else enemy_color
-	wall.set_color(color)
+	wall.init(self, color)
 	get_node("/root/Level").add_child(wall)
 	return wall
 
 func finalize_wall(wall, tf=null):
 	if tf:
 		wall.set_transform(tf)
-	# Originally, the wall is disabled to avoid weird physics
-	wall.get_node("CollisionShape").disabled = false
+	wall.place()
 	# Remember this wall, and return to non-placing state
 	# We need to do this even as slave, because we keep track of the count
 	walls.append(wall)
