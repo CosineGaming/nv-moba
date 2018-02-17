@@ -50,8 +50,8 @@ flags_fixed_size = false
 flags_albedo_tex_force_srgb = false
 vertex_color_use_as_albedo = false
 vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
+params_diffuse_mode = 1
+params_specular_mode = 3
 params_blend_mode = 0
 params_cull_mode = 0
 params_depth_draw_mode = 0
@@ -87,6 +87,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
+_sections_unfolded = [ "Flags", "Parameters", "Roughness" ]
 
 [node name="RigidBody" type="RigidBody" index="0" groups=[
 "player",
@@ -203,12 +204,13 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
+custom_colors/font_color = Color( 0.277344, 0.277344, 0.277344, 1 )
 text = "+"
 align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Margin", "Rect" ]
+_sections_unfolded = [ "Anchor", "Margin", "custom_colors" ]
 
 [node name="SwitchCharge" type="Label" parent="MasterOnly" index="1"]
 
@@ -225,10 +227,12 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
+custom_colors/font_color = Color( 0.289062, 0.289062, 0.289062, 1 )
 align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+_sections_unfolded = [ "custom_colors" ]
 
 [node name="TPCamera" type="Spatial" parent="." index="5"]
 
@@ -297,10 +301,12 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
+custom_colors/font_color = Color( 0.3125, 0.3125, 0.3125, 1 )
 align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 script = ExtResource( 3 )
+_sections_unfolded = [ "custom_colors" ]
 
 
