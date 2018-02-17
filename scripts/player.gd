@@ -22,7 +22,7 @@ var movement_charge = 0.15 # In percent per meter (except when heroes change tha
 const fall_height = -50
 
 var debug_node
-var recording = { "time": 0, "states": [], "events": [], "spawn": Vector3() }
+var recording
 
 slave var slave_transform = Basis()
 slave var slave_lin_v = Vector3()
@@ -51,6 +51,8 @@ func _ready():
 		remove_child(get_node(master_only))
 
 func spawn():
+	if "record" in player_info:
+		write_recording() # Write each spawn as a separate recording
 	var placement = Vector3()
 	var x_varies = 5
 	var z_varies = 5
@@ -62,11 +64,13 @@ func spawn():
 	# So we don't all spawn on top of each other
 	placement.x += rand_range(0, x_varies)
 	placement.z += rand_range(0, z_varies)
+	recording = { "time": 0, "states": [], "events": [], "spawn": Vector3() }
 	recording.spawn = var2str(placement)
+	recording.switch_charge = var2str(switch_charge)
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
-	
+
 func event_to_obj(event):
 	var d = {}
 	if event is InputEventMouseMotion:
@@ -220,8 +224,7 @@ func _process(delta):
 
 		if get_translation().y < fall_height:
 			spawn()
-			switch_hero_interface()
-		
+
 		if "record" in player_info:
 			recording.time += delta
 
@@ -264,11 +267,12 @@ func _exit_tree():
 # =========
 
 func write_recording():
-	var save = File.new()
-	var fname = "res://recordings/%d-%d-%d.rec" % [player_info.level, player_info.hero, randi() % 10000]
-	save.open(fname, File.WRITE)
-	save.store_line(to_json(recording))
-	save.close()
+	if recording and recording.events.size() > 0:
+		var save = File.new()
+		var fname = "res://recordings/%d-%d-%d.rec" % [player_info.level, player_info.hero, randi() % 10000]
+		save.open(fname, File.WRITE)
+		save.store_line(to_json(recording))
+		save.close()
 
 # Quits the game:
 func quit():

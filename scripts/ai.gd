@@ -8,6 +8,7 @@ func _ready():
 	if is_network_master():
 		print("readdyyyyy")
 		read_recording()
+		set_spawn = true
 		time = 0
 		set_physics_process(true)
 
@@ -15,6 +16,7 @@ func _physics_process(delta):
 	if is_network_master():
 		if set_spawn:
 			get_node("..").set_translation(str2var(recording.spawn))
+			get_node("..").switch_charge = str2var(recording.switch_charge)
 			print(get_node("..").get_translation())
 			set_spawn = false
 		play_keys()
@@ -69,6 +71,10 @@ func obj_to_event(d):
 func play_keys():
 	# events[0] is first event
 	# events[0][0] is first event's TIME
+	if recording.events.size() == 0:
+		get_node("..").spawn() # This may cause spawn twice, I hope this isn't a problem
+		# get_node("..").switch_charge = 0 # This needs to reset so the recording is accurate
+		read_recording()
 	while float(recording.events[0][0]) <= time:
 		# events[0][1] is first event's EVENT
 		var event_obj = recording.events.pop_front()[1]

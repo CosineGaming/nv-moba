@@ -82,7 +82,7 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Flags", "Parameters", "Vertex Color" ]
 
-[node name="RigidBody" type="RigidBody" groups=[
+[node name="RigidBody" type="RigidBody" index="0" groups=[
 "player",
 ]]
 
@@ -246,8 +246,8 @@ projection = 0
 current = false
 fov = 70.0
 size = 1.0
-near = 0.05
-far = 100.0
+near = 0.1
+far = 250.0
 
 [node name="Ray" type="RayCast" parent="TPCamera/Camera" index="0"]
 
