@@ -10,8 +10,10 @@ var update_frequency = 2 # In secs. This isn't too fast-paced, so don't clog the
 var update_count = 0
 
 var master_team_right = null
+var friend_color
+var enemy_color
 
-var build_rate = 1
+var build_rate = 1.5
 
 func _integrate_forces(state):
 	var rot = get_rotation().x
@@ -27,12 +29,12 @@ func _integrate_forces(state):
 	if active:
 		if right_active == master_team_right:
 			# We DO own the correct one; display left counting, blue
-			get_node("../HUD/LeftTeam").add_color_override("font_color_shadow", Color(0,0,1))
+			get_node("../HUD/LeftTeam").add_color_override("font_color_shadow", friend_color)
 			get_node("../HUD/RightTeam").add_color_override("font_color_shadow", Color(0,0,0,0))
 		else:
 			# We DO NOT own the correct one; display right counting, red
 			get_node("../HUD/LeftTeam").add_color_override("font_color_shadow", Color(0,0,0,0))
-			get_node("../HUD/RightTeam").add_color_override("font_color_shadow", Color(1,0,0))
+			get_node("../HUD/RightTeam").add_color_override("font_color_shadow", enemy_color)
 
 func _process(delta):
 
@@ -41,6 +43,8 @@ func _process(delta):
 	if master_team_right == null:
 		var master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
 		master_team_right = master_player.player_info.is_right_team
+		friend_color = master_player.friend_color
+		enemy_color = master_player.enemy_color
 
 	# Count the percents
 	if active:
