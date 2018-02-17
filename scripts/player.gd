@@ -6,7 +6,7 @@ var view_sensitivity = 0.25
 
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
-var jump_speed = 1.5 # m/s
+var jump_speed = 5 # m/s
 var air_accel = .1 # m/s/s
 var floor_friction = 1-0.08
 var air_friction = 1-0.03
@@ -182,7 +182,7 @@ func control_player(state):
 		lin_v.z *= floor_friction
 		state.set_linear_velocity(lin_v)
 
-		if Input.is_action_pressed("jump"):
+		if Input.is_action_just_pressed("jump"):
 			# This may be kinda expensive but we only check while pressing jump so it's ok
 			# Detect jumpable
 			var jump_dot = 0.8 # If normal.dot(up) > jump_dot, we can jump

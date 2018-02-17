@@ -7,7 +7,7 @@ const wallride_leap_build = 0.01
 
 var since_on_wall = 0
 var last_wall_normal = Vector3()
-var wallride_forgiveness = .150
+var wallride_forgiveness = .3
 
 func _ready():
 	._ready()
