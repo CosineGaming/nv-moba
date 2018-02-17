@@ -256,6 +256,7 @@ sync func switch_hero(hero):
 	get_node("/root/Level/Players").call_deferred("add_child", new_hero)
 	# We must wait until after _ready is called, so that we don't end up at spawn
 	new_hero.call_deferred("set_status", get_status())
+	new_hero.call_deferred("begin")
 	queue_free()
 
 func _exit_tree():
