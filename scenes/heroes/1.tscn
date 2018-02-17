@@ -27,7 +27,6 @@ mesh = ExtResource( 3 )
 
 transform = Transform( 1, 0, 0, 0, -1.54624e-07, -0.949072, 0, 1, -1.62921e-07, 0, 0.725089, 0 )
 mesh = ExtResource( 4 )
-material/0 = null
 
 [node name="TPCamera" parent="." index="5"]
 

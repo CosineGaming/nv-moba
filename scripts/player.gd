@@ -52,7 +52,7 @@ func _ready():
 		# Remove HUD
 		remove_child(get_node(master_only))
 
-func spawn():
+sync func spawn():
 	if "record" in player_info:
 		write_recording() # Write each spawn as a separate recording
 	var placement = Vector3()
@@ -225,7 +225,7 @@ func _process(delta):
 			switch_charge = switch_charge_cap
 
 		if get_translation().y < fall_height:
-			spawn()
+			rpc("spawn")
 
 		if "record" in player_info:
 			recording.time += delta

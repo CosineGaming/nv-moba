@@ -16,6 +16,11 @@ func place():
 	get_node("CollisionShape").disabled = false
 	get_node("MeshInstance").get_surface_material(0).flags_transparent = false
 
+func make_last():
+	var mat = get_node("MeshInstance").get_surface_material(0)
+	mat.flags_transparent = true
+	mat.albedo_color.a = 0.9
+
 func _process(delta):
 	pass
 	# var cols = get_colliding_bodies()
