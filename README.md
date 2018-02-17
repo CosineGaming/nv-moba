@@ -12,7 +12,6 @@ Main mechanics ideas:
 
 Side mechanics ideas:
 
-- [ ] Maze-like map
 - [x] After enough movement, player can switch characters (switching is a mechanic, not a meta-game! no one-tricks)
 - [x] Speed up slowly over time. Reset on switch
 
@@ -50,6 +49,9 @@ Key concepts:
   - An emphasis on teamwork (Objective-based is a plus)
   - Rich, emergent interaction
   - Quick battles (very high replay value)
+- From FPS we take:
+  - Attention bursts / rationing
+  - Fast pace
 - From Zineth we take:
   - A rethinking of racing games
   - High skill cap, low skill floor
@@ -58,7 +60,7 @@ Key concepts:
 Running
 =======
 
-First, install [godot engine 3.0-rc1](https://godotengine.org/article/dev-snapshot-godot-3-0-rc-1). Then:
+First, install [godot engine (3.0)](https://godotengine.org/download). Then:
 
     $ git clone https://github.com/CosineGaming/nv-moba && cd nv-moba
     $ godot
