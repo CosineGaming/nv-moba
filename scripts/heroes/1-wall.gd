@@ -1,10 +1,14 @@
 extends StaticBody
 
 var maker_node
-var touch_charge = 1
+var touch_charge = 4
+var being_touched = 0
 
 func init(maker, color):
 	maker_node = maker
+	for player in get_node("/root/Level/Players").get_children():
+		player.connect("body_entered", self, "count_bodies", [player, 1])
+		player.connect("body_exited", self, "count_bodies", [player, -1])
 	var mat = SpatialMaterial.new()
 	color.a = 0.5
 	mat.flags_transparent = true
@@ -21,10 +25,12 @@ func make_last():
 	mat.flags_transparent = true
 	mat.albedo_color.a = 0.9
 
+func count_bodies(with, player, delta):
+	if with == self:
+		if player != maker_node:
+			being_touched += delta
+
 func _process(delta):
-	pass
-	# var cols = get_colliding_bodies()
-	# for col in cols:
-	# 	if col != maker_node: # Don't count ourself. This encourages teamwork and discourages wall-touching-for-charge abuse
-	# 		maker_node.switch_charge += touch_charge * delta
+	if being_touched > 0:
+		maker_node.switch_charge += touch_charge * delta
 

@@ -99,8 +99,8 @@ func add_wall():
 	var wall = preload("res://scenes/wall.tscn").instance()
 	var friendly = player_info.is_right_team == master_player.player_info.is_right_team
 	var color = friend_color if friendly else enemy_color
-	wall.init(self, color)
 	get_node("/root/Level").add_child(wall)
+	wall.init(self, color)
 	return wall
 
 func finalize_wall(wall, tf=null):

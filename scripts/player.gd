@@ -13,11 +13,11 @@ var air_friction = 1-0.03
 var player_info # Set by lobby
 
 var walk_speed_build = 0.006 # `walk_speed` per `switch_charge`
-var air_speed_build = 0.006 # `air_accel` per `switch_chare`
+var air_speed_build = 0.006 # `air_accel` per `switch_charge`
 
 var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
-var movement_charge = 0.15 # In percent per meter (except when heroes change that)
+var movement_charge = 0.1 # In percent per meter (except when heroes change that)
 
 const fall_height = -50
 
@@ -32,7 +32,7 @@ var tp_camera = "TPCamera"
 var master_only = "MasterOnly"
 
 var master_player
-var friend_color = Color("#4abfe5") # Blue
+var friend_color = Color("#4ab0e5") # Blue
 var enemy_color = Color("#f04273") # Red
 
 var ai_instanced = false
