@@ -121,7 +121,3 @@ func check_wall_count():
 	if walls.size() >= max_walls:
 		walls[0].make_last()
 
-func sigmoid(x):
-	var margin = 0.2
-	return 0 if abs(x) < margin else x
-

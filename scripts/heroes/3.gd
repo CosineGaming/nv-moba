@@ -9,6 +9,9 @@ var old_mask
 var allow_merge_time = 0
 var allow_merge_threshold = 0.4
 
+var original_charge
+var boost_charge = 0
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
@@ -29,7 +32,12 @@ func _process(delta):
 						rpc("merge", col.get_name())
 
 		if merged and Input.is_action_just_pressed("hero_3_unmerge"):
-				rpc("unmerge")
+			rpc("unmerge")
+		if merged:
+			# Subtract and then add, so we can continously add this
+			switch_charge -= boost_charge
+			boost_charge = merged.switch_charge - original_charge
+			switch_charge += boost_charge
 
 func control_player(state):
 	if !merged:
@@ -74,6 +82,9 @@ func set_boosted(node, is_boosted):
 		ratio = 1/ratio # Undo the effect
 	node.walk_speed *= ratio
 	node.air_accel *= ratio
+	if is_boosted:
+		original_charge = node.switch_charge
+		boost_charge = 0
 
 sync func merge(node_name):
 	set_boosting(true)

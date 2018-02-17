@@ -3,7 +3,7 @@ extends "res://scripts/player.gd"
 const wallride_speed_necessary = 1.5
 const wallride_leap_height = 45
 const wallride_leap_side = 6
-const wallride_leap_build = 0.01
+const wallride_leap_build = 0
 
 var since_on_wall = 0
 var last_wall_normal = Vector3()
@@ -11,11 +11,10 @@ var wallride_forgiveness = .3
 
 func _ready():
 	._ready()
-	walk_speed *= 1.2
-	air_accel *= 3
+	walk_speed *= 0.8
+	air_accel *= 2
 	jump_speed *= 1
-	walk_speed_build *= 2
-	air_speed_build *= 3
+	air_speed_build *= 2
 
 func control_player(state):
 	.control_player(state)
@@ -35,7 +34,6 @@ func wallride(state):
 	else:
 		since_on_wall += state.get_step()
 
-	debug_node.set_text(str(since_on_wall < wallride_forgiveness))
 	if since_on_wall < wallride_forgiveness:
 		# Add zero gravity
 		set_gravity_scale(0)
