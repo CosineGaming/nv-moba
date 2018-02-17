@@ -32,6 +32,8 @@ var tp_camera = "TPCamera"
 var master_only = "MasterOnly"
 
 var master_player
+var friend_color = Color("#073a98") # Blue
+var enemy_color = Color("#62071a") # Red
 
 var ai_instanced = false
 
@@ -104,9 +106,9 @@ func begin():
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player.player_info.is_right_team == player_info.is_right_team:
-		color = Color("#073a98") # Blue for friendly
+		color = friend_color
 	else:
-		color = Color("#62071a") # Red for enemy
+		color = enemy_color
 	var mat = SpatialMaterial.new()
 	mat.albedo_color = color
 	get_node("Yaw/MainMesh").set_surface_material(0, mat)
@@ -255,9 +257,6 @@ sync func switch_hero(hero):
 	# We must wait until after _ready is called, so that we don't end up at spawn
 	new_hero.call_deferred("set_status", get_status())
 	queue_free()
-
-func _exit_scene():
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _exit_tree():
 	if "record" in player_info:

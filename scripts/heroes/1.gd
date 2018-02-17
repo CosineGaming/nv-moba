@@ -8,7 +8,7 @@ const max_walls = 7
 
 func _process(delta):
 	if is_network_master():
-		
+
 		if Input.is_action_just_pressed("hero_1_place_wall"):
 			# Press button twice to cancel
 			if is_placing_wall:
@@ -36,6 +36,10 @@ func _process(delta):
 				placing_wall_node = null
 				is_placing_wall = false
 
+func _exit_tree():
+	for wall in walls:
+		wall.queue_free()
+
 slave func slave_place_wall(tf):
 	var wall = add_wall()
 	finalize_wall(wall, tf)
@@ -43,6 +47,9 @@ slave func slave_place_wall(tf):
 # Creates wall, adds to world, and returns the node
 func add_wall():
 	var wall = preload("res://scenes/wall.tscn").instance()
+	var friendly = player_info.is_right_team == master_player.player_info.is_right_team
+	var color = friend_color if friendly else enemy_color
+	wall.set_color(color)
 	get_node("/root/Level").add_child(wall)
 	return wall
 
