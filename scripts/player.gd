@@ -37,6 +37,8 @@ var enemy_color = Color("#f04273") # Red
 
 var ai_instanced = false
 
+signal spawn
+
 func _ready():
 
 	set_process_input(true)
@@ -53,6 +55,7 @@ func _ready():
 		remove_child(get_node(master_only))
 
 sync func spawn():
+	emit_signal("spawn")
 	if "record" in player_info:
 		write_recording() # Write each spawn as a separate recording
 	var placement = Vector3()
@@ -72,6 +75,8 @@ sync func spawn():
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
+	get_node(tp_camera).cam_yaw = 0
+	get_node(tp_camera).cam_pitch = 0
 
 func event_to_obj(event):
 	var d = {}

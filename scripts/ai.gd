@@ -6,6 +6,7 @@ var set_spawn = true
 
 func _ready():
 	if is_network_master():
+		get_node("..").connect("spawn", self, "read_recording")
 		read_recording()
 		set_spawn = true
 		time = 0
@@ -14,13 +15,17 @@ func _ready():
 func _physics_process(delta):
 	if is_network_master():
 		if set_spawn:
-			get_node("..").set_translation(str2var(recording.spawn))
-			get_node("..").switch_charge = str2var(recording.switch_charge)
+			set_spawn()
 			set_spawn = false
 		play_keys()
 		# It's actually better to do this 2nd
 		# Since input is, on average, called 1/2way through a frame
 		time += delta
+
+func set_spawn():
+	get_node("..").set_translation(str2var(recording.spawn))
+	print(recording.switch_charge)
+	get_node("..").switch_charge = str2var(recording.switch_charge)
 
 func read_recording():
 
@@ -43,11 +48,15 @@ func read_recording():
 	# Now pick a random one
 	var fname = possible[randi() % possible.size()]
 
+	print("Reading recording: " + fname)
+
 	# Read the file into recording.events for later use
 	var frec = File.new()
 	frec.open(path + fname, File.READ)
 	recording = parse_json(frec.get_as_text())
 	frec.close()
+
+	set_spawn()
 
 func apply_dict(from, to):
 	if typeof(from) != TYPE_DICTIONARY:
@@ -80,3 +89,4 @@ func play_keys():
 		Input.parse_input_event(event)
 		#._input(event)
 		#get_node("TPCamera")._input(event)
+
