@@ -45,7 +45,6 @@ func _ready():
 		SERVER_PLAYING = false # TODO: Uncaps :(
 	if o.get_value("-hero"):
 		option_sel("HeroSelect", o.get_value("-hero"))
-		print(get_node("HeroSelect").get_selected_id())
 	if o.get_value("-level"):
 		option_sel("ServerStart/LevelSelect", o.get_value("-level"))
 	if o.get_value("-server"):
@@ -105,7 +104,7 @@ func _server_init():
 		player_info[1] = my_info
 
 func _player_connected(id):
-	print("Connect, my friend: " + str(id))
+	pass
 
 func _player_disconnected(id):
 	if get_tree().is_network_server():
@@ -138,7 +137,6 @@ remote func register_player(new_peer, info):
 			if old_peer != new_peer:
 				# We need to assign team later, so count current
 				if player_info[old_peer].is_right_team:
-					print(right_team_count)
 					right_team_count += 1
 				# You'd think this part could be met with a simple `rpc(`, but actually it can't
 				# My best guess is this is because we haven't registered the names yet, but I'm not sure (TODO)

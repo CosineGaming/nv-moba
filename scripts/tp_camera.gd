@@ -115,4 +115,4 @@ func _physics_process(delta):
 	var ds = get_world().get_direct_space_state();
 	if ds != null:
 		cam_ray_result = ds.intersect_ray(pivot.get_global_transform().origin, cam_pos, collision_exception);
-		#print(cam_ray_result)
+

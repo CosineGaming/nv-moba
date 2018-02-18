@@ -6,7 +6,6 @@ var set_spawn = true
 
 func _ready():
 	if is_network_master():
-		print("readdyyyyy")
 		read_recording()
 		set_spawn = true
 		time = 0
@@ -17,7 +16,6 @@ func _physics_process(delta):
 		if set_spawn:
 			get_node("..").set_translation(str2var(recording.spawn))
 			get_node("..").switch_charge = str2var(recording.switch_charge)
-			print(get_node("..").get_translation())
 			set_spawn = false
 		play_keys()
 		# It's actually better to do this 2nd

@@ -7,11 +7,12 @@ Big TODOs:
 - Start making maps and figuring out what works / what you like
 - Make a real user interface
 - Voice chat
-- ARTTTTT
 
 Smaller TODOs:
 
 - Allow non-playing server to keep running and connecting people
+- Art?
+  - Particles - wall destruction, wallriding
 
 Bugs:
 
