@@ -126,15 +126,32 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="LeftTeam" type="Label" parent="HUD" index="0"]
+[node name="ColorRect" type="ColorRect" parent="HUD" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -35.0
+margin_top = 18.0
+margin_right = 95.0
+margin_bottom = 57.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0, 0, 0, 0.3 )
+
+[node name="LeftTeam" type="Label" parent="HUD" index="1"]
 
 anchor_left = 0.5
 anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
-margin_left = -44.0
+margin_left = -47.0
 margin_top = 32.0
-margin_right = -4.0
+margin_right = -7.0
 margin_bottom = 63.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 2
@@ -142,20 +159,21 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 text = "0%"
+align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Theme" ]
 
-[node name="RightTeam" type="Label" parent="HUD" index="1"]
+[node name="RightTeam" type="Label" parent="HUD" index="2"]
 
 anchor_left = 0.5
 anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
-margin_left = 32.0
+margin_left = 29.0
 margin_top = 30.0
-margin_right = 72.0
+margin_right = 69.0
 margin_bottom = 44.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 2
@@ -163,11 +181,12 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 text = "0%"
+align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Finish" type="Label" parent="HUD" index="2"]
+[node name="Finish" type="Label" parent="HUD" index="3"]
 
 anchor_left = 0.5
 anchor_top = 0.0
