@@ -4,7 +4,8 @@ const hero_names = [
 	"INDUSTRIA",
 	"IRA",
 	"LUSSURIA",
-	"CARITAS"
+	"CARITAS",
+	"PAZIENZA",
 ]
 
 func _ready():

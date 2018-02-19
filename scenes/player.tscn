@@ -22,7 +22,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="CapsuleMesh" id=5]
+[sub_resource type="CapsuleMesh" id=4]
 
 radius = 0.4
 mid_height = 0.1
@@ -30,14 +30,14 @@ radial_segments = 64
 rings = 8
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="CubeMesh" id=6]
+[sub_resource type="CubeMesh" id=5]
 
 size = Vector3( 2, 2, 2 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="SpatialMaterial" id=7]
+[sub_resource type="SpatialMaterial" id=6]
 
 render_priority = 0
 flags_transparent = false
@@ -182,7 +182,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 5 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "material" ]
@@ -264,7 +264,7 @@ far = 250.0
 enabled = true
 exclude_parent = true
 cast_to = Vector3( 0, 0, -500 )
-collision_mask = 1
+collision_mask = 5
 _sections_unfolded = [ "Transform" ]
 
 [node name="MaterialSettings" type="MeshInstance" parent="." index="6"]
@@ -279,9 +279,9 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 6 )
+mesh = SubResource( 5 )
 skeleton = NodePath("..")
-material/0 = SubResource( 7 )
+material/0 = SubResource( 6 )
 _sections_unfolded = [ "material" ]
 
 [node name="NamePosition" type="Spatial" parent="." index="7"]

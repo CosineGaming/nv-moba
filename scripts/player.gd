@@ -39,6 +39,11 @@ var ai_instanced = false
 
 signal spawn
 
+var colored_meshes = [
+	"Yaw/MainMesh",
+	"Yaw/Pitch/RotatedHead",
+]
+
 func _ready():
 
 	set_process_input(true)
@@ -121,8 +126,8 @@ func begin():
 	# We call .duplicate() so we can set this color without messing with other players' colors
 	var mat = get_node("MaterialSettings").get_surface_material(0).duplicate()
 	mat.albedo_color = color
-	get_node("Yaw/MainMesh").set_surface_material(0, mat)
-	get_node("Yaw/Pitch/RotatedHead").set_surface_material(0, mat)
+	for mesh in colored_meshes:
+		get_node(mesh).set_surface_material(0, mat)
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):

@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/heroes/4.gd" type="Script" id=2]
+[ext_resource path="res://assets/heroes/4_head.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://assets/heroes/4_beam.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://assets/heroes/4.obj" type="ArrayMesh" id=5]
+
+[node name="RigidBody" index="0" instance=ExtResource( 1 )]
+
+script = ExtResource( 2 )
+
+[node name="RotatedHead" parent="Yaw/Pitch" index="0"]
+
+mesh = ExtResource( 3 )
+
+[node name="Beam" type="MeshInstance" parent="Yaw/Pitch" index="1"]
+
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = ExtResource( 4 )
+skeleton = NodePath("..")
+material/0 = null
+_sections_unfolded = [ "Transform" ]
+
+[node name="MainMesh" parent="Yaw" index="1"]
+
+mesh = ExtResource( 5 )
+
+
