@@ -49,6 +49,7 @@ func _ready():
 	set_process_input(true)
 	debug_node = get_node("/root/Level/Debug")
 	if is_network_master():
+		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
 		spawn()
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
