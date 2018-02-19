@@ -250,7 +250,7 @@ func switch_hero_interface():
 		toggle_mouse_capture()
 		# Pause so if we have walls and such nothing funny happens
 		get_tree().set_pause(true)
-		var interface = preload("res://scenes/HeroSelect.tscn").instance()
+		var interface = preload("res://scenes/hero_select.tscn").instance()
 		add_child(interface)
 		interface.get_node("Confirm").connect("pressed", self, "switch_hero_master")
 
