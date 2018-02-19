@@ -7,9 +7,9 @@ func _ready():
 	pos = get_node("../NamePosition")
 
 func _process(delta):
-	if not camera:
-		# This needs to happen here because players are added later
-		camera = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id()).get_node("TPCamera/Camera")
+	# This needs to happen here because players are added later
+	# Plus, the camera changes when a player switches hero
+	camera = util.get_master_player().get_node("TPCamera/Camera")
 	var pos3d = pos.get_global_transform().origin
 	if camera.is_position_behind(pos3d):
 		hide()

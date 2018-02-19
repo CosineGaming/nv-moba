@@ -76,10 +76,6 @@ subdivide_depth = 0
 
 light_cull_mask = -1
 
-[node name="Players" parent="." index="1"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4634, -0.377042 )
-
 [node name="MeshInstance" parent="Ball" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.6514, 0, 12.0446 )

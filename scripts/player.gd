@@ -49,6 +49,7 @@ func _ready():
 	set_process_input(true)
 	debug_node = get_node("/root/Level/Debug")
 	if is_network_master():
+		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
 		spawn()
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
@@ -58,6 +59,52 @@ func _ready():
 		get_node("PlayerName").set_text(player_info.username)
 		# Remove HUD
 		remove_child(get_node(master_only))
+
+func _input(event):
+	if is_network_master():
+		if Input.is_action_just_pressed("switch_hero"):
+			switch_hero_interface()
+		# Quit the game:
+		if Input.is_action_pressed("quit"):
+			quit()
+		if "record" in player_info:
+			recording.events.append([recording.time, event_to_obj(event)])
+
+func _process(delta):
+	# All player code not caused by input, and not causing movement
+	if is_network_master():
+		var vel = get_linear_velocity()
+		switch_charge += movement_charge * vel.length() * delta
+		var switch_node = get_node("MasterOnly/SwitchCharge")
+		switch_node.set_text("%.f%%" % switch_charge)
+		if switch_charge >= 100:
+			# Let switch_charge keep building, because we use it for walk_speed and things
+			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+		if switch_charge > switch_charge_cap:
+			# There is however a cap
+			switch_charge = switch_charge_cap
+
+		if get_translation().y < fall_height:
+			rpc("spawn")
+
+		if "record" in player_info:
+			recording.time += delta
+
+
+func _integrate_forces(state):
+	if is_network_master():
+		control_player(state)
+		var status = get_status()
+		rpc_unreliable("set_status", status)
+		record_status(status)
+	set_rotation()
+
+func _exit_tree():
+	if "record" in player_info:
+		write_recording()
+
+# Functions
+# =========
 
 sync func spawn():
 	emit_signal("spawn")
@@ -101,18 +148,8 @@ func event_to_obj(event):
 		d.type = "mb"
 	return d
 
-func _input(event):
-	if is_network_master():
-		if Input.is_action_just_pressed("switch_hero"):
-			switch_hero_interface()
-		# Quit the game:
-		if Input.is_action_pressed("quit"):
-			quit()
-		if "record" in player_info:
-			recording.events.append([recording.time, event_to_obj(event)])
-
 func begin():
-	master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
+	master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player.player_info.is_right_team == player_info.is_right_team:
@@ -147,14 +184,6 @@ func record_status(status):
 		for i in range(status.size()):
 			status[i] = var2str(status[i])
 		recording.states.append([recording.time, status])
-
-func _integrate_forces(state):
-	if is_network_master():
-		control_player(state)
-		var status = get_status()
-		rpc_unreliable("set_status", status)
-		record_status(status)
-	set_rotation()
 
 slave func set_status(s):
 	set_transform(s[0])
@@ -224,26 +253,6 @@ func control_player(state):
 
 	state.integrate_forces()
 
-func _process(delta):
-	# All player code not caused by input, and not causing movement
-	if is_network_master():
-		var vel = get_linear_velocity()
-		switch_charge += movement_charge * vel.length() * delta
-		var switch_node = get_node("MasterOnly/SwitchCharge")
-		switch_node.set_text("%.f%%" % switch_charge)
-		if switch_charge >= 100:
-			# Let switch_charge keep building, because we use it for walk_speed and things
-			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
-		if switch_charge > switch_charge_cap:
-			# There is however a cap
-			switch_charge = switch_charge_cap
-
-		if get_translation().y < fall_height:
-			rpc("spawn")
-
-		if "record" in player_info:
-			recording.time += delta
-
 func switch_hero_interface():
 	if switch_charge >= 100:
 		# Interface needs the mouse!
@@ -273,13 +282,6 @@ sync func switch_hero(hero):
 	new_hero.call_deferred("begin")
 	queue_free()
 
-func _exit_tree():
-	if "record" in player_info:
-		write_recording()
-
-# Functions
-# =========
-
 func write_recording():
 	if recording and recording.events.size() > 0:
 		var save = File.new()
@@ -292,3 +294,12 @@ func write_recording():
 func quit():
 	get_tree().quit()
 
+# These aren't used by vanilla player, but are used by heroes in common
+
+func pick_from(group):
+	var look_ray = get_node("TPCamera/Camera/Ray")
+	var looking_at = look_ray.get_collider()
+	var result = group.find(looking_at)
+	return result
+
+# =========
