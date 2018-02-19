@@ -1,3 +1,5 @@
+extends Node # Networking functionality
+
 var player
 
 var is_placing = false
@@ -9,10 +11,18 @@ var start_action
 var confirm_action
 var delete_action
 
-var scene_path
+var scene
 
 signal start_placement
 signal confirm_placement
+
+func _init(parent, scene_path):
+	player = parent
+	player.add_child(self)
+	# Set the network master to the player's network master, which happens to be its name
+	# This allows it to use master, slave keywords appropriately
+	set_network_master(int(player.get_name()))
+	scene = load(scene_path)
 
 func place_input():
 
@@ -33,22 +43,20 @@ func place_input():
 	if Input.is_action_just_pressed(delete_action):
 		var pick = player.pick_from(placed)
 		if pick != -1:
-			remove_placed(pick)
+			rpc("remove_placed", pick)
 
 	if is_placing or confirm:
-		call_deferred("position_placement", placing_node)
+		position_placement(placing_node)
 
 	if confirm:
-		call_deferred("confirm_placement", placing_node)
-		emit_signal("confirm_placement")
+		# Order matters here: confirm_placement resets placing_node so we have to do anything with it first
+		rpc("slave_place", placing_node.transform)
+		confirm_placement(placing_node)
 
 func confirm_placement(node, tf=null):
 	if tf:
 		node.set_transform(tf)
-	# TODO: Is this working? Could it be done better?
 	node.place()
-	# Remember this wall, and return to non-placing state
-	# We need to do this even as slave, because we keep track of the count
 	placed.append(node)
 	check_count()
 	placing_node = null
@@ -106,8 +114,10 @@ sync func remove_placed(index):
 	placed.remove(index)
 
 func create():
-	var node = load(scene_path).instance()
-	player.get_node("/root/Level").call_deferred("add_child", node)
-	node.call_deferred("init", player) # TODO: Is call_deferred legal on possibly not existing node?
+	var node = scene.instance()
+	print(node)
+	player.get_node("/root/Level").add_child(node)
+	# We have to call_deferred because we're `load`ing instead of `preload`ing. TODO: preload?
+	node.init(player)
 	return node
 
