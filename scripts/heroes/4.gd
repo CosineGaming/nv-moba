@@ -17,15 +17,13 @@ func _process(delta):
 		var is_stunning = false
 
 		if stun:
-			var look_ray = get_node("TPCamera/Camera/Ray")
-			var stunning = look_ray.get_collider()
 			var players = get_node("/root/Level/Players").get_children()
-			var player = players.find(stunning)
+			var player = pick_from(players)
 			if player != -1:
 				# We get charge for just stunning, plus charge for how much linear velocity we cut out
 				switch_charge += stun_charge * delta
 				switch_charge += velocity_charge * players[player].get_linear_velocity().length() * delta
-				rpc("stun", players[player].get_name(), look_ray.get_collision_point())
+				rpc("stun", players[player].get_name(), get_node("TPCamera/Camera/Ray").get_collision_point())
 				is_stunning = true
 
 		if not is_stunning:
