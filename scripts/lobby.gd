@@ -36,15 +36,24 @@ func option_sel(button_name, option):
 
 func _ready():
 
+	randomize()
+
+	get_node("Server").connect("pressed", self, "_server_init")
+	get_node("ServerStart").connect("pressed", self, "start_game")
+	get_node("Client").connect("pressed", self, "_client_init")
+	get_node("Singleplayer").connect("pressed", self, "_singleplayer_init")
+	get_node("HeroSelect").connect("item_selected", self, "select_hero")
+
 	var o = setup_options()
 	o.parse()
-	
-	randomize()
 
 	if o.get_value("-silent-server"):
 		SERVER_PLAYING = false # TODO: Uncaps :(
 	if o.get_value("-hero"):
-		option_sel("HeroSelect", o.get_value("-hero"))
+		var hero = o.get_value("-hero")
+		option_sel("HeroSelect", hero)
+		# For some reason, calling option_sel doesn't trigger the actual selection
+		select_hero(get_node("HeroSelect").get_selected_id())
 	if o.get_value("-level"):
 		option_sel("ServerStart/LevelSelect", o.get_value("-level"))
 	if o.get_value("-server"):
@@ -64,18 +73,9 @@ func _ready():
 		o.print_help()
 		quit()
 
-	# Called every time the node is added to the scene.
-	# Initialization here
-	get_node("Server").connect("pressed", self, "_server_init")
-	get_node("ServerStart").connect("pressed", self, "start_game")
-	get_node("Client").connect("pressed", self, "_client_init")
-	get_node("Singleplayer").connect("pressed", self, "_singleplayer_init")
-
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
-	
-	get_node("HeroSelect").connect("item_selected", self, "select_hero")
 
 func _client_init():
 	collect_info()
@@ -157,6 +157,8 @@ sync func unregister_player(peer):
 	get_node("/root/Level/Players/%d" % peer).queue_free()
 
 func select_hero(hero):
+	var description = get_node("HeroSelect").hero_text[hero]
+	get_node("HeroDescription").set_text(description)
 	rpc("set_hero", get_tree().get_network_unique_id(), hero)
 
 sync func set_hero(peer, hero):
@@ -228,7 +230,3 @@ sync func post_configure_game():
 	for p in player_info:
 		get_node("/root/Level/Players/%d" % p).begin()
 
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass

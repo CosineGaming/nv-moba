@@ -2,6 +2,9 @@
 
 extends "res://scripts/player.gd"
 
+var stun_charge = 1
+var velocity_charge = 10 # This one is instantaneous, so it gets quita weight
+
 # --- Godot overrides ---
 
 func _ready():
@@ -19,6 +22,9 @@ func _process(delta):
 			var players = get_node("/root/Level/Players").get_children()
 			var player = players.find(stunning)
 			if player != -1:
+				# We get charge for just stunning, plus charge for how much linear velocity we cut out
+				switch_charge += stun_charge * delta
+				switch_charge += velocity_charge * players[player].get_linear_velocity().length() * delta
 				rpc("stun", players[player].get_name(), look_ray.get_collision_point())
 				is_stunning = true
 
@@ -30,7 +36,6 @@ func _process(delta):
 # --- Own ---
 
 sync func stun(net_id, position):
-	print("stunnnn")
 	# Stun the thing!
 	var player = get_node("/root/Level/Players/%s" % net_id)
 	player.set_linear_velocity(Vector3())
@@ -42,7 +47,6 @@ sync func stun(net_id, position):
 	var us = get_node("TPCamera/Camera").get_global_transform().origin
 	var distance = position - us
 	beam.scale = Vector3(1,distance.length(),1)
-	print(beam.scale)
 	# We move the beam up by half the scale because the position is based on the center, not the bottom
 	beam.translation.z = -distance.length() / 2 # We face -z direction
 

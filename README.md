@@ -18,12 +18,12 @@ Side mechanics ideas:
 Current heroes:
 
 - Active:
-  - Wallriding mfer
+  - INDUSTRIA (Wallriding mfer)
 - Offensive:
-  - WallMAKING mfer
-  - An ATTRACTIVE mfer
+  - IRA (WallMAKING mfer)
+  - LUSSURIA (An ATTRACTIVE mfer)
 - Support:
-  - Margarine
+  - CARITAS (Margarine)
 
 Ideas for Heroes:
 
@@ -41,7 +41,6 @@ Ideas for Heroes:
   - Lay walls
   - Lay traps
   - Destroy buildings
-  - Slow in AoE
 
 Key concepts:
 
@@ -54,7 +53,7 @@ Key concepts:
   - Fast pace
 - From Zineth we take:
   - A rethinking of racing games
-  - High skill cap, low skill floor
+  - High skill cap, high(=easy) skill floor
   - Forgiving gameplay
 
 Running
