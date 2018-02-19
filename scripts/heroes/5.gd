@@ -2,7 +2,7 @@ extends "res://scripts/player.gd"
 
 onready var placement = preload("res://scripts/placement.gd").new(self, "res://scenes/heroes/5_portal.tscn")
 
-var radius = 10
+var radius = 15
 # The spaces make the bracket centered, rather than on of the dots
 var first_crosshair = "   [..."
 var second_crosshair = "...]   "
