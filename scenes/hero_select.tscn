@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://scripts/hero_select.gd" type="Script" id=1]
+[ext_resource path="res://scripts/hero_select_screen.gd" type="Script" id=1]
+[ext_resource path="res://scripts/hero_select.gd" type="Script" id=2]
 
 [node name="HeroSelect" type="ColorRect" index="0"]
 
@@ -15,6 +16,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 0.097229, 0.104696, 0.105469, 1 )
+script = ExtResource( 1 )
 _sections_unfolded = [ "Anchor", "Margin", "Material", "Pause", "Visibility" ]
 
 [node name="Hero" type="OptionButton" parent="." index="0"]
@@ -43,7 +45,7 @@ flat = false
 align = 0
 selected = -1
 items = [  ]
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="Confirm" type="Button" parent="." index="1"]
 
@@ -68,5 +70,33 @@ group = null
 text = "Select Hero"
 flat = false
 align = 1
+
+[node name="HeroDescription" type="RichTextLabel" parent="." index="2"]
+
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -198.0
+margin_top = 105.0
+margin_right = 197.0
+margin_bottom = 240.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = ""
+scroll_active = true
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
 
 
