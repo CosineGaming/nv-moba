@@ -2,6 +2,8 @@
 
 extends "res://scripts/player.gd"
 
+var stun_charge = 5
+
 # --- Godot overrides ---
 
 func _ready():
@@ -19,6 +21,7 @@ func _process(delta):
 			var players = get_node("/root/Level/Players").get_children()
 			var player = players.find(stunning)
 			if player != -1:
+				switch_charge += stun_charge * delta
 				rpc("stun", players[player].get_name(), look_ray.get_collision_point())
 				is_stunning = true
 
