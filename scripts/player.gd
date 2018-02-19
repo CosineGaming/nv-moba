@@ -148,7 +148,7 @@ func event_to_obj(event):
 	return d
 
 func begin():
-	master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
+	master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player.player_info.is_right_team == player_info.is_right_team:

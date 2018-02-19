@@ -41,7 +41,7 @@ func _process(delta):
 	# Figure out what team we're on
 	# We have to do this here because we never know when the master player will actually be added
 	if master_team_right == null:
-		var master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
+		var master_player = util.get_master_player()
 		master_team_right = master_player.player_info.is_right_team
 		friend_color = master_player.friend_color
 		enemy_color = master_player.enemy_color

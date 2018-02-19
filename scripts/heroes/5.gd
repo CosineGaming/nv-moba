@@ -2,6 +2,11 @@ extends "res://scripts/player.gd"
 
 onready var placement = preload("res://scripts/placement.gd").new(self, "res://scenes/heroes/5_portal.tscn")
 
+var radius = 10
+# The spaces make the bracket centered, rather than on of the dots
+var first_crosshair = "   [..."
+var second_crosshair = "...]   "
+
 # --- Godot overrides ---
 
 func _ready():
@@ -12,7 +17,10 @@ func _ready():
 
 func _process(delta):
 	if is_network_master():
-		placement.place_input()
+		placement.place_input(radius)
+		var is_second = placement.placed.size() % 2 != 0
+		var crosshair = second_crosshair if is_second else first_crosshair
+		get_node("MasterOnly/Crosshair").set_text(crosshair)
 
 func _exit_tree():
 	._exit_tree()

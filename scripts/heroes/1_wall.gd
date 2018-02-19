@@ -13,7 +13,7 @@ func init(maker):
 		player.connect("body_entered", self, "count_bodies", [player, 1])
 		player.connect("body_exited", self, "count_bodies", [player, -1])
 
-	var master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
+	var master_player = util.get_master_player()
 	var friendly = maker.player_info.is_right_team == master_player.player_info.is_right_team
 	var color = maker.friend_color if friendly else maker.enemy_color
 

@@ -24,7 +24,7 @@ func _init(parent, scene_path):
 	set_network_master(int(player.get_name()))
 	scene = load(scene_path)
 
-func place_input():
+func place_input(radius=-1):
 
 	# We allow you to just click to place, without needing to press E
 	var confirm = Input.is_action_just_pressed(confirm_action)
@@ -47,6 +47,13 @@ func place_input():
 
 	if is_placing or confirm:
 		position_placement(placing_node)
+		if radius > 0: # A radius is specified
+			var distance = placing_node.get_translation() - player.get_translation()
+			if distance.length() > radius:
+				placing_node.out_of_range()
+				confirm = false
+			else:
+				placing_node.within_range()
 
 	if confirm:
 		# Order matters here: confirm_placement resets placing_node so we have to do anything with it first
@@ -115,7 +122,6 @@ sync func remove_placed(index):
 
 func create():
 	var node = scene.instance()
-	print(node)
 	player.get_node("/root/Level").add_child(node)
 	# We have to call_deferred because we're `load`ing instead of `preload`ing. TODO: preload?
 	node.init(player)

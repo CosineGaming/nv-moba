@@ -4,8 +4,15 @@ var portal_charge = 15
 var other
 var index
 
-var first_color = Color("#d14013")
-var second_color = Color("#ecb521")
+var enemy_colors = [
+	Color("#d14013"),
+	Color("#ecb521"),
+]
+
+var friend_colors = [
+	Color("#1209c4"),
+	Color("#2066e7"),
+]
 
 func _ready():
 	for player in get_node("/root/Level/Players").get_children():
@@ -17,7 +24,9 @@ func init(maker):
 	index = maker_portals.size() # No -1, because we haven't actually been added to the array yet
 	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
 	var second = index % 2 != 0
-	var color = second_color if second else first_color
+	var is_friend = util.is_friendly(maker)
+	var color_set = friend_colors if is_friend else enemy_colors
+	var color = color_set[int(second)]
 
 	var mat = SpatialMaterial.new()
 	color.a = 0.5
@@ -44,12 +53,14 @@ func find_other():
 		return null
 
 func portal(player):
-	if find_other():
-		var spawn_distance = 2
-		# Find a sane place to spawn
-		# -Z is in the direction of the portal
-		# X is enough away from the portal to avoid infinite loop
-		# With both axes, gravity could never bring us to hit the portal
-		var to = other.to_global(Vector3(spawn_distance,0,-spawn_distance)) 
-		player.set_translation(to)
+	if player.player_info.is_right_team == maker_node.player_info.is_right_team:
+		if find_other():
+			var spawn_distance = 2
+			# Find a sane place to spawn
+			# -Z is in the direction of the portal
+			# X is enough away from the portal to avoid infinite loop
+			# With both axes, gravity could never bring us to hit the portal
+			var to = other.to_global(Vector3(spawn_distance,0,-spawn_distance)) 
+			player.set_translation(to)
+			maker_node.switch_charge += portal_charge
 

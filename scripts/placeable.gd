@@ -1,6 +1,7 @@
 extends StaticBody
 
 var maker_node
+var material
 
 func _ready():
 	get_node("CollisionShape").disabled = true
@@ -8,20 +9,25 @@ func _ready():
 func init(maker):
 	maker_node = maker
 
-	var mat = get_node("MeshInstance").get_surface_material(0)
-	if not mat:
-		mat = SpatialMaterial.new()
-		get_node("MeshInstance").set_surface_material(0, mat)
-	mat.flags_transparent = true
-	mat.albedo_color.a = 0.5
+	material = get_node("MeshInstance").get_surface_material(0)
+	if not material:
+		material = SpatialMaterial.new()
+		get_node("MeshInstance").set_surface_material(0, material)
+	material.flags_transparent = true
+	material.albedo_color.a = 0.5
 
 func place():
 	# Originally, the ghost is disabled to avoid weird physics
 	get_node("CollisionShape").disabled = false
-	get_node("MeshInstance").get_surface_material(0).flags_transparent = false
+	material.flags_transparent = false
 
 func make_last():
-	var mat = get_node("MeshInstance").get_surface_material(0)
-	mat.flags_transparent = true
-	mat.albedo_color.a = 0.9
+	material.flags_transparent = true
+	material.albedo_color.a = 0.9
+
+func out_of_range():
+	material.albedo_color.a = 0.2
+
+func within_range():
+	material.albedo_color.a = 0.5
 
