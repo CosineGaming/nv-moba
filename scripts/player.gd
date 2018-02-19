@@ -59,6 +59,52 @@ func _ready():
 		# Remove HUD
 		remove_child(get_node(master_only))
 
+func _input(event):
+	if is_network_master():
+		if Input.is_action_just_pressed("switch_hero"):
+			switch_hero_interface()
+		# Quit the game:
+		if Input.is_action_pressed("quit"):
+			quit()
+		if "record" in player_info:
+			recording.events.append([recording.time, event_to_obj(event)])
+
+func _process(delta):
+	# All player code not caused by input, and not causing movement
+	if is_network_master():
+		var vel = get_linear_velocity()
+		switch_charge += movement_charge * vel.length() * delta
+		var switch_node = get_node("MasterOnly/SwitchCharge")
+		switch_node.set_text("%.f%%" % switch_charge)
+		if switch_charge >= 100:
+			# Let switch_charge keep building, because we use it for walk_speed and things
+			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+		if switch_charge > switch_charge_cap:
+			# There is however a cap
+			switch_charge = switch_charge_cap
+
+		if get_translation().y < fall_height:
+			rpc("spawn")
+
+		if "record" in player_info:
+			recording.time += delta
+
+
+func _integrate_forces(state):
+	if is_network_master():
+		control_player(state)
+		var status = get_status()
+		rpc_unreliable("set_status", status)
+		record_status(status)
+	set_rotation()
+
+func _exit_tree():
+	if "record" in player_info:
+		write_recording()
+
+# Functions
+# =========
+
 sync func spawn():
 	emit_signal("spawn")
 	if "record" in player_info:
@@ -101,16 +147,6 @@ func event_to_obj(event):
 		d.type = "mb"
 	return d
 
-func _input(event):
-	if is_network_master():
-		if Input.is_action_just_pressed("switch_hero"):
-			switch_hero_interface()
-		# Quit the game:
-		if Input.is_action_pressed("quit"):
-			quit()
-		if "record" in player_info:
-			recording.events.append([recording.time, event_to_obj(event)])
-
 func begin():
 	master_player = get_node("/root/Level/Players/%d" % get_tree().get_network_unique_id())
 	# Set color to blue (teammate) or red (enemy)
@@ -147,14 +183,6 @@ func record_status(status):
 		for i in range(status.size()):
 			status[i] = var2str(status[i])
 		recording.states.append([recording.time, status])
-
-func _integrate_forces(state):
-	if is_network_master():
-		control_player(state)
-		var status = get_status()
-		rpc_unreliable("set_status", status)
-		record_status(status)
-	set_rotation()
 
 slave func set_status(s):
 	set_transform(s[0])
@@ -224,26 +252,6 @@ func control_player(state):
 
 	state.integrate_forces()
 
-func _process(delta):
-	# All player code not caused by input, and not causing movement
-	if is_network_master():
-		var vel = get_linear_velocity()
-		switch_charge += movement_charge * vel.length() * delta
-		var switch_node = get_node("MasterOnly/SwitchCharge")
-		switch_node.set_text("%.f%%" % switch_charge)
-		if switch_charge >= 100:
-			# Let switch_charge keep building, because we use it for walk_speed and things
-			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
-		if switch_charge > switch_charge_cap:
-			# There is however a cap
-			switch_charge = switch_charge_cap
-
-		if get_translation().y < fall_height:
-			rpc("spawn")
-
-		if "record" in player_info:
-			recording.time += delta
-
 func switch_hero_interface():
 	if switch_charge >= 100:
 		# Interface needs the mouse!
@@ -272,13 +280,6 @@ sync func switch_hero(hero):
 	new_hero.call_deferred("set_status", get_status())
 	new_hero.call_deferred("begin")
 	queue_free()
-
-func _exit_tree():
-	if "record" in player_info:
-		write_recording()
-
-# Functions
-# =========
 
 func write_recording():
 	if recording and recording.events.size() > 0:
