@@ -293,3 +293,12 @@ func write_recording():
 func quit():
 	get_tree().quit()
 
+# These aren't used by vanilla player, but are used by heroes in common
+
+func pick_from(group):
+	var look_ray = get_node("TPCamera/Camera/Ray")
+	var looking_at = look_ray.get_collider()
+	var result = group.find(looking_at)
+	return result
+
+# =========
