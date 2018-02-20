@@ -10,9 +10,13 @@ Big TODOs:
 
 Smaller TODOs:
 
+- Too much time "waiting" - too hard to get to objective
 - Allow non-playing server to keep running and connecting people
 - Art?
   - Particles - wall destruction, wallriding
+- Ira is OP?
+- Industria is too individual?
+- player_name.gd:15 (error on Silas's=client side)
 
 Bugs:
 
@@ -21,3 +25,4 @@ Landmarks:
 When you have a workable demo: @mention @turion@mastodon.art
 
 Design ideas too long for the README:
+
