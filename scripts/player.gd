@@ -15,7 +15,7 @@ var player_info # Set by lobby
 var walk_speed_build = 0.006 # `walk_speed` per `switch_charge`
 var air_speed_build = 0.006 # `air_accel` per `switch_charge`
 
-var switch_charge = 0
+sync var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.1 # In percent per meter (except when heroes change that)
 
@@ -90,6 +90,7 @@ func _process(delta):
 		if "record" in player_info:
 			recording.time += delta
 
+		rset_unreliable("switch_charge", switch_charge)
 
 func _integrate_forces(state):
 	if is_network_master():
