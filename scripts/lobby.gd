@@ -43,6 +43,7 @@ func _ready():
 	get_node("Client").connect("pressed", self, "_client_init")
 	get_node("Singleplayer").connect("pressed", self, "_singleplayer_init")
 	get_node("HeroSelect").connect("item_selected", self, "select_hero")
+	get_node("Username").connect("text_changed", self, "resend_name")
 
 	var o = setup_options()
 	o.parse()
@@ -163,6 +164,14 @@ func select_hero(hero):
 
 sync func set_hero(peer, hero):
 	player_info[peer].hero = hero
+	render_player_list()
+
+func resend_name():
+	var name = get_node("Username").get_text()
+	rpc("set_name", get_tree().get_network_unique_id(), name)
+
+sync func set_name(peer, name):
+	player_info[peer].username = name
 	render_player_list()
 
 sync func assign_team(peer, is_right_team):
