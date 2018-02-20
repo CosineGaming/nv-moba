@@ -6,7 +6,7 @@ var active = false
 var right_active = false
 var activation_margin = 0.1
 
-var update_frequency = 2 # In secs. This isn't too fast-paced, so don't clog the network with updates every frame
+var update_frequency = 1 # In secs. This isn't too fast-paced, so don't clog the network with updates every frame
 var update_count = 0
 
 var master_team_right = null
@@ -20,10 +20,10 @@ func _integrate_forces(state):
 
 	if active:
 		activation_margin = 0
-	if rot < -activation_margin:
+	if rot > activation_margin:
 		active = true
 		right_active = false
-	if rot > activation_margin:
+	if rot < -activation_margin:
 		active = true
 		right_active = true
 	if active:
@@ -45,6 +45,9 @@ func _process(delta):
 		master_team_right = master_player.player_info.is_right_team
 		friend_color = master_player.friend_color
 		enemy_color = master_player.enemy_color
+		var name = "right" if master_team_right else "left"
+		var full_name = "res://assets/objective-%s.png" % name
+		get_node("MeshInstance").get_surface_material(0).albedo_texture = load(full_name)
 
 	# Count the percents
 	if active:
@@ -55,8 +58,9 @@ func _process(delta):
 	update_count += delta
 	if is_network_master() and update_count > update_frequency:
 		update_count = 0
-		rset_unreliable("left", left)
-		rset_unreliable("right", right)
+		print("updatey counts")
+		rset("left", left)
+		rset("right", right)
 
 	# Check for game over
 	var game_over = false
