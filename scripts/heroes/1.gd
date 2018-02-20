@@ -8,7 +8,7 @@ func _ready():
 	placement.start_action = "hero_1_place_wall"
 	placement.confirm_action = "hero_1_confirm_wall"
 	placement.delete_action = "hero_1_remove_wall"
-	placement.max_placed = 100
+	placement.max_placed = 5
 
 func _process(delta):
 	if is_network_master():

@@ -221,7 +221,7 @@ func control_player(state):
 
 	# Detect jumpable
 	var jumpable = false
-	var jump_dot = 0.8 # If normal.dot(up) > jump_dot, we can jump
+	var jump_dot = 0.5 # If normal.dot(up) > jump_dot, we can jump
 	for i in range(state.get_contact_count()):
 		var n = state.get_contact_local_normal(i)
 		if n.dot(Vector3(0,1,0)) > jump_dot:
