@@ -1,9 +1,12 @@
-# Hero 4 stuns people at a distance, removing their linear velocity
+# Stuns people at a distance, removing their linear velocity
 
 extends "res://scripts/player.gd"
 
 var stun_charge = 1
 var velocity_charge = 10 # This one is instantaneous, so it gets quita weight
+
+var zoom_factor = 3
+var sens_factor = 10
 
 # --- Godot overrides ---
 
@@ -15,6 +18,15 @@ func _process(delta):
 
 		var stun = Input.is_action_pressed("hero_4_stun")
 		var is_stunning = false
+
+		if Input.is_action_just_pressed("hero_4_zoom"):
+			get_node("TPCamera").cam_fov /= zoom_factor
+			get_node("TPCamera").cam_view_sensitivity /= sens_factor
+			get_node("TPCamera").cam_smooth_movement = false
+		if Input.is_action_just_released("hero_4_zoom"):
+			get_node("TPCamera").cam_fov *= zoom_factor
+			get_node("TPCamera").cam_view_sensitivity *= sens_factor
+			get_node("TPCamera").cam_smooth_movement = true
 
 		if stun:
 			var players = get_node("/root/Level/Players").get_children()
