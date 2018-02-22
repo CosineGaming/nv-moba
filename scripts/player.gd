@@ -1,4 +1,5 @@
 # Original: https://raw.githubusercontent.com/Calinou/fps-test/master/scripts/player.gd
+# All heroes extend from here. Implements all common behavior
 
 extends RigidBody
 
@@ -19,7 +20,8 @@ sync var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.1 # In percent per meter (except when heroes change that)
 
-const fall_height = -50
+var fall_height = -400 # This is essentially the respawn timer
+var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
 
 var debug_node
 var recording
@@ -74,9 +76,11 @@ func _process(delta):
 	# All player code not caused by input, and not causing movement
 	if is_network_master():
 		var vel = get_linear_velocity()
+		if translation.y < switch_height:
+			vel.y = 0 # Don't gain charge from falling when below switch_height
 		switch_charge += movement_charge * vel.length() * delta
 		var switch_node = get_node("MasterOnly/SwitchCharge")
-		switch_node.set_text("%.f%%" % switch_charge)
+		switch_node.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
 		if switch_charge >= 100:
 			# Let switch_charge keep building, because we use it for walk_speed and things
 			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)

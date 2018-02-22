@@ -1,3 +1,5 @@
+# Hero three boosts a friend, making them faster
+
 extends "res://scripts/player.gd"
 
 var merge_power = .75

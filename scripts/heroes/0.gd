@@ -15,6 +15,8 @@ func _ready():
 	air_accel *= 2
 	jump_speed *= 1
 	air_speed_build *= 2
+	# Since movement is the only ability of this hero, it builds charge more
+	movement_charge *= 2
 
 func control_player(state):
 	.control_player(state)

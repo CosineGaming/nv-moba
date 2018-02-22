@@ -14,7 +14,7 @@ var cam_smooth_movement = true;
 var cam_fov = 60.0;
 var cam_view_sensitivity = 0.3;
 var cam_smooth_lerp = 10;
-var cam_pitch_minmax = Vector2(90, -90);
+var cam_pitch_minmax = Vector2(89, -89);
 
 var is_enabled = false;
 var collision_exception = [];

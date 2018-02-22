@@ -58,7 +58,6 @@ func _process(delta):
 	update_count += delta
 	if is_network_master() and update_count > update_frequency:
 		update_count = 0
-		print("updatey counts")
 		rset("left", left)
 		rset("right", right)
 
