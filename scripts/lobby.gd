@@ -120,6 +120,7 @@ func _player_connected(id):
 func _player_disconnected(id):
 	if get_tree().is_network_server():
 		rpc("unregister_player", id)
+	call_deferred("render_player_list")
 
 func _connected_ok():
 	rpc("register_player", get_tree().get_network_unique_id(), my_info)
@@ -156,6 +157,10 @@ remote func register_player(new_peer, info):
 				if begun:
 					rpc_id(old_peer, "spawn_player", new_peer)
 					rpc_id(old_peer, "begin_player_deferred", new_peer) # Spawning is deferred
+		if not server_playing:
+			# We didn't catch this in player_info
+			rpc_id(1, "spawn_player", new_peer)
+			rpc_id(1, "begin_player_deferred", new_peer) # Spawning is deferred
 		var assign_right_team = right_team_count * 2 < player_info.size()
 		rpc("assign_team", new_peer, assign_right_team)
 		if not begun and player_info.size() == MAX_PLAYERS:
