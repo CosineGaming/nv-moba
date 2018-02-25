@@ -11,6 +11,7 @@ var my_info = {}
 var begun = false
 var server_playing = true
 var global_server_ip = "216.195.175.190"
+var players_done = []
 
 func setup_options():
 	var opts = Options.new()
@@ -211,7 +212,6 @@ sync func start_game():
 	my_info.level = get_node("CustomGame/LevelSelect").get_selected_id()
 	rpc("pre_configure_game", my_info.level)
 
-var players_done = []
 sync func done_preconfiguring(who):
 	players_done.append(who)
 	if players_done.size() == player_info.size():
@@ -252,6 +252,10 @@ func begin_player(peer):
 
 remote func begin_player_deferred(peer):
 	call_deferred("begin_player", peer)
+
+func reset_state():
+	players_done = []
+	get_node("/root/Level").queue_free()
 
 sync func post_configure_game():
 	# Begin all players (including self)

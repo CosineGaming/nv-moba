@@ -1,7 +1,7 @@
 extends RigidBody
 
-var left = 0
-var right = 0
+sync var left = 0
+sync var right = 0
 var active = false
 var right_active = false
 var activation_margin = 0.1
@@ -14,6 +14,8 @@ var friend_color
 var enemy_color
 
 var build_rate = 1.5
+var restart_count = 0
+var restart_time = 15
 
 func _integrate_forces(state):
 	var rot = get_rotation().x
@@ -46,11 +48,13 @@ func _process(delta):
 			master_team_right = master_player.player_info.is_right_team
 			friend_color = master_player.friend_color
 			enemy_color = master_player.enemy_color
-			var name = "right" if master_team_right else "left"
-			var full_name = "res://assets/objective-%s.png" % name
-			get_node("MeshInstance").get_surface_material(0).albedo_texture = load(full_name)
 		else:
 			master_team_right = true # Doesn't matter, it's all graphical and we're headless
+			friend_color = Color()
+			enemy_color = Color()
+		var name = "right" if master_team_right else "left"
+		var full_name = "res://assets/objective-%s.png" % name
+		get_node("MeshInstance").get_surface_material(0).albedo_texture = load(full_name)
 
 	# Count the percents
 	if active:
@@ -81,6 +85,11 @@ func _process(delta):
 			text = "You win!!!"
 		get_node("../HUD/Finish").set_text(text)
 		Engine.set_time_scale(0.1)
+		# You won't believe this, but because time_scale is 0.1 we have to multiply times 10 for proper timing
+		restart_count += delta * 10
+	if restart_count > restart_time:
+		get_node("/root/Lobby").reset_state()
+		Engine.set_time_scale(1)
 
 	# Render the percents
 	var on_left = left
@@ -91,4 +100,8 @@ func _process(delta):
 		on_right = left
 	get_node("../HUD/LeftTeam").set_text("%d%%" % on_left)
 	get_node("../HUD/RightTeam").set_text("%d%%" % on_right)
+
+func _exit_tree():
+	var lobby = get_node("/root/Lobby")
+	lobby.call_deferred("pre_configure_game", lobby.my_info.level)
 
