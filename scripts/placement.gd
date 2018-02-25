@@ -22,13 +22,14 @@ func _init(parent, scene_path):
 	# Set the network master to the player's network master, which happens to be its name
 	# This allows it to use master, slave keywords appropriately
 	var net_id = int(player.get_name())
+	set_name("Placement") # We need to share common name for networking
 	set_network_master(net_id)
 	scene = load(scene_path)
-	rpc("request_placed", net_id)
+	rpc("request_placed", get_tree().get_network_unique_id())
 
 master func request_placed(from):
 	for node in placed:
-		rpc_id(from, "slave_place", node)
+		rpc_id(from, "slave_place", node.transform)
 
 func place_input(radius=-1):
 
