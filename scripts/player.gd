@@ -3,8 +3,6 @@
 
 extends RigidBody
 
-var view_sensitivity = 0.25
-
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
 var jump_speed = 5 # m/s
@@ -157,7 +155,7 @@ func begin():
 	master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
-	if master_player.player_info.is_right_team == player_info.is_right_team:
+	if master_player and master_player.player_info.is_right_team == player_info.is_right_team:
 		color = friend_color
 	else:
 		color = enemy_color
@@ -174,10 +172,8 @@ func begin():
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		view_sensitivity = 0
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		view_sensitivity = 0.25
 
 # Update visual yaw + pitch components to match camera
 func set_rotation():

@@ -10,6 +10,7 @@ var player_info = {}
 var my_info = {}
 var begun = false
 var server_playing = true
+var global_server_ip = "216.195.175.190"
 
 func setup_options():
 	var opts = Options.new()
@@ -40,6 +41,7 @@ func _ready():
 
 	randomize()
 
+	get_node("GameBrowser/Play").connect("pressed", self, "connect_global_server")
 	get_node("PlayerSettings/HeroSelect").connect("item_selected", self, "select_hero")
 	get_node("PlayerSettings/Username").connect("text_changed", self, "resend_name")
 	get_node("JoinedGameLobby/StartGame").connect("pressed", self, "start_game")
@@ -81,11 +83,15 @@ func _ready():
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("connected_to_server", self, "_connected_ok")
 
-func _client_init():
+func connect_global_server():
+	_client_init(global_server_ip)
+
+func _client_init(ip=null):
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
-	var server_ip = get_node("CustomGame/IP").get_text()
-	peer.create_client(server_ip, SERVER_PORT)
+	if not ip:
+		ip = get_node("CustomGame/IP").get_text()
+	peer.create_client(ip, SERVER_PORT)
 	get_tree().set_network_peer(peer)
 	get_node("CustomGame/Client").set_text("Clienting!")
 
@@ -186,17 +192,18 @@ sync func assign_team(peer, is_right_team):
 	render_player_list()
 
 func render_player_list():
-	var list = ""
-	var hero_names = get_node("PlayerSettings/HeroSelect").hero_names
-	for p in player_info:
-		list += "%-15s" % player_info[p].username
-		list += "%-20s" % hero_names[player_info[p].hero]
-		if player_info[p].is_right_team:
-			list += "Right Team"
-		else:
-			list += "Left Team"
-		list += "\n"
-	get_node("JoinedGameLobby/PlayerList").set_text(list)
+	if has_node("PlayerSettings"):
+		var list = ""
+		var hero_names = get_node("PlayerSettings/HeroSelect").hero_names
+		for p in player_info:
+			list += "%-15s" % player_info[p].username
+			list += "%-20s" % hero_names[player_info[p].hero]
+			if player_info[p].is_right_team:
+				list += "Right Team"
+			else:
+				list += "Left Team"
+			list += "\n"
+		get_node("JoinedGameLobby/PlayerList").set_text(list)
 
 sync func start_game():
 	begun = true

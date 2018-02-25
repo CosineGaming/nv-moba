@@ -42,12 +42,15 @@ func _process(delta):
 	# We have to do this here because we never know when the master player will actually be added
 	if master_team_right == null:
 		var master_player = util.get_master_player()
-		master_team_right = master_player.player_info.is_right_team
-		friend_color = master_player.friend_color
-		enemy_color = master_player.enemy_color
-		var name = "right" if master_team_right else "left"
-		var full_name = "res://assets/objective-%s.png" % name
-		get_node("MeshInstance").get_surface_material(0).albedo_texture = load(full_name)
+		if master_player:
+			master_team_right = master_player.player_info.is_right_team
+			friend_color = master_player.friend_color
+			enemy_color = master_player.enemy_color
+			var name = "right" if master_team_right else "left"
+			var full_name = "res://assets/objective-%s.png" % name
+			get_node("MeshInstance").get_surface_material(0).albedo_texture = load(full_name)
+		else:
+			master_team_right = true # Doesn't matter, it's all graphical and we're headless
 
 	# Count the percents
 	if active:

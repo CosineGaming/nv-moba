@@ -14,7 +14,11 @@ func init(maker):
 		player.connect("body_exited", self, "count_bodies", [player, -1])
 
 	var master_player = util.get_master_player()
-	var friendly = maker.player_info.is_right_team == master_player.player_info.is_right_team
+	var friendly
+	if master_player:
+		friendly = maker.player_info.is_right_team == master_player.player_info.is_right_team
+	else:
+		friendly = true # Doesn't matter, we're headless
 	var color = maker.friend_color if friendly else maker.enemy_color
 
 	var mat = SpatialMaterial.new()
