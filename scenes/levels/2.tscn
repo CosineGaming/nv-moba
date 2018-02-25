@@ -76,21 +76,17 @@ subdivide_depth = 0
 
 light_cull_mask = -1
 
-[node name="MeshInstance" parent="Ball" index="1"]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.6514, 0, 12.0446 )
-
 [node name="FullObjective" parent="." index="3"]
 
 transform = Transform( 0.0288263, 0, 0.999584, 0, 1, 0, -0.999584, 0, 0.0288263, -3.05232, 1.09111, 112.518 )
 
 [node name="LeftSpawn" parent="." index="5"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2098, 2.03618, -0.474447 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.655049, 2.03618, -2.65647 )
 
 [node name="RightSpawn" parent="." index="6"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.18065, 2.94348, 2.17647 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.374263, 2.94348, -2.52042 )
 
 [node name="MainGeometry" parent="." index="7"]
 
