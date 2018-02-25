@@ -144,14 +144,16 @@ remote func register_player(new_peer, info):
 				if old_peer != 1:
 					# Send old player, new player's info (not us, no infinite loop)
 					rpc_id(old_peer, "register_player", new_peer, info)
+				if begun:
+					rpc_id(old_peer, "spawn_player", new_peer)
+					rpc_id(old_peer, "begin_player_deferred", new_peer) # Spawning is deferred
 		var assign_right_team = right_team_count * 2 < player_info.size()
 		rpc("assign_team", new_peer, assign_right_team)
 		if not begun and player_info.size() == MAX_PLAYERS:
 			start_game()
 		if begun:
-			var level = get_node("ServerStart/LevelSelect").get_selected_id()
-			rpc_id(new_peer, "pre_configure_game", level)
-			rpc("spawn_player", new_peer)
+			rpc_id(new_peer, "pre_configure_game", my_info.level)
+			rpc_id(new_peer, "post_configure_game")
 
 sync func unregister_player(peer):
 	player_info.erase(peer)
@@ -197,9 +199,8 @@ func render_player_list():
 	get_node("PlayerList").set_text(list)
 
 sync func start_game():
-	begun = true
-	var level = get_node("ServerStart/LevelSelect").get_selected_id()
-	rpc("pre_configure_game", level)
+	my_info.level = get_node("CustomGame/LevelSelect").get_selected_id()
+	rpc("pre_configure_game", my_info.level)
 
 var players_done = []
 sync func done_preconfiguring(who):
@@ -217,6 +218,9 @@ sync func spawn_player(p):
 	get_node("/root/Level/Players").call_deferred("add_child", player)
 
 sync func pre_configure_game(level):
+	begun = true
+	my_info.level = level # Remember the level for future player registration
+
 	var self_peer_id = get_tree().get_network_unique_id()
 
 	# Remove the interface so as to not fuck with things
@@ -234,8 +238,14 @@ sync func pre_configure_game(level):
 
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 
+func begin_player(peer):
+	get_node("/root/Level/Players/%d" % peer).begin()
+
+remote func begin_player_deferred(peer):
+	call_deferred("begin_player", peer)
+
 sync func post_configure_game():
 	# Begin all players (including self)
 	for p in player_info:
-		get_node("/root/Level/Players/%d" % p).begin()
+		begin_player_deferred(p)
 
