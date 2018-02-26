@@ -258,7 +258,7 @@ func begin_player(peer):
 remote func begin_player_deferred(peer):
 	call_deferred("begin_player", peer)
 
-func reset_state():
+sync func reset_state():
 	players_done = []
 	get_node("/root/Level").queue_free()
 

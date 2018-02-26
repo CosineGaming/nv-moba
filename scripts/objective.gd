@@ -100,7 +100,8 @@ func _process(delta):
 		restart_count += delta / Engine.time_scale
 	if restart_count > restart_time:
 		Engine.time_scale = 1
-		get_node("/root/Lobby").reset_state()
+		if is_network_master():
+			get_node("/root/Lobby").rpc("reset_state")
 
 	# Render the percents
 	var on_left = left
