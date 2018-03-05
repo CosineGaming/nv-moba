@@ -10,7 +10,7 @@ var player_info = {}
 var my_info = {}
 var begun = false
 var server_playing = true
-var global_server_ip = "216.195.175.190"
+var global_server_ip = "home.cosinegaming.com"
 var players_done = []
 
 func setup_options():
@@ -92,6 +92,7 @@ func _client_init(ip=null):
 	var peer = NetworkedMultiplayerENet.new()
 	if not ip:
 		ip = get_node("CustomGame/IP").get_text()
+	ip = IP.resolve_hostname(ip)
 	peer.create_client(ip, SERVER_PORT)
 	get_tree().set_network_peer(peer)
 	get_node("CustomGame/Client").set_text("Clienting!")
