@@ -10,7 +10,7 @@ var player_info = {}
 var my_info = {}
 var begun = false
 var server_playing = true
-var global_server_ip = "home.cosinegaming.com"
+var global_server_ip = "nv.cosinegaming.com"
 var players_done = []
 
 func setup_options():
