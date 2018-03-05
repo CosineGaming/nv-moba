@@ -1,10 +1,7 @@
 extends "res://scripts/args.gd"
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
 var SERVER_PORT = 54672
-var MAX_PLAYERS = 10
+var MAX_PLAYERS = 50
 
 var player_info = {}
 var my_info = {}
