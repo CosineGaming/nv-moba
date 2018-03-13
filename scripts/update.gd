@@ -7,7 +7,7 @@ var time = 0
 func _ready():
 	connect("request_completed", self, "_request_completed")
 	# Check if we need an update
-	request("http://localhost:8080/vanagloria/version")
+	request("https://cosinegaming.com/vanagloria/version")
 	set_process(true)
 
 func _request_completed(result, response_code, headers, body):
@@ -18,7 +18,8 @@ func _request_completed(result, response_code, headers, body):
 	if not is_update_payload:
 		# Just checking if we need an update
 		var server = JSON.parse(body.get_string_from_utf8()).result
-		if server.version == util.version:
+		# 0.0.0 -> Update-shell application, needs more resources
+		if server.version == util.version and util.version != "0.0.0":
 			completed()
 		else:
 			is_update_payload = true
