@@ -38,8 +38,6 @@ func option_sel(button_name, option):
 
 func _ready():
 
-	my_info.version = [0,0,0] # Semantic versioning: [0].[1].[2]
-
 	randomize()
 
 	get_node("GameBrowser/Play").connect("pressed", self, "connect_global_server")
@@ -136,8 +134,14 @@ func collect_info():
 		my_info.hero = get_node("PlayerSettings/HeroSelect").get_selected_id()
 	if not "is_right_team" in my_info:
 		my_info.is_right_team = false # Server assigns team, wait for that
+	my_info.version = util.version
 
 remote func register_player(new_peer, info):
+	var p_version = info.version.split(".")
+	var version_split = util.version.split(".")
+	if p_version[0] != version_split[0]:
+		# TODO: Fail gracefully
+		return
 	player_info[new_peer] = info
 	render_player_list()
 	if (get_tree().is_network_server()):
