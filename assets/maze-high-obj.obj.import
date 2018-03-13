@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/maze-high-obj.obj-24db734e0c48b4dd09ff2d9426ff3915.mesh"
+
+[deps]
+
+files=[ "res://.import/maze-high-obj.obj-24db734e0c48b4dd09ff2d9426ff3915.mesh" ]
+
+source_file="res://assets/maze-high-obj.obj"
+source_md5="6957a6487d30265864dc3d40baf411a2"
+
+dest_files=[ "res://.import/maze-high-obj.obj-24db734e0c48b4dd09ff2d9426ff3915.mesh", "res://.import/maze-high-obj.obj-24db734e0c48b4dd09ff2d9426ff3915.mesh" ]
+dest_md5="29247dab4c1d1925b97879ff582aef56"
+
+[params]
+
+generate_tangents=true

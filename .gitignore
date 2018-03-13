@@ -3,7 +3,6 @@
 *.swo
 .fscache
 .import
-*.import
 *.blend1
 nohup.out
 recordings
