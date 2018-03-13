@@ -10,6 +10,13 @@ extends Node
 # 1.0.0 will be the reddit release
 var version = "0.0.0"
 
+func _ready():
+	var version_file = File.new()
+	version_file.open("GameVersion.txt", File.READ)
+	version = version_file.get_as_text()
+	version_file.close()
+	print(version)
+
 func get_master_player():
 	var path = "/root/Level/Players/%d" % get_tree().get_network_unique_id()
 	if has_node(path):
