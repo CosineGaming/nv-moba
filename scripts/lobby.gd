@@ -134,7 +134,7 @@ func collect_info():
 		my_info.hero = get_node("PlayerSettings/HeroSelect").get_selected_id()
 	if not "is_right_team" in my_info:
 		my_info.is_right_team = false # Server assigns team, wait for that
-	my_info.version = version
+	my_info.version = util.version
 
 remote func register_player(new_peer, info):
 	var p_version = info.version.split(".")
