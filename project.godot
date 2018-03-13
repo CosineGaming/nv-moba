@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="mv-moba"
-run/main_scene="res://scenes/lobby.tscn"
+run/main_scene="res://scenes/update.tscn"
 config/icon="res://icon.png"
 
 [autoload]
