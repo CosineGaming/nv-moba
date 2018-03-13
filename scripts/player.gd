@@ -16,7 +16,7 @@ var air_speed_build = 0.006 # `air_accel` per `switch_charge`
 
 sync var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
-var movement_charge = 0.1 # In percent per meter (except when heroes change that)
+var movement_charge = 0.15 # In percent per meter (except when heroes change that)
 
 var fall_height = -400 # This is essentially the respawn timer
 var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
