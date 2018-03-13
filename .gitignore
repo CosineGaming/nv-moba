@@ -2,7 +2,6 @@
 *.swp
 *.swo
 .fscache
-.import
 *.blend1
 nohup.out
 recordings
