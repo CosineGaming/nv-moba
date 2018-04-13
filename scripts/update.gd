@@ -7,7 +7,7 @@ var time = 0
 func _ready():
 	connect("request_completed", self, "_request_completed")
 	# Check if we need an update
-	request("https://cosinegaming.com/vanagloria/version")
+	request("https://www.cosinegaming.com/static/vanagloria/version.json", [], false)
 	set_process(true)
 
 func _request_completed(result, response_code, headers, body):
@@ -20,12 +20,16 @@ func _request_completed(result, response_code, headers, body):
 		var server = JSON.parse(body.get_string_from_utf8()).result
 		# 0.0.0 -> Update-shell application, needs more resources
 		if server.version == util.version and util.version != "0.0.0":
+			print("Game up-to-date! Launching")
 			completed()
 		else:
 			is_update_payload = true
 			save_to = server.save_location
+			use_threads = true
+			print("Need to update! Downloading " + server.download_path)
 			request(server.download_path)
 	else:
+		print("Update recieved. Saving to " + save_to)
 		var file = File.new()
 		file.open(save_to, File.WRITE)
 		file.store_buffer(body)

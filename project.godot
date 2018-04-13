@@ -57,7 +57,7 @@ hero_5_remove_portal=[ Object(InputEventMouseButton,"resource_local_to_scene":fa
 
 [network]
 
-ssl/certificates="/etc/ssl/certs/ca-certificates.crt"
+ssl/certificates="res://assets/ca-certificates.crt"
 
 [rendering]
 
