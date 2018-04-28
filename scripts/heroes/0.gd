@@ -26,7 +26,7 @@ func control_player(state):
 	var cost = boost_drain * state.step
 	if Input.is_action_pressed("hero_0_boost") and switch_charge > cost:
 		walk_speed *= 2
-		air_accel *= 2
+		air_accel *= 3
 		switch_charge -= cost
 	.control_player(state)
 	wallride(state)
