@@ -38,7 +38,7 @@ Ideas for Heroes:
   - Boost - Area of effect or zarya-like cast, speeds people up
   - Flop - Changes side of see-saw for each team (should it be mechanic instead??)
   - Build - Build Zineth-like rails for anyone to use
-  - (Combine with Ira?) Portal 2-like gels (bounce, speed, slow?)
+  - (Combine with IRA?) Portal 2-like gels (bounce, speed, slow?)
   - (Combine with LUSSURIA?) Hook and swing on terrain
 - More offensive
   - Lay traps

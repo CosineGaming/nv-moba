@@ -10,7 +10,7 @@ config_version=3
 
 [application]
 
-config/name="mv-moba"
+config/name="nv-moba"
 run/main_scene="res://scenes/lobby.tscn"
 config/icon="res://icon.png"
 
