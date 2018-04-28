@@ -31,12 +31,12 @@ master func request_placed():
 	for node in placed:
 		rpc_id(get_tree().get_rpc_sender_id(), "slave_place", node.transform)
 
-func place_input(radius=-1):
+func place_input(radius=-1, require_ghost=false):
 
 	# We allow you to just click to place, without needing to press E
 	var confirm = Input.is_action_just_pressed(confirm_action)
 
-	if Input.is_action_just_pressed(start_action) or (confirm and not is_placing):
+	if Input.is_action_just_pressed(start_action) or (confirm and not is_placing and not require_ghost):
 		# Press button twice to cancel
 		if is_placing:
 			# We changed our mind, delete the placing wall
@@ -52,7 +52,7 @@ func place_input(radius=-1):
 		if pick != -1:
 			rpc("remove_placed", pick)
 
-	if is_placing or confirm:
+	if is_placing:
 		position_placement(placing_node)
 		if radius > 0: # A radius is specified
 			var distance = placing_node.get_translation() - player.get_translation()
@@ -62,10 +62,12 @@ func place_input(radius=-1):
 			else:
 				placing_node.within_range()
 
-	if confirm:
+	if (confirm and not require_ghost) or (confirm and is_placing):
 		# Order matters here: confirm_placement resets placing_node so we have to do anything with it first
 		rpc("slave_place", placing_node.transform)
 		confirm_placement(placing_node)
+		return true
+	return false
 
 func confirm_placement(node, tf=null):
 	if tf:
@@ -130,7 +132,6 @@ sync func remove_placed(index):
 func create():
 	var node = scene.instance()
 	player.get_node("/root/Level").add_child(node)
-	# We have to call_deferred because we're `load`ing instead of `preload`ing. TODO: preload?
-	node.init(player)
+	node.init(player, placed.size())
 	return node
 

@@ -24,7 +24,7 @@ func control_player(state):
 	var boost_strength = 2
 	var boost_drain = 25 # Recall increased charge must be factored in
 	var cost = boost_drain * state.step
-	if Input.is_action_pressed("primary_action") and switch_charge > cost:
+	if Input.is_action_pressed("hero_0_boost") and switch_charge > cost:
 		walk_speed *= 2
 		air_accel *= 2
 		switch_charge -= cost

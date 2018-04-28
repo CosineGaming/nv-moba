@@ -6,6 +6,12 @@ var radius = 15
 # The spaces make the bracket centered, rather than on of the dots
 var first_crosshair = "   [..."
 var second_crosshair = "...]   "
+var no_portal_crosshair = "+"
+var portal_cost = 20
+
+var flicking = null
+var flick_charge = 3
+var flick_strength = 4
 
 # --- Godot overrides ---
 
@@ -17,10 +23,30 @@ func _ready():
 
 func _process(delta):
 	if is_network_master():
-		placement.place_input(radius)
 		var is_second = placement.placed.size() % 2 != 0
-		var crosshair = second_crosshair if is_second else first_crosshair
+		var portal_crosshair = second_crosshair if is_second else first_crosshair
+		var crosshair = no_portal_crosshair if switch_charge < portal_cost else portal_crosshair
 		get_node("MasterOnly/Crosshair").set_text(crosshair)
+		if switch_charge > portal_cost or is_second:
+			if placement.place_input(radius, true) and is_second:
+				switch_charge -= portal_cost
+
+		if Input.is_action_just_pressed("primary_mouse"):
+			var pick = pick_by_friendly(false)
+			if pick:
+				flicking = pick
+		if flicking and Input.is_action_just_released("primary_mouse"):
+			var aim = get_node("Yaw/Pitch").get_global_transform().basis
+			var forwards = -aim[2]
+			var distance = (flicking.translation - translation).length()
+			forwards *= distance
+			var towards = translation + forwards
+			var gravity = PhysicsServer.area_get_param(get_world().get_space(), PhysicsServer.AREA_PARAM_GRAVITY_VECTOR)
+			# Automatically account for gravity, so as to make UI more intuitive
+			towards -= gravity
+			rpc("flick", flicking.get_name(), towards)
+			flicking = null
+			switch_charge += flick_charge
 
 func _exit_tree():
 	._exit_tree()
@@ -30,4 +56,11 @@ func _exit_tree():
 # --- Player overrides ---
 
 # --- Own ---
+
+sync func flick(player_id, towards):
+	var who = $"/root/Level/Players".get_node(player_id)
+	if who.is_network_master():
+		var direction = towards - who.translation
+		var impulse = direction.normalized() * flick_strength * who.get_mass()
+		who.apply_impulse(Vector3(), impulse)
 

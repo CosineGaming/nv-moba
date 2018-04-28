@@ -7,7 +7,7 @@ func _process(delta):
 	if being_touched > 0:
 		maker_node.switch_charge += touch_charge * delta
 
-func init(maker):
+func init(maker, index):
 
 	for player in get_node("/root/Level/Players").get_children():
 		player.connect("body_entered", self, "count_bodies", [player, 1])
@@ -27,7 +27,7 @@ func init(maker):
 	mat.albedo_color = color
 	get_node("MeshInstance").set_surface_material(0, mat)
 
-	.init(maker)
+	.init(maker, index)
 
 func count_bodies(with, player, delta):
 	if with == self:

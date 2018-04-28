@@ -15,7 +15,7 @@ const hero_text = [
 	"LUST.\n\nYou attract nearby heroes.\n\nPress E to switch to repelling them.",
 	"GENEROSITY.\n\nMake contact with a friend to boost their speed.\n\nPress E to separate.",
 	"PATIENCE.\n\nHold left mouse button on an enemy to slow them down.\n\nPress E to delete someone else's building (costs charge).",
-	"PRIDE.\n\nClick to build portal. Click again to build its partner.\n\nYou can build multiple portal sets.",
+	"PRIDE.\n\nDrag on enemies to bully them around.\n\nClick to build a portal. Click again to build its partner (costs charge).",
 ]
 
 func _ready():

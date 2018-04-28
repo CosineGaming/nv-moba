@@ -297,10 +297,22 @@ func quit():
 
 # These aren't used by vanilla player, but are used by heroes in common
 
-func pick_from(group):
+func pick():
 	var look_ray = get_node("TPCamera/Camera/Ray")
-	var looking_at = look_ray.get_collider()
-	var result = group.find(looking_at)
-	return result
+	return look_ray.get_collider()
+
+func pick_from(group):
+	return group.find(pick())
+
+func pick_player():
+	var players = get_node("/root/Level/Players").get_children()
+	return players[pick_from(players)]
+
+func pick_by_friendly(pick_friendlies):
+	var pick = pick_player()
+	if (pick.player_info.is_right_team == player_info.is_right_team) == pick_friendlies:
+		return pick
+	else:
+		return null
 
 # =========

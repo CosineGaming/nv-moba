@@ -29,8 +29,7 @@ func _process(delta):
 			get_node("TPCamera").cam_smooth_movement = true
 
 		if Input.is_action_just_pressed("primary_ability"):
-			var look_ray = get_node("TPCamera/Camera/Ray")
-			var looking_at = look_ray.get_collider()
+			var looking_at = pick()
 			if looking_at.has_method("destroy"):
 				if switch_charge > looking_at.destroy_cost:
 					switch_charge -= looking_at.destroy()
