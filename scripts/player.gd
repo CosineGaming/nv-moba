@@ -17,6 +17,9 @@ var air_speed_build = 0.006 # `air_accel` per `switch_charge`
 sync var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.15 # In percent per meter (except when heroes change that)
+onready var switch_text = get_node("MasterOnly/ChargeBar/ChargeText")
+onready var switch_bar = get_node("MasterOnly/ChargeBar")
+onready var switch_bar_extra = get_node("MasterOnly/ChargeBar/Extra")
 
 var fall_height = -400 # This is essentially the respawn timer
 var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
@@ -77,14 +80,15 @@ func _process(delta):
 		if translation.y < switch_height:
 			vel.y = 0 # Don't gain charge from falling when below switch_height
 		switch_charge += movement_charge * vel.length() * delta
-		var switch_node = get_node("MasterOnly/SwitchCharge")
-		switch_node.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
+		switch_text.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
 		if switch_charge >= 100:
 			# Let switch_charge keep building, because we use it for walk_speed and things
-			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+			switch_text.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
 		if switch_charge > switch_charge_cap:
 			# There is however a cap
 			switch_charge = switch_charge_cap
+		switch_bar.value = switch_charge
+		switch_bar_extra.value = switch_charge - 100
 
 		if get_translation().y < fall_height:
 			rpc("spawn")
