@@ -54,6 +54,7 @@ func _ready():
 	if is_network_master():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
+		get_node(tp_camera).cam_view_sensitivity = 0.05
 		spawn()
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
