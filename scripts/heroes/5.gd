@@ -21,6 +21,7 @@ func _ready():
 	placement.confirm_action = "hero_5_confirm_portal"
 	placement.delete_action = "hero_5_remove_portal"
 	placement.max_placed = 100
+	set_process_input(true)
 
 func _process(delta):
 	if is_network_master():
@@ -28,27 +29,14 @@ func _process(delta):
 		var portal_crosshair = second_crosshair if is_second else first_crosshair
 		var crosshair = no_portal_crosshair if switch_charge < portal_cost else portal_crosshair
 		get_node("MasterOnly/Crosshair").set_text(crosshair)
-		if switch_charge > portal_cost or is_second:
-			if placement.place_input(radius, true) and is_second:
-				switch_charge -= portal_cost
+		var can_build = switch_charge > portal_cost
+		if placement.place_input(radius, can_build, true) and is_second:
+			switch_charge -= portal_cost
 
-		if Input.is_action_just_pressed("primary_mouse"):
-			var pick = pick_by_friendly(false)
-			if pick:
-				flicking = pick
-		if flicking and Input.is_action_just_released("primary_mouse"):
-			var aim = get_node("Yaw/Pitch").get_global_transform().basis
-			var forwards = -aim[2]
-			var distance = (flicking.translation - translation).length()
-			forwards *= distance
-			var towards = translation + forwards
-			var gravity = PhysicsServer.area_get_param(get_world().get_space(), PhysicsServer.AREA_PARAM_GRAVITY_VECTOR)
-			# Automatically account for gravity, so as to make UI more intuitive
-			towards -= gravity
-			rpc("flick", flicking.get_name(), towards)
-			flicking = null
-			switch_charge += flick_charge
 		teleport_ability.disabled = placement.placed.size() <= 1
+
+func _input(event):
+	flick_input()
 
 func _exit_tree():
 	._exit_tree()
@@ -58,6 +46,24 @@ func _exit_tree():
 # --- Player overrides ---
 
 # --- Own ---
+
+func flick_input():
+	if Input.is_action_just_pressed("primary_mouse"):
+		var pick = pick_by_friendly(false)
+		if pick:
+			flicking = pick
+	if flicking and Input.is_action_just_released("primary_mouse"):
+		var aim = get_node("Yaw/Pitch").get_global_transform().basis
+		var forwards = -aim[2]
+		var distance = (flicking.translation - translation).length()
+		forwards *= distance
+		var towards = translation + forwards
+		var gravity = PhysicsServer.area_get_param(get_world().get_space(), PhysicsServer.AREA_PARAM_GRAVITY_VECTOR)
+		# Automatically account for gravity, so as to make UI more intuitive
+		towards -= gravity
+		rpc("flick", flicking.get_name(), towards)
+		flicking = null
+		switch_charge += flick_charge
 
 sync func flick(player_id, towards):
 	var who = $"/root/Level/Players".get_node(player_id)
