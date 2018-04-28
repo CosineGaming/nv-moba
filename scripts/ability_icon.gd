@@ -28,7 +28,14 @@ func _ready():
 		description = ""
 	get_node("Button").text = description
 
+func is_pressed():
+	return Input.is_action_pressed(action)
+
 func _process(delta):
+	if action and Input.is_action_pressed(action):
+		available.rect_position = Vector2(-25, -25) # Centered / not offset
+	else:
+		available.rect_position = Vector2(-30, -30)
 	if disabled:
 		available.hide()
 		bar.value = 0

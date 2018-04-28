@@ -24,7 +24,7 @@ mesh = ExtResource( 4 )
 
 text = ""
 
-[node name="ProgressBar" parent="MasterOnly" index="1" instance=ExtResource( 5 )]
+[node name="Boost" parent="MasterOnly" index="1" instance=ExtResource( 5 )]
 
 anchor_left = 1.0
 anchor_top = 1.0
