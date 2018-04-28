@@ -29,7 +29,6 @@ size = 16
 use_mipmaps = false
 use_filter = false
 font_data = SubResource( 4 )
-_sections_unfolded = [ "Font", "Resource" ]
 
 [node name="world" type="Spatial"]
 
@@ -63,7 +62,6 @@ directional_shadow_max_distance = 200.0
 [node name="players" type="Spatial" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.4634, 0 )
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Maze" type="MeshInstance" parent="." index="2"]
 
@@ -125,13 +123,11 @@ linear_velocity = Vector3( 0, 0, 0 )
 linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
-_sections_unfolded = [ "Collision", "Pause", "Transform", "Visibility" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Ball" index="0"]
 
 shape = SubResource( 2 )
 disabled = false
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="Ball" index="1"]
 
@@ -147,12 +143,10 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="FullObjective" parent="." index="4" instance=ExtResource( 2 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -91.3336, 2.0316, 4.06596 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="Debug" type="Label" parent="." index="5"]
 
@@ -174,12 +168,10 @@ custom_fonts/font = SubResource( 5 )
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Material", "Mouse", "Pause", "Rect", "Size Flags", "Theme", "Visibility", "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 [node name="LeftSpawn" type="Spatial" parent="." index="6"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.96426, 9.36109 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="RightSpawn" type="Spatial" parent="." index="7"]
 

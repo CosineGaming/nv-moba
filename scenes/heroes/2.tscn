@@ -51,7 +51,6 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-_sections_unfolded = [ "Audio Bus", "Collision", "Pause", "Reverb Bus", "Transform", "Visibility" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 
