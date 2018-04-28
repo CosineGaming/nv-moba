@@ -6,11 +6,27 @@ onready var available = get_node("Available")
 export var cost = 1
 export var ability_name = "Ability"
 export var display_progress = true
+export var action = ""
 # This is intended to be public
 var disabled = false
 
 func _ready():
 	get_node("Name").text = ability_name
+	var description
+	if action:
+		var primary = InputMap.get_action_list(action)[0]
+		if primary is InputEventMouseButton:
+			if primary.button_index == BUTTON_LEFT:
+				description = "Click"
+			elif primary.button_index == BUTTON_RIGHT:
+				description = "Right Click"
+			else:
+				description = "Scroll Click"
+		else:
+			description = primary.as_text()
+	else:
+		description = ""
+	get_node("Button").text = description
 
 func _process(delta):
 	if disabled:

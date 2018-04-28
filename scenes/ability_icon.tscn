@@ -77,6 +77,7 @@ script = ExtResource( 1 )
 cost = 1
 ability_name = "Ability"
 display_progress = true
+action = ""
 
 [node name="Bar" type="ProgressBar" parent="." index="0"]
 
@@ -127,10 +128,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = -65.0
-margin_top = 36.0
-margin_right = 77.0
-margin_bottom = 50.0
+margin_left = -68.0
+margin_top = -49.0
+margin_right = 74.0
+margin_bottom = -35.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 2
 mouse_default_cursor_shape = 0
@@ -138,6 +139,28 @@ size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_colors/font_color = Color( 0.00357056, 0.0703125, 0.04372, 1 )
 text = "<Name>"
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Button" type="Label" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -68.0
+margin_top = 38.0
+margin_right = 74.0
+margin_bottom = 52.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_colors/font_color = Color( 0.00357056, 0.0703125, 0.04372, 1 )
+text = "<Button>"
 align = 1
 percent_visible = 1.0
 lines_skipped = 0
