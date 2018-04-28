@@ -43,6 +43,7 @@ Ideas for Heroes:
 - More offensive
   - Lay traps
   - (Combine with PAZIENZA?) Destroy buildings
+  - (Combine wit LUSSURIA?) Hold, then release to explode enemies away
 
 Key concepts:
 
