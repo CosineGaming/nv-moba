@@ -188,8 +188,9 @@ sync func set_hero(peer, hero):
 	render_player_list()
 
 func resend_name():
-	var name = get_node("PlayerSettings/Username").get_text()
-	rpc("set_name", get_tree().get_network_unique_id(), name)
+	if is_connected:
+		var name = get_node("PlayerSettings/Username").get_text()
+		rpc("set_name", get_tree().get_network_unique_id(), name)
 
 sync func set_name(peer, name):
 	player_info[peer].username = name
