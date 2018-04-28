@@ -2,6 +2,8 @@
 
 extends "res://scripts/player.gd"
 
+onready var destroy_ability = get_node("MasterOnly/Destroy")
+
 var stun_charge = 1
 var velocity_charge = 10 # This one is instantaneous, so it gets quita weight
 
@@ -28,11 +30,16 @@ func _process(delta):
 			get_node("TPCamera").cam_view_sensitivity *= sens_factor
 			get_node("TPCamera").cam_smooth_movement = true
 
-		if Input.is_action_just_pressed("primary_ability"):
-			var looking_at = pick()
-			if looking_at.has_method("destroy"):
-				if switch_charge > looking_at.destroy_cost:
-					switch_charge -= looking_at.destroy()
+		var looking_at = pick()
+		if looking_at and looking_at.has_method("destroy"):
+			destroy_ability.cost = looking_at.destroy_cost
+			destroy_ability.disabled = false
+			if Input.is_action_just_pressed("primary_ability"):
+					if switch_charge > looking_at.destroy_cost:
+						switch_charge -= looking_at.destroy_cost
+						looking_at.rpc("destroy")
+		else:
+			destroy_ability.disabled = true
 
 		if stun:
 			var players = get_node("/root/Level/Players").get_children()

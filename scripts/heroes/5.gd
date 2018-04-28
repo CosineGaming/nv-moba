@@ -1,6 +1,7 @@
 extends "res://scripts/player.gd"
 
 onready var placement = preload("res://scripts/placement.gd").new(self, "res://scenes/heroes/5_portal.tscn")
+onready var teleport_ability = get_node("MasterOnly/Teleport")
 
 var radius = 15
 # The spaces make the bracket centered, rather than on of the dots
@@ -47,6 +48,7 @@ func _process(delta):
 			rpc("flick", flicking.get_name(), towards)
 			flicking = null
 			switch_charge += flick_charge
+		teleport_ability.disabled = placement.placed.size() <= 1
 
 func _exit_tree():
 	._exit_tree()
