@@ -72,6 +72,8 @@ func _input(event):
 			quit()
 		if "record" in player_info:
 			recording.events.append([recording.time, event_to_obj(event)])
+		if Input.is_action_just_pressed("enable_cheats"):
+			switch_charge = 199
 
 func _process(delta):
 	# All player code not caused by input, and not causing movement
@@ -304,14 +306,11 @@ func quit():
 func pick():
 	var look_ray = get_node("TPCamera/Camera/Ray")
 	return look_ray.get_collider()
-
 func pick_from(group):
 	return group.find(pick())
-
 func pick_player():
 	var players = get_node("/root/Level/Players").get_children()
 	return players[pick_from(players)]
-
 func pick_by_friendly(pick_friendlies):
 	var pick = pick_player()
 	if (pick.player_info.is_right_team == player_info.is_right_team) == pick_friendlies:
