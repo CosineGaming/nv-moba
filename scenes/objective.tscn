@@ -58,7 +58,6 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo" ]
 
 [sub_resource type="CapsuleShape" id=3]
 
@@ -71,9 +70,8 @@ size = 50
 use_mipmaps = false
 use_filter = false
 font_data = ExtResource( 3 )
-_sections_unfolded = [ "Extra Spacing", "Font", "Resource", "Settings" ]
 
-[node name="FullObjective" type="Spatial" index="0"]
+[node name="FullObjective" type="Spatial"]
 
 [node name="Objective" type="RigidBody" parent="." index="0"]
 
@@ -103,13 +101,11 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Axis Lock", "Collision", "Linear", "Transform", "Visibility" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Objective" index="0"]
 
 shape = SubResource( 1 )
 disabled = false
-_sections_unfolded = [ "Transform" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="Objective" index="1"]
 
@@ -125,7 +121,6 @@ lod_max_hysteresis = 0.0
 mesh = ExtResource( 2 )
 skeleton = NodePath("..")
 material/0 = SubResource( 2 )
-_sections_unfolded = [ "Transform", "material" ]
 
 [node name="HingeJoint" type="HingeJoint" parent="." index="1"]
 
@@ -144,7 +139,6 @@ angular_limit/relaxation = 1.0
 motor/enable = false
 motor/target_velocity = 1.0
 motor/max_impulse = 1.0
-_sections_unfolded = [ "Transform", "Visibility", "angular_limit", "collision", "motor", "nodes", "params", "solver" ]
 
 [node name="Rod" type="StaticBody" parent="." index="2"]
 
@@ -157,13 +151,11 @@ friction = 1.0
 bounce = 0.0
 constant_linear_velocity = Vector3( 0, 0, 0 )
 constant_angular_velocity = Vector3( 0, 0, 0 )
-_sections_unfolded = [ "Collision", "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Rod" index="0"]
 
 shape = SubResource( 3 )
 disabled = false
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="HUD" type="Control" parent="." index="3"]
 
@@ -217,7 +209,6 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Theme" ]
 
 [node name="RightTeam" type="Label" parent="HUD" index="2"]
 
@@ -261,6 +252,5 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 

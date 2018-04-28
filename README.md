@@ -22,8 +22,10 @@ Current heroes:
 - Offensive:
   - IRA (WallMAKING mfer)
   - LUSSURIA (An ATTRACTIVE mfer)
+  - PAZIENZA (Slow down at a distance)
 - Support:
   - CARITAS (Margarine)
+  - SUPERBIA (Build portals)
 
 Ideas for Heroes:
 
@@ -31,16 +33,17 @@ Ideas for Heroes:
   - Blink (Tracer) - no cooldown, but loses all speed on hitting walls
   - Heavy guy - Slow, but very heavy for the see-saw
   - Climb and glide abilities
+  - JUMPING
 - More supportive
   - Boost - Area of effect or zarya-like cast, speeds people up
   - Flop - Changes side of see-saw for each team (should it be mechanic instead??)
   - Build - Build Zineth-like rails for anyone to use
-  - Teleportation - (for others! or maybe including the enemy too!)
-  - Portal 2-like gels (bounce, speed, slow?)
+  - (Combine with IRA?) Portal 2-like gels (bounce, speed, slow?)
+  - (Combine with LUSSURIA?) Hook and swing on terrain
 - More offensive
-  - Lay walls
   - Lay traps
-  - Destroy buildings
+  - (Combine with PAZIENZA?) Destroy buildings
+  - (Combine wit LUSSURIA?) Hold, then release to explode enemies away
 
 Key concepts:
 

@@ -10,7 +10,7 @@
 radius = 0.5
 height = 0.5
 
-[node name="RigidBody" index="0" instance=ExtResource( 1 )]
+[node name="RigidBody" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
 

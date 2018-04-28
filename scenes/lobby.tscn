@@ -6,7 +6,6 @@
 [sub_resource type="DynamicFontData" id=1]
 
 font_path = "res://assets/DejaVuSansMono.ttf"
-_sections_unfolded = [ "Resource" ]
 
 [sub_resource type="DynamicFont" id=2]
 
@@ -14,12 +13,10 @@ size = 30
 use_mipmaps = false
 use_filter = false
 font_data = SubResource( 1 )
-_sections_unfolded = [ "Extra Spacing", "Font", "Resource", "Settings" ]
 
 [sub_resource type="DynamicFontData" id=3]
 
 font_path = "res://assets/DejaVuSansMono.ttf"
-_sections_unfolded = [ "Resource" ]
 
 [sub_resource type="DynamicFont" id=4]
 
@@ -27,9 +24,8 @@ size = 16
 use_mipmaps = false
 use_filter = false
 font_data = SubResource( 3 )
-_sections_unfolded = [ "Font", "Resource", "Settings" ]
 
-[node name="Lobby" type="Control" index="0"]
+[node name="Lobby" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -45,7 +41,6 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 1 )
-_sections_unfolded = [ "Anchor" ]
 
 [node name="Title" type="Label" parent="." index="0"]
 
@@ -67,7 +62,6 @@ text = "VANAGLORIA"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "custom_fonts" ]
 
 [node name="GameBrowser" type="Control" parent="." index="1"]
 
@@ -538,7 +532,6 @@ text = "IP:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Visibility" ]
 
 [node name="IP" type="TextEdit" parent="CustomGame" index="5"]
 
@@ -669,7 +662,6 @@ text = "Waiting for players to connect...."
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "BBCode", "custom_fonts" ]
 
 [node name="StartGame" type="Button" parent="JoinedGameLobby" index="2"]
 
@@ -694,6 +686,5 @@ group = null
 text = "Start game"
 flat = false
 align = 1
-_sections_unfolded = [ "Visibility" ]
 
 

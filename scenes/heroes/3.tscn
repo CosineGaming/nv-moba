@@ -9,7 +9,6 @@
 
 contacts_reported = 3
 script = ExtResource( 2 )
-_sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Pause", "Transform", "Visibility", "collision" ]
 
 [node name="RotatedHead" parent="Yaw/Pitch" index="0"]
 

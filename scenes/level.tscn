@@ -24,7 +24,6 @@ size = 16
 use_mipmaps = false
 use_filter = false
 font_data = SubResource( 3 )
-_sections_unfolded = [ "Font", "Resource" ]
 
 [sub_resource type="ProceduralSky" id=5]
 
@@ -45,7 +44,6 @@ sun_angle_max = 100.0
 sun_curve = 0.05
 sun_energy = 16.0
 texture_size = 2
-_sections_unfolded = [ "Ground", "Sky" ]
 
 [sub_resource type="Environment" id=6]
 
@@ -125,9 +123,8 @@ adjustment_enabled = false
 adjustment_brightness = 1.0
 adjustment_contrast = 1.0
 adjustment_saturation = 1.0
-_sections_unfolded = [ "Background" ]
 
-[node name="Level" type="Spatial" index="0"]
+[node name="Level" type="Spatial"]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="0"]
 
@@ -158,7 +155,6 @@ directional_shadow_max_distance = 200.0
 
 [node name="Players" type="Spatial" parent="." index="1"]
 
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Ball" type="RigidBody" parent="." index="2"]
 
@@ -188,13 +184,11 @@ linear_velocity = Vector3( 0, 0, 0 )
 linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
-_sections_unfolded = [ "Collision", "Pause", "Transform", "Visibility" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="Ball" index="0"]
 
 shape = SubResource( 1 )
 disabled = false
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="Ball" index="1"]
 
@@ -210,12 +204,10 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 2 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="FullObjective" parent="." index="3" instance=ExtResource( 1 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -17.3706, 2.0316, 4.06596 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="Debug" type="Label" parent="." index="4"]
 
@@ -237,12 +229,10 @@ custom_fonts/font = SubResource( 4 )
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Material", "Mouse", "Pause", "Rect", "Size Flags", "Theme", "Visibility", "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 [node name="LeftSpawn" type="Spatial" parent="." index="5"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.96426, 9.36109 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="RightSpawn" type="Spatial" parent="." index="6"]
 

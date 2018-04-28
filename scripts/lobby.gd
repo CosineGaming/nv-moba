@@ -9,6 +9,7 @@ var begun = false
 var server_playing = true
 var global_server_ip = "nv.cosinegaming.com"
 var players_done = []
+var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
 
 func setup_options():
 	var opts = Options.new()
@@ -107,6 +108,7 @@ func _server_init():
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(peer)
+	is_connected = true
 	get_node("CustomGame/Server").set_text("Serving!")
 	get_node("JoinedGameLobby").show()
 	if server_playing:
@@ -125,6 +127,7 @@ func _connected_ok():
 	if "start_game" in my_info and my_info.start_game:
 		rpc_id(1, "start_game")
 	get_node("JoinedGameLobby").show()
+	is_connected = true
 
 func collect_info():
 	if not "username" in my_info:
@@ -174,7 +177,8 @@ sync func unregister_player(peer):
 func select_hero(hero):
 	var description = get_node("PlayerSettings/HeroSelect").hero_text[hero]
 	get_node("PlayerSettings/HeroDescription").set_text(description)
-	rpc("set_hero", get_tree().get_network_unique_id(), hero)
+	if is_connected:
+		rpc("set_hero", get_tree().get_network_unique_id(), hero)
 
 sync func set_hero(peer, hero):
 	player_info[peer].hero = hero

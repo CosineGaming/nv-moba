@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://scripts/tp_camera.gd" type="Script" id=2]
@@ -12,7 +12,6 @@ height = 0.5
 [sub_resource type="RayShape" id=2]
 
 length = 0.1
-_sections_unfolded = [ "Resource" ]
 
 [sub_resource type="PrismMesh" id=3]
 
@@ -28,7 +27,97 @@ radius = 0.4
 mid_height = 0.1
 radial_segments = 64
 rings = 8
-_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="StyleBoxFlat" id=7]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+bg_color = Color( 0.541351, 0.855469, 0.612519, 1 )
+draw_center = true
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color( 0.8, 0.8, 0.8, 1 )
+border_blend = false
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+corner_detail = 8
+expand_margin_left = 0.0
+expand_margin_right = 0.0
+expand_margin_top = 0.0
+expand_margin_bottom = 0.0
+shadow_color = Color( 0, 0, 0, 0.6 )
+shadow_size = 0
+anti_aliasing = true
+anti_aliasing_size = 1
+
+[sub_resource type="StyleBoxFlat" id=8]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+bg_color = Color( 0.00305176, 0.0976562, 0.0111818, 1 )
+draw_center = true
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color( 0.8, 0.8, 0.8, 1 )
+border_blend = false
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+corner_detail = 8
+expand_margin_left = 0.0
+expand_margin_right = 0.0
+expand_margin_top = 0.0
+expand_margin_bottom = 0.0
+shadow_color = Color( 0, 0, 0, 0.6 )
+shadow_size = 0
+anti_aliasing = true
+anti_aliasing_size = 1
+
+[sub_resource type="StyleBoxFlat" id=9]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
+bg_color = Color( 0.878769, 0.949219, 0.911242, 1 )
+draw_center = true
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color( 0.8, 0.8, 0.8, 1 )
+border_blend = false
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+corner_detail = 8
+expand_margin_left = 0.0
+expand_margin_right = 0.0
+expand_margin_top = 0.0
+expand_margin_bottom = 0.0
+shadow_color = Color( 0, 0, 0, 0.6 )
+shadow_size = 0
+anti_aliasing = true
+anti_aliasing_size = 1
+
+[sub_resource type="StyleBoxEmpty" id=10]
+
+content_margin_left = -1.0
+content_margin_right = -1.0
+content_margin_top = -1.0
+content_margin_bottom = -1.0
 
 [sub_resource type="CubeMesh" id=5]
 
@@ -87,9 +176,8 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Flags", "Parameters", "Roughness" ]
 
-[node name="RigidBody" type="RigidBody" index="0" groups=[
+[node name="RigidBody" type="RigidBody" groups=[
 "player",
 ]]
 
@@ -119,21 +207,18 @@ linear_damp = -1.0
 angular_velocity = Vector3( 0, 0, 0 )
 angular_damp = -1.0
 script = ExtResource( 1 )
-_sections_unfolded = [ "Angular", "Axis Lock", "Collision", "Linear", "Transform", "Visibility", "collision" ]
 
 [node name="Body" type="CollisionShape" parent="." index="0"]
 
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.75, 0 )
 shape = SubResource( 1 )
 disabled = false
-_sections_unfolded = [ "Pause", "Transform", "Visibility" ]
 
 [node name="Leg" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0.05, 0.1, 0 )
 shape = SubResource( 2 )
 disabled = false
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Ray" type="RayCast" parent="." index="2"]
 
@@ -142,16 +227,13 @@ enabled = true
 exclude_parent = true
 cast_to = Vector3( 0, -0.2, 0 )
 collision_mask = 1
-_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="Yaw" type="Spatial" parent="." index="3"]
 
-_sections_unfolded = [ "Transform" ]
 
 [node name="Pitch" type="Spatial" parent="Yaw" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.19053, 0 )
-_sections_unfolded = [ "Transform" ]
 
 [node name="RotatedHead" type="MeshInstance" parent="Yaw/Pitch" index="0"]
 
@@ -168,7 +250,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "material" ]
 
 [node name="MainMesh" type="MeshInstance" parent="Yaw" index="1"]
 
@@ -185,7 +266,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 4 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform", "material" ]
 
 [node name="MasterOnly" type="Node" parent="." index="4"]
 
@@ -210,35 +290,85 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Anchor", "Margin", "custom_colors" ]
 
-[node name="SwitchCharge" type="Label" parent="MasterOnly" index="1"]
+[node name="ChargeBar" type="ProgressBar" parent="MasterOnly" index="1"]
 
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -62.0
-margin_top = -98.0
-margin_right = 61.0
-margin_bottom = -84.0
+margin_left = -484.0
+margin_top = -41.0
+margin_right = 483.0
+margin_bottom = -25.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 0
+custom_styles/fg = SubResource( 7 )
+custom_styles/bg = SubResource( 8 )
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+page = 0.0
+value = 0.0
+exp_edit = false
+rounded = false
+percent_visible = false
+
+[node name="Extra" type="ProgressBar" parent="MasterOnly/ChargeBar" index="0"]
+
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -484.0
+margin_top = -8.0
+margin_right = 484.0
+margin_bottom = 8.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 0
+custom_styles/fg = SubResource( 9 )
+custom_styles/bg = SubResource( 10 )
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+page = 0.0
+value = 0.0
+exp_edit = false
+rounded = false
+percent_visible = false
+
+[node name="ChargeText" type="Label" parent="MasterOnly/ChargeBar" index="1"]
+
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -61.5
+margin_top = -14.0
+margin_right = 61.5
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_colors/font_color = Color( 0.289062, 0.289062, 0.289062, 1 )
+custom_colors/font_color = Color( 0.456299, 0.689711, 0.695312, 1 )
+custom_colors/font_color_shadow = Color( 0.0868835, 0.304688, 0.304688, 1 )
+text = "0%"
 align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "custom_colors" ]
 
 [node name="TPCamera" type="Spatial" parent="." index="5"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56913, 0 )
 script = ExtResource( 2 )
-_sections_unfolded = [ "Transform" ]
 cam = NodePath("Camera")
 pivot = NodePath("Pivot")
 
@@ -265,7 +395,6 @@ enabled = true
 exclude_parent = true
 cast_to = Vector3( 0, 0, -500 )
 collision_mask = 13
-_sections_unfolded = [ "Transform" ]
 
 [node name="MaterialSettings" type="MeshInstance" parent="." index="6"]
 
@@ -282,7 +411,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 5 )
 skeleton = NodePath("..")
 material/0 = SubResource( 6 )
-_sections_unfolded = [ "material" ]
 
 [node name="NamePosition" type="Spatial" parent="." index="7"]
 
@@ -307,6 +435,5 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 script = ExtResource( 3 )
-_sections_unfolded = [ "custom_colors" ]
 
 
