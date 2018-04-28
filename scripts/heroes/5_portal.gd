@@ -23,7 +23,7 @@ func _exit_tree():
 		maker_node.placement.placed.remove(index - 1)
 		other.queue_free()
 
-func init(maker, index):
+func init(maker):
 
 	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
 	var second = index % 2 != 0
@@ -37,7 +37,7 @@ func init(maker, index):
 	mat.albedo_color = color
 	get_node("MeshInstance").set_surface_material(0, mat)
 
-	.init(maker, index)
+	.init(maker)
 
 func place():
 	.place()

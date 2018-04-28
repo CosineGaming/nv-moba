@@ -31,12 +31,12 @@ master func request_placed():
 	for node in placed:
 		rpc_id(get_tree().get_rpc_sender_id(), "slave_place", node.transform)
 
-func place_input(radius=-1, require_ghost=false):
+func place_input(radius=-1, can_build=true, require_ghost=false):
 
 	# We allow you to just click to place, without needing to press E
 	var confirm = Input.is_action_just_pressed(confirm_action)
 
-	if Input.is_action_just_pressed(start_action) or (confirm and not is_placing and not require_ghost):
+	if can_build and Input.is_action_just_pressed(start_action) or (confirm and not is_placing and not require_ghost):
 		# Press button twice to cancel
 		if is_placing:
 			# We changed our mind, delete the placing wall
@@ -50,7 +50,7 @@ func place_input(radius=-1, require_ghost=false):
 	if Input.is_action_just_pressed(delete_action):
 		var pick = player.pick_from(placed)
 		if pick != -1:
-			rpc("remove_placed", pick)
+			rpc("remove_placed", placed[pick].get_name())
 
 	if is_placing:
 		position_placement(placing_node)
@@ -62,7 +62,7 @@ func place_input(radius=-1, require_ghost=false):
 			else:
 				placing_node.within_range()
 
-	if (confirm and not require_ghost) or (confirm and is_placing):
+	if can_build and (confirm and not require_ghost) or (confirm and is_placing):
 		# Order matters here: confirm_placement resets placing_node so we have to do anything with it first
 		rpc("slave_place", placing_node.transform)
 		confirm_placement(placing_node)
@@ -125,13 +125,14 @@ slave func slave_place(tf):
 	var node = create()
 	confirm_placement(node, tf)
 
-sync func remove_placed(index):
-	placed[index].queue_free()
-	placed.remove(index)
+sync func remove_placed(name):
+	var what = get_node("/root/Level").get_node(name)
+	placed.erase(what)
+	what.queue_free()
 
 func create():
 	var node = scene.instance()
 	player.get_node("/root/Level").add_child(node)
-	node.init(player, placed.size())
+	node.init(player)
 	return node
 

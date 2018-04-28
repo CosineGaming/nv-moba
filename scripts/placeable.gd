@@ -3,14 +3,12 @@ extends StaticBody
 var maker_node
 var material
 var destroy_cost = 20
-var index
 
 func _ready():
 	get_node("CollisionShape").disabled = true
 
-func init(maker, index):
+func init(maker):
 	maker_node = maker
-	self.index = index
 
 	material = get_node("MeshInstance").get_surface_material(0)
 	if not material:
@@ -24,9 +22,8 @@ func place():
 	get_node("CollisionShape").disabled = false
 	material.flags_transparent = false
 
-func destroy():
-	maker_node.placement.remove_placed(index)
-	return destroy_cost
+sync func destroy():
+	maker_node.placement.remove_placed(get_name())
 
 func make_last():
 	material.flags_transparent = true
