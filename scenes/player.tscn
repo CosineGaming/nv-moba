@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
-[ext_resource path="res://scripts/tp_camera.gd" type="Script" id=2]
-[ext_resource path="res://scripts/player_name.gd" type="Script" id=3]
+[ext_resource path="res://scenes/ability_icon.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/tp_camera.gd" type="Script" id=3]
+[ext_resource path="res://scripts/player_name.gd" type="Script" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -365,10 +366,24 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="SwitchHero" parent="MasterOnly" index="2" instance=ExtResource( 2 )]
+
+visible = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_top = -107.0
+margin_bottom = -98.0
+cost = 100
+ability_name = "Switch Hero"
+display_progress = false
+action = "switch_hero"
+
 [node name="TPCamera" type="Spatial" parent="." index="5"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56913, 0 )
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 cam = NodePath("Camera")
 pivot = NodePath("Pivot")
 
@@ -434,6 +449,6 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
 
