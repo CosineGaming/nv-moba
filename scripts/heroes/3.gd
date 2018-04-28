@@ -39,7 +39,7 @@ func _process(delta):
 			# Subtract and then add, so we can continously add this
 			switch_charge -= boost_charge
 			boost_charge = merged.switch_charge - original_charge
-			switch_charge += boost_charge
+			build_charge(boost_charge)
 
 func control_player(state):
 	if !merged:

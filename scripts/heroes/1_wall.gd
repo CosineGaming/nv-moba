@@ -5,7 +5,7 @@ var being_touched = 0
 
 func _process(delta):
 	if being_touched > 0:
-		maker_node.switch_charge += touch_charge * delta
+		maker_node.build_charge(touch_charge * delta)
 
 func init(maker):
 

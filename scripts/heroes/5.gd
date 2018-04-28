@@ -63,7 +63,7 @@ func flick_input():
 		towards -= gravity
 		rpc("flick", flicking.get_name(), towards)
 		flicking = null
-		switch_charge += flick_charge
+		build_charge(flick_charge)
 
 sync func flick(player_id, towards):
 	var who = $"/root/Level/Players".get_node(player_id)

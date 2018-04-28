@@ -15,7 +15,7 @@ func _process(delta):
 				get_node("MasterOnly/Crosshair").set_text("\\/")
 
 		var overlapping = get_node("Area").get_overlapping_bodies().size()
-		switch_charge += delta * overlap_charge * overlapping
+		build_charge(delta * overlap_charge * overlapping)
 
 sync func switch_gravity():
 	var area = get_node("Area")

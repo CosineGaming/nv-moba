@@ -83,7 +83,7 @@ func _process(delta):
 		var vel = get_linear_velocity()
 		if translation.y < switch_height:
 			vel.y = 0 # Don't gain charge from falling when below switch_height
-		switch_charge += movement_charge * vel.length() * delta
+		build_charge(movement_charge * vel.length() * delta)
 		switch_text.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
 		if switch_charge >= 100:
 			switch_hero_action.show()
@@ -117,6 +117,21 @@ func _exit_tree():
 
 # Functions
 # =========
+
+# Build all charge with a multiplier for ~~balance~~
+func build_charge(amount):
+	# If we used build_charge to cost charge, don't mess with it!
+	if amount > 0:
+		var losing_advantage = 1.2
+		var uncapped_advantage = 1.3
+		var obj = get_node("/root/Level/FullObjective/Objective")
+		if (obj.left > obj.right) == player_info.is_right_team:
+			# Is losing (left winning, we're on right or vice versa)
+			amount *= losing_advantage
+		if obj.right_active != player_info.is_right_team and obj.active:
+			# Point against us (right active and left, or vice versa)
+			amount *= uncapped_advantage
+	switch_charge += amount
 
 sync func spawn():
 	emit_signal("spawn")

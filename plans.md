@@ -25,8 +25,6 @@ Smaller TODOs:
 - Ira is OP?
   - Nerfed - 5 walls
 - Make motion more reactive?
-- Grab someone and draw an impulse on them
-  - Combine with SUPERBIA, use charge to build portals
 
 Bugs:
 

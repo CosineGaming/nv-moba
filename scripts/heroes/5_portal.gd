@@ -65,5 +65,5 @@ func portal(player):
 				# With both axes, gravity could never bring us to hit the portal
 				var to = other.to_global(Vector3(spawn_distance,0,-spawn_distance)) 
 				player.set_translation(to)
-				maker_node.switch_charge += portal_charge
+				maker_node.build_charge(portal_charge)
 
