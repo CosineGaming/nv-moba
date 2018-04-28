@@ -3,7 +3,7 @@
 [ext_resource path="res://scripts/hero_select_screen.gd" type="Script" id=1]
 [ext_resource path="res://scripts/hero_select.gd" type="Script" id=2]
 
-[node name="HeroSelect" type="ColorRect" index="0"]
+[node name="HeroSelect" type="ColorRect"]
 
 pause_mode = 2
 anchor_left = 0.0
@@ -17,7 +17,6 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 0.097229, 0.104696, 0.105469, 1 )
 script = ExtResource( 1 )
-_sections_unfolded = [ "Anchor", "Margin", "Material", "Pause", "Visibility" ]
 
 [node name="Hero" type="OptionButton" parent="." index="0"]
 

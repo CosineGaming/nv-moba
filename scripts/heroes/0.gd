@@ -12,13 +12,26 @@ var wallride_forgiveness = .3
 func _ready():
 	._ready()
 	walk_speed *= 0.8
-	air_accel *= 2
+	air_accel *= 1.5
 	jump_speed *= 1
 	air_speed_build *= 2
+	# Since movement is the only ability of this hero, it builds charge more
+	movement_charge *= 2
 
 func control_player(state):
+	var original_speed = walk_speed
+	var original_accel = air_accel
+	var boost_strength = 2
+	var boost_drain = 25 # Recall increased charge must be factored in
+	var cost = boost_drain * state.step
+	if get_node("MasterOnly/Boost").is_pressed() and switch_charge > cost:
+		walk_speed *= 2
+		air_accel *= 3
+		switch_charge -= cost
 	.control_player(state)
 	wallride(state)
+	walk_speed = original_speed
+	air_accel = original_accel
 
 func wallride(state):
 

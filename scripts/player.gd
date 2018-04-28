@@ -1,8 +1,7 @@
 # Original: https://raw.githubusercontent.com/Calinou/fps-test/master/scripts/player.gd
+# All heroes extend from here. Implements all common behavior
 
 extends RigidBody
-
-var view_sensitivity = 0.25
 
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
@@ -15,11 +14,16 @@ var player_info # Set by lobby
 var walk_speed_build = 0.006 # `walk_speed` per `switch_charge`
 var air_speed_build = 0.006 # `air_accel` per `switch_charge`
 
-var switch_charge = 0
+sync var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
-var movement_charge = 0.1 # In percent per meter (except when heroes change that)
+var movement_charge = 0.15 # In percent per meter (except when heroes change that)
+onready var switch_text = get_node("MasterOnly/ChargeBar/ChargeText")
+onready var switch_bar = get_node("MasterOnly/ChargeBar")
+onready var switch_bar_extra = get_node("MasterOnly/ChargeBar/Extra")
+onready var switch_hero_action = get_node("MasterOnly/SwitchHero")
 
-const fall_height = -50
+var fall_height = -400 # This is essentially the respawn timer
+var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
 
 var debug_node
 var recording
@@ -51,6 +55,7 @@ func _ready():
 	if is_network_master():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
+		get_node(tp_camera).cam_view_sensitivity = 0.05
 		spawn()
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
@@ -69,20 +74,26 @@ func _input(event):
 			quit()
 		if "record" in player_info:
 			recording.events.append([recording.time, event_to_obj(event)])
+		if Input.is_action_just_pressed("enable_cheats"):
+			switch_charge = 199
 
 func _process(delta):
 	# All player code not caused by input, and not causing movement
 	if is_network_master():
 		var vel = get_linear_velocity()
-		switch_charge += movement_charge * vel.length() * delta
-		var switch_node = get_node("MasterOnly/SwitchCharge")
-		switch_node.set_text("%.f%%" % switch_charge)
+		if translation.y < switch_height:
+			vel.y = 0 # Don't gain charge from falling when below switch_height
+		build_charge(movement_charge * vel.length() * delta)
+		switch_text.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
 		if switch_charge >= 100:
-			# Let switch_charge keep building, because we use it for walk_speed and things
-			switch_node.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+			switch_hero_action.show()
+		else:
+			switch_hero_action.hide()
 		if switch_charge > switch_charge_cap:
 			# There is however a cap
 			switch_charge = switch_charge_cap
+		switch_bar.value = switch_charge
+		switch_bar_extra.value = switch_charge - 100
 
 		if get_translation().y < fall_height:
 			rpc("spawn")
@@ -90,6 +101,7 @@ func _process(delta):
 		if "record" in player_info:
 			recording.time += delta
 
+		rset_unreliable("switch_charge", switch_charge)
 
 func _integrate_forces(state):
 	if is_network_master():
@@ -105,6 +117,21 @@ func _exit_tree():
 
 # Functions
 # =========
+
+# Build all charge with a multiplier for ~~balance~~
+func build_charge(amount):
+	# If we used build_charge to cost charge, don't mess with it!
+	if amount > 0:
+		var losing_advantage = 1.2
+		var uncapped_advantage = 1.3
+		var obj = get_node("/root/Level/FullObjective/Objective")
+		if (obj.left > obj.right) == player_info.is_right_team:
+			# Is losing (left winning, we're on right or vice versa)
+			amount *= losing_advantage
+		if obj.right_active != player_info.is_right_team and obj.active:
+			# Point against us (right active and left, or vice versa)
+			amount *= uncapped_advantage
+	switch_charge += amount
 
 sync func spawn():
 	emit_signal("spawn")
@@ -152,7 +179,7 @@ func begin():
 	master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
-	if master_player.player_info.is_right_team == player_info.is_right_team:
+	if master_player and master_player.player_info.is_right_team == player_info.is_right_team:
 		color = friend_color
 	else:
 		color = enemy_color
@@ -169,10 +196,8 @@ func begin():
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		view_sensitivity = 0
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		view_sensitivity = 0.25
 
 # Update visual yaw + pitch components to match camera
 func set_rotation():
@@ -296,10 +321,19 @@ func quit():
 
 # These aren't used by vanilla player, but are used by heroes in common
 
-func pick_from(group):
+func pick():
 	var look_ray = get_node("TPCamera/Camera/Ray")
-	var looking_at = look_ray.get_collider()
-	var result = group.find(looking_at)
-	return result
+	return look_ray.get_collider()
+func pick_from(group):
+	return group.find(pick())
+func pick_player():
+	var players = get_node("/root/Level/Players").get_children()
+	return players[pick_from(players)]
+func pick_by_friendly(pick_friendlies):
+	var pick = pick_player()
+	if (pick.player_info.is_right_team == player_info.is_right_team) == pick_friendlies:
+		return pick
+	else:
+		return null
 
 # =========

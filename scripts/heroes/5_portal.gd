@@ -1,6 +1,6 @@
 extends "res://scripts/placeable.gd"
 
-var portal_charge = 15
+var portal_charge = -5
 var other
 var index
 
@@ -18,10 +18,16 @@ func _ready():
 	for player in get_node("/root/Level/Players").get_children():
 		player.connect("body_entered", self, "player_collided", [player])
 
-func init(maker):
+func _exit_tree():
+	# We delete in pairs
+	if other:
+		maker_node.placement.placed.remove(index - 1)
+		other.queue_free()
 
-	var maker_portals = maker.placement.placed
-	index = maker_portals.size() # No -1, because we haven't actually been added to the array yet
+func init(maker):
+	
+	index = maker.placement.placed.size()
+
 	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
 	var second = index % 2 != 0
 	var is_friend = util.is_friendly(maker)
@@ -29,38 +35,35 @@ func init(maker):
 	var color = color_set[int(second)]
 
 	var mat = SpatialMaterial.new()
-	color.a = 0.5
-	mat.flags_transparent = true
+	# color.a = 0.5
+	# mat.flags_transparent = true
 	mat.albedo_color = color
 	get_node("MeshInstance").set_surface_material(0, mat)
 
 	.init(maker)
 
+func place():
+	.place()
+	var second = index % 2 != 0
+	if second:
+		# Our responsibility to complete the pairing
+		other = maker_node.placement.placed[index - 1]
+		other.other = self
+
 func player_collided(with, player):
 	if with == self:
 		portal(player)
 
-func find_other():
-	var maker_portals = maker_node.placement.placed
-	var count = maker_portals.size()
-	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
-	var second = index % 2 != 0
-	var delta = -1 if second else 1
-	if index + delta < count:
-		other = maker_portals[index + delta] # Second-to-last: we're already included
-		return other
-	else:
-		return null
-
 func portal(player):
 	if player.player_info.is_right_team == maker_node.player_info.is_right_team:
-		if find_other():
-			var spawn_distance = 2
-			# Find a sane place to spawn
-			# -Z is in the direction of the portal
-			# X is enough away from the portal to avoid infinite loop
-			# With both axes, gravity could never bring us to hit the portal
-			var to = other.to_global(Vector3(spawn_distance,0,-spawn_distance)) 
-			player.set_translation(to)
-			maker_node.switch_charge += portal_charge
+		if other:
+			if maker_node.switch_charge > -portal_charge:
+				var spawn_distance = 1.75
+				# Find a sane place to spawn
+				# -Z is in the direction of the portal
+				# X is enough away from the portal to avoid infinite loop
+				# With both axes, gravity could never bring us to hit the portal
+				var to = other.to_global(Vector3(spawn_distance,0,-spawn_distance)) 
+				player.set_translation(to)
+				maker_node.build_charge(portal_charge)
 
