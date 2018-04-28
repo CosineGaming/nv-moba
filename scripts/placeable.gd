@@ -2,6 +2,7 @@ extends StaticBody
 
 var maker_node
 var material
+var destroy_cost = 20
 
 func _ready():
 	get_node("CollisionShape").disabled = true
@@ -20,6 +21,10 @@ func place():
 	# Originally, the ghost is disabled to avoid weird physics
 	get_node("CollisionShape").disabled = false
 	material.flags_transparent = false
+
+func destroy():
+	queue_free()
+	return destroy_cost
 
 func make_last():
 	material.flags_transparent = true

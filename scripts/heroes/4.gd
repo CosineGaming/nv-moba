@@ -28,6 +28,13 @@ func _process(delta):
 			get_node("TPCamera").cam_view_sensitivity *= sens_factor
 			get_node("TPCamera").cam_smooth_movement = true
 
+		if Input.is_action_just_pressed("primary_ability"):
+			var look_ray = get_node("TPCamera/Camera/Ray")
+			var looking_at = look_ray.get_collider()
+			if looking_at.has_method("destroy"):
+				if switch_charge > looking_at.destroy_cost:
+					switch_charge -= looking_at.destroy()
+
 		if stun:
 			var players = get_node("/root/Level/Players").get_children()
 			var player = pick_from(players)
