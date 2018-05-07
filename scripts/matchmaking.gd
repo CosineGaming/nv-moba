@@ -8,7 +8,7 @@ var next_port = 54673
 
 # Filled with queue info which contains
 # { "netid" }
-var queue = []
+var skirmishing_players = []
 var skirmish
 # To avoid the confusion of the gameSERVERS being CLIENTS,
 # we just call them games whenever possible
@@ -39,15 +39,17 @@ func _process(delta):
 		game_streams.append(stream) # make new data transfer object for game
 		print("Server has requested connection")
 
-master func _queue(info):
-	queue.push(info)
+master func queue(info):
+	var netid = get_tree().get_rpc_sender_id()
+	rpc_id(netid, "join_game", skirmish)
+	skirmishing_players.push(netid)
 	check_queue()
 
 func check_queue():
-	if queue.size() >= SERVER_SIZE:
+	if skirmishing_players.size() >= SERVER_SIZE:
 		var port = spawn_server()
 		games.push(port)
-		for p in queue:
+		for p in skirmishing_players:
 			rpc_id(p.netid, "join_game", port)
 
 func spawn_server():
