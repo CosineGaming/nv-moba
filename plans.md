@@ -8,6 +8,7 @@ Big TODOs:
 - ^ I think you need more abilities for heroes, that combine well
   - Like, you could combine PAZIENZA with [destroys buildings]
 - Start making maps and figuring out what works / what you like
+  - Make just one new main level with the lessons you've learned from this one
   - I'd love to do a payload map!
   - More platforming for everyone (It's industria only rn tbh)
   - Give portals a tilted wall to fuck with acceleration
