@@ -3,8 +3,7 @@ extends "res://scripts/args.gd"
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
-var SERVER_PORT = 54672
-var MAX_PLAYERS = 10
+var port = null # Defined by command-line argument with default
 
 var player_info = {}
 var my_info = {}
@@ -14,13 +13,17 @@ var global_server_ip = "nv.cosinegaming.com"
 var players_done = []
 var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
 
+onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
+
 func setup_options():
 	var opts = Options.new()
 	opts.set_banner(('A non-violent MOBA inspired by Overwatch and Zineth'))
 	opts.add('-singleplayer', false, 'Whether to run singeplayer, starting immediately')
 	opts.add('-server', false, 'Whether to run as server')
+	opts.add('-matchmaker', false, 'Whether to be the sole matchmaker')
 	opts.add('-client', false, 'Immediately connect as client')
 	opts.add('-silent', false, 'If the server is not playing, merely serving')
+	opts.add('-port', 54672, 'The port to run a server on or connect to')
 	opts.add('-hero', 'r', 'Your choice of hero (index)')
 	opts.add('-level', 'r', 'Your choice of level (index) - server only!')
 	opts.add('-start-game', false, 'Join as a client and immediately start the game')
@@ -38,6 +41,8 @@ func option_sel(button_name, option):
 	button.select(option)
 
 func _ready():
+
+	add_child(matchmaking)
 
 	my_info.version = [0,0,0] # Semantic versioning: [0].[1].[2]
 
@@ -66,8 +71,12 @@ func _ready():
 		option_sel("CustomGame/LevelSelect", o.get_value("-level"))
 	if o.get_value("-server"):
 		call_deferred("_server_init")
+	if o.get_value("-matchmaker"):
+		call_deferred("_matchmaker_init")
 	if o.get_value("-client"):
 		call_deferred("_client_init")
+	if o.get_value("-port"):
+		port = o.get_value("-port")
 	if o.get_value("-start-game"):
 		my_info.start_game = true
 		call_deferred("_client_init")
@@ -94,14 +103,14 @@ func _client_init(ip=null):
 	if not ip:
 		ip = get_node("CustomGame/IP").get_text()
 	ip = IP.resolve_hostname(ip)
-	peer.create_client(ip, SERVER_PORT)
+	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
 	get_node("CustomGame/Client").set_text("Clienting!")
 
 func _singleplayer_init():
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_server(SERVER_PORT, 1)
+	peer.create_server(port, 1)
 	get_tree().set_network_peer(peer)
 	player_info[1] = my_info
 	start_game()
@@ -109,13 +118,16 @@ func _singleplayer_init():
 func _server_init():
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_server(SERVER_PORT, MAX_PLAYERS)
+	peer.create_server(port, matchmaking.SERVER_SIZE)
 	get_tree().set_network_peer(peer)
 	is_connected = true
 	get_node("CustomGame/Server").set_text("Serving!")
 	get_node("JoinedGameLobby").show()
 	if server_playing:
 		player_info[1] = my_info
+
+func _matchmaker_init():
+	matchmaking.run_matchmaker()
 
 func _player_connected(id):
 	pass
@@ -167,7 +179,7 @@ remote func register_player(new_peer, info):
 			rpc_id(1, "begin_player_deferred", new_peer) # Spawning is deferred
 		var assign_right_team = right_team_count * 2 < player_info.size()
 		rpc("assign_team", new_peer, assign_right_team)
-		if not begun and player_info.size() == MAX_PLAYERS:
+		if not begun and player_info.size() == matchmaking.SERVER_SIZE:
 			start_game()
 		if begun:
 			rpc_id(new_peer, "pre_configure_game", my_info.level)
