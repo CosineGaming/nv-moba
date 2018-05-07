@@ -79,7 +79,6 @@ func _ready():
 		port = o.get_value("-port")
 	if o.get_value("-start-game"):
 		my_info.start_game = true
-		call_deferred("_client_init")
 	if o.get_value("-singleplayer"):
 		call_deferred("_singleplayer_init")
 	if o.get_value("-ai"):
@@ -125,6 +124,8 @@ func _server_init():
 	get_node("JoinedGameLobby").show()
 	if server_playing:
 		player_info[1] = my_info
+	if "start_game" in my_info and my_info.start_game:
+		start_game()
 
 func _matchmaker_init():
 	matchmaking.run_matchmaker()
