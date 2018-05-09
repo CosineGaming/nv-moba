@@ -61,7 +61,7 @@ func _process(delta):
 
 func queue(netid):
 	print("Player " + str(netid) + " connected.")
-	$"..".rpc_id(netid, "_client_init", skirmish)
+	add_to_game(netid, skirmish)
 	skirmishing_players.append(netid)
 	check_queue()
 
@@ -69,13 +69,17 @@ func queue(netid):
 # slave func join_game(port):
 # 	#
 
+func add_to_game(netid, port):
+	lobby.rpc_id(netid, "_client_init", port)
+
 func check_queue():
 	if skirmishing_players.size() >= GAME_SIZE:
 		var port = spawn_server()
-		games.push(port)
+		games.append(port)
 		for i in range(GAME_SIZE):
 			var p = skirmishing_players[i]
-			rpc_id(p.netid, "join_game", port)
+			print("Moving player " + str(p) + " to game " + str(port))
+			add_to_game(p, port)
 
 func spawn_server():
 	OS.execute("util/server.sh", ['-port='+str(next_port)], false)
