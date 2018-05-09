@@ -2,7 +2,9 @@ extends Node
 
 var SERVER_TO_SERVER_PORT = 54671
 var MATCHMAKING_PORT = 54672
-var SERVER_SIZE = 6
+var GAME_SIZE = 6
+# Number of games we can make without blowing up the computer
+var MAX_GAMES = 50 # Totally random guess
 
 var next_port = 54673
 
@@ -19,15 +21,33 @@ var game_streams = []
 # Matchmaker to game servers
 var matchmaker_to_games
 
+onready var lobby = get_node("..")
+
 func _ready():
+	# By default, having this node doesn't do naything
+	# You must call run_matchmaker to enable it
+	# If not called, don't call _process (= don't matchmake)
 	set_process(false)
 
 func run_matchmaker():
+	# Actually run the matchmaker
+	set_process(true)
+
+	# Setup skirmish server
 	skirmish = spawn_server()
+
+	# Set up communication between GAMESERVERS
+	# This is necessary for eg, when a player leaves to backfill
 	matchmaker_to_games = TCP_Server.new()
 	if matchmaker_to_games.listen(SERVER_TO_SERVER_PORT):
 		print("Error, could not listen")
-	set_process(true)
+
+	# Use ENet for matchmaker because we can (makes client code cleaner)
+	var matchmaker_to_players = NetworkedMultiplayerENet.new()
+	print("Starting matchmaker on port " + str(MATCHMAKING_PORT))
+	matchmaker_to_players.create_server(MATCHMAKING_PORT, MAX_GAMES)
+	get_tree().set_network_peer(matchmaker_to_players)
+	matchmaker_to_players.connect("peer_connected", self, "queue")
 
 func _process(delta):
 	# Manage connection to GAMESERVERS (not clients)
@@ -39,21 +59,26 @@ func _process(delta):
 		game_streams.append(stream) # make new data transfer object for game
 		print("Server has requested connection")
 
-master func queue(info):
-	var netid = get_tree().get_rpc_sender_id()
-	rpc_id(netid, "join_game", skirmish)
-	skirmishing_players.push(netid)
+func queue(netid):
+	print("Player " + str(netid) + " connected.")
+	$"..".rpc_id(netid, "_client_init", skirmish)
+	skirmishing_players.append(netid)
 	check_queue()
 
+# # This is only for clients, but it's in here so we can rpc it easily
+# slave func join_game(port):
+# 	#
+
 func check_queue():
-	if skirmishing_players.size() >= SERVER_SIZE:
+	if skirmishing_players.size() >= GAME_SIZE:
 		var port = spawn_server()
 		games.push(port)
-		for p in skirmishing_players:
+		for i in range(GAME_SIZE):
+			var p = skirmishing_players[i]
 			rpc_id(p.netid, "join_game", port)
 
 func spawn_server():
-	OS.execute("util/server.sh", [], false)
+	OS.execute("util/server.sh", ['-port='+str(next_port)], false)
 	next_port += 1
 	return (next_port - 1) # Return original port
 

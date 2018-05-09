@@ -10,6 +10,7 @@ var my_info = {}
 var begun = false
 var server_playing = true
 var global_server_ip = "nv.cosinegaming.com"
+var ip = null
 var players_done = []
 var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
 
@@ -47,6 +48,7 @@ func _ready():
 	my_info.version = [0,0,0] # Semantic versioning: [0].[1].[2]
 
 	randomize()
+	parse_args()
 
 	get_node("GameBrowser/Play").connect("pressed", self, "connect_global_server")
 	get_node("PlayerSettings/HeroSelect").connect("item_selected", self, "select_hero")
@@ -57,6 +59,11 @@ func _ready():
 	get_node("CustomGame/Singleplayer").connect("pressed", self, "_singleplayer_init")
 	get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level")
 
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	get_tree().connect("connected_to_server", self, "_connected_ok")
+
+func parse_args():
 	var o = setup_options()
 	o.parse()
 
@@ -89,19 +96,19 @@ func _ready():
 		o.print_help()
 		quit()
 
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
-	get_tree().connect("connected_to_server", self, "_connected_ok")
-
 func connect_global_server():
-	_client_init(global_server_ip)
+	ip = global_server_ip
+	_client_init()
 
-func _client_init(ip=null):
+slave func _client_init(given_port=null):
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
 	if not ip:
 		ip = get_node("CustomGame/IP").get_text()
 	ip = IP.resolve_hostname(ip)
+	if given_port:
+		port = given_port
+	print("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
 	get_node("CustomGame/Client").set_text("Clienting!")
@@ -117,7 +124,8 @@ func _singleplayer_init():
 func _server_init():
 	collect_info()
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_server(port, matchmaking.SERVER_SIZE)
+	print("Starting server on port " + str(port))
+	peer.create_server(port, matchmaking.GAME_SIZE)
 	get_tree().set_network_peer(peer)
 	is_connected = true
 	get_node("CustomGame/Server").set_text("Serving!")
@@ -180,7 +188,7 @@ remote func register_player(new_peer, info):
 			rpc_id(1, "begin_player_deferred", new_peer) # Spawning is deferred
 		var assign_right_team = right_team_count * 2 < player_info.size()
 		rpc("assign_team", new_peer, assign_right_team)
-		if not begun and player_info.size() == matchmaking.SERVER_SIZE:
+		if not begun and player_info.size() == matchmaking.GAME_SIZE:
 			start_game()
 		if begun:
 			rpc_id(new_peer, "pre_configure_game", my_info.level)
