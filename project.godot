@@ -11,12 +11,16 @@ config_version=3
 [application]
 
 config/name="nv-moba"
-run/main_scene="res://scenes/lobby.tscn"
+run/main_scene="res://scenes/menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 util="*res://scripts/util.gd"
+
+[display]
+
+window/stretch/mode="viewport"
 
 [input]
 

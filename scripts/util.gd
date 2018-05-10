@@ -1,5 +1,7 @@
 extends Node
 
+var version = [0,0,0] # Semantic versioning: [0].[1].[2]
+
 func get_master_player():
 	var path = "/root/Level/Players/%d" % get_tree().get_network_unique_id()
 	if has_node(path):

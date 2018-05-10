@@ -83,7 +83,6 @@ func add_to_game(netid, port):
 	lobby.rpc_id(netid, "_client_init", port)
 
 func skirmish_to_game(port, count=1):
-	print("dropping 'em in")
 	for i in range(count):
 		if not skirmishing_players.size():
 			return false

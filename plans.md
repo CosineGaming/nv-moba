@@ -26,6 +26,8 @@ Smaller TODOs:
 - Ira is OP?
   - Nerfed - 5 walls
 - Make motion more reactive?
+- Remember some player settings, probably in a player.json or something
+  - I'm mostly thinking of nickname, but also SR eventually
 
 Bugs:
 
