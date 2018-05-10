@@ -16,6 +16,8 @@ var is_connected = false # Technically this can be done with ENetcetera but it's
 
 onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
 
+var matchmaker_tcp
+
 func setup_options():
 	var opts = Options.new()
 	opts.set_banner(('A non-violent MOBA inspired by Overwatch and Zineth'))
@@ -127,6 +129,14 @@ func _server_init():
 	print("Starting server on port " + str(port))
 	peer.create_server(port, matchmaking.GAME_SIZE)
 	get_tree().set_network_peer(peer)
+	# As soon as we're listening, let the matchmaker know
+	var matchmaker_peer = StreamPeerTCP.new()
+	matchmaker_peer.connect_to_host("127.0.0.1", matchmaking.SERVER_TO_SERVER_PORT)
+	matchmaker_tcp = PacketPeerStream.new()
+	matchmaker_tcp.set_stream_peer(matchmaker_peer)
+	# matchmaker_tcp.put_packet([matchmaking.messages.ready_to_connect, port])
+	matchmaker_tcp.put_var(matchmaking.messages.ready_to_connect)
+	matchmaker_tcp.put_var(port)
 	is_connected = true
 	get_node("CustomGame/Server").set_text("Serving!")
 	get_node("JoinedGameLobby").show()

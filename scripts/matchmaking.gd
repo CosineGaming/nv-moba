@@ -14,12 +14,16 @@ var skirmishing_players = []
 var skirmish
 # To avoid the confusion of the gameSERVERS being CLIENTS,
 # we just call them games whenever possible
-var games = []
+# var games = []
 var game_connections = []
 var game_streams = []
 
 # Matchmaker to game servers
 var matchmaker_to_games
+
+enum messages {
+	ready_to_connect,
+}
 
 onready var lobby = get_node("..")
 
@@ -57,7 +61,13 @@ func _process(delta):
 		var stream = PacketPeerStream.new()
 		stream.set_stream_peer(game) # bind peerstream to new client
 		game_streams.append(stream) # make new data transfer object for game
-		print("Server has requested connection")
+	for stream in game_streams:
+		if stream.get_available_packet_count():
+			var message = stream.get_var()
+			if message == messages.ready_to_connect:
+				var port = stream.get_var()
+				print("Server " + str(port) + " has requested connection")
+				skirmish_to_game(port, GAME_SIZE)
 
 func queue(netid):
 	print("Player " + str(netid) + " connected.")
@@ -72,14 +82,22 @@ func queue(netid):
 func add_to_game(netid, port):
 	lobby.rpc_id(netid, "_client_init", port)
 
+func skirmish_to_game(port, count=1):
+	print("dropping 'em in")
+	for i in range(count):
+		if not skirmishing_players.size():
+			return false
+		print(skirmishing_players[0])
+		print("to")
+		print(port)
+		add_to_game(skirmishing_players[0], port)
+	return true
+
 func check_queue():
+	# Prefer making a full game to backfilling
 	if skirmishing_players.size() >= GAME_SIZE:
-		var port = spawn_server()
-		games.append(port)
-		for i in range(GAME_SIZE):
-			var p = skirmishing_players[i]
-			print("Moving player " + str(p) + " to game " + str(port))
-			add_to_game(p, port)
+		spawn_server()
+		# games.append(port)
 
 func spawn_server():
 	OS.execute("util/server.sh", ['-port='+str(next_port)], false)
