@@ -29,11 +29,11 @@ onready var lobby = get_node("..")
 
 func _ready():
 	# By default, having this node doesn't do naything
-	# You must call run_matchmaker to enable it
+	# You must call start_matchmaker to enable it
 	# If not called, don't call _process (= don't matchmake)
 	set_process(false)
 
-func run_matchmaker():
+func start_matchmaker():
 	# Actually run the matchmaker
 	set_process(true)
 

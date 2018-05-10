@@ -49,7 +49,7 @@ func _option_sel(button_name, option):
 	button.select(option)
 
 func _parse_args():
-	var o = setup_options()
+	var o = _set_up_options()
 	o.parse()
 
 	# if o.get_value("-silent"):

@@ -2,9 +2,7 @@ extends Control
 
 var port = null # Defined by command-line argument with default
 
-var player_info = {}
 var my_info = {}
-var begun = false
 var server_playing = true
 var global_server_ip = "nv.cosinegaming.com"
 var ip = null
@@ -72,4 +70,13 @@ func render_player_list():
 				list += "Left Team"
 			list += "\n"
 		get_node("JoinedGameLobby/PlayerList").set_text(list)
+
+sync func assign_team(peer, is_right_team):
+	player_info[peer].is_right_team = is_right_team
+	if peer == get_tree().get_network_unique_id():
+		if is_right_team:
+			get_node("PlayerSettings/Team").set_text("Right Team")
+		else:
+			get_node("PlayerSettings/Team").set_text("Left Team")
+	render_player_list()
 
