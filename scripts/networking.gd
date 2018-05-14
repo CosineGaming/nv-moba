@@ -20,11 +20,6 @@ func _ready():
 func start_client(ip, port):
 	# collect_info() TODO
 	var peer = NetworkedMultiplayerENet.new()
-	# if not ip: TODO
-	# 	ip = get_node("CustomGame/IP").get_text()
-	# ip = IP.resolve_hostname(ip)
-	# if given_port:
-	# 	port = given_port
 	print("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
