@@ -2,6 +2,7 @@ extends Control
 
 var port = null # Defined by command-line argument with default
 
+var player_info = []
 var my_info = {}
 var server_playing = true
 var global_server_ip = "nv.cosinegaming.com"
@@ -17,18 +18,9 @@ var matchmaker_tcp
 func _ready():
 	add_child(matchmaking)
 
-	get_node("GameBrowser/Play").connect("pressed", self, "connect_global_server")
-	get_node("PlayerSettings/HeroSelect").connect("item_selected", self, "select_hero")
-	get_node("PlayerSettings/Username").connect("text_changed", self, "resend_name")
-	get_node("JoinedGameLobby/StartGame").connect("pressed", self, "start_game")
-	get_node("CustomGame/Server").connect("pressed", self, "_server_init")
-	get_node("CustomGame/Client").connect("pressed", self, "_client_init")
-	get_node("CustomGame/Singleplayer").connect("pressed", self, "_singleplayer_init")
-	get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level")
-
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
-	get_tree().connect("connected_to_server", self, "_connected_ok")
+	get_node("Username").connect("text_changed", self, "resend_name")
+	get_node("StartGame").connect("pressed", self, "start_game")
+	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
 
 func collect_info():
 	if not "username" in my_info:

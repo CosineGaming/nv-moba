@@ -13,6 +13,10 @@ var my_info = {}
 func _ready():
 	add_child(matchmaking)
 
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	get_tree().connect("connected_to_server", self, "_connected_ok")
+
 # func connect_global_server(): TODO
 # 	ip = global_server_ip
 # 	_client_init()
@@ -66,12 +70,11 @@ func disconnect_player(id):
 		rpc("unregister_player", id)
 	# call_deferred("render_player_list") TODO
 
-# func connect_player():
-	# rpc("register_player", get_tree().get_network_unique_id(), my_info)
-	# if "start_game" in my_info and my_info.start_game:
-	# 	rpc_id(1, "start_game")
-	# get_node("JoinedGameLobby").show() TODO
-	# is_connected = true
+func connect_player():
+	rpc("_register_player", get_tree().get_network_unique_id(), {})
+	if util.args.get_value("-start-game"):
+		rpc_id(1, "start_game")
+	# is_connected = true TODO
 
 remote func _register_player(new_peer, info):
 	players[new_peer] = info
