@@ -2,7 +2,7 @@ extends Node
 
 onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
 
-var players = []
+var players = {}
 # TODO: Should we abstract server so variables like this aren't cluttering everything up?
 var players_done = []
 var begun = false
@@ -13,9 +13,9 @@ var my_info = {}
 func _ready():
 	add_child(matchmaking)
 
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
-	get_tree().connect("connected_to_server", self, "_connected_ok")
+	# get_tree().connect("network_peer_connected", self, "connect_player")
+	get_tree().connect("network_peer_disconnected", self, "disconnect_player")
+	get_tree().connect("connected_to_server", self, "_on_connect")
 
 # func connect_global_server(): TODO
 # 	ip = global_server_ip
@@ -61,24 +61,23 @@ func start_server(port):
 	# if "start_game" in my_info and my_info.start_game: TODO
 	# 	start_game()
 
-# sync func start_game(): TODO
-	# my_info.level = get_node("CustomGame/LevelSelect").get_selected_id() TODO
-	# rpc("_pre_configure_game", my_info.level)
+sync func start_game(level):
+	rpc("_pre_configure_game", level)
 
 func disconnect_player(id):
 	if get_tree().is_network_server():
 		rpc("unregister_player", id)
 	# call_deferred("render_player_list") TODO
 
-func connect_player():
-	rpc("_register_player", get_tree().get_network_unique_id(), {})
+func _on_connect():
+	rpc("_register_player", get_tree().get_network_unique_id(), my_info)
 	if util.args.get_value("-start-game"):
 		rpc_id(1, "start_game")
 	# is_connected = true TODO
 
 remote func _register_player(new_peer, info):
 	players[new_peer] = info
-	render_player_list()
+	# render_player_list() TODO
 	if (get_tree().is_network_server()):
 		var right_team_count = 0
 		# Send current players' info to new player
@@ -138,7 +137,7 @@ sync func _pre_configure_game(level):
 	# Load all players (including self)
 	for p in players:
 		players[p].level = level
-		spawn_player(p)
+		_spawn_player(p)
 
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 

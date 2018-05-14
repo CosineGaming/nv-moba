@@ -11,15 +11,20 @@ var players_done = []
 var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
 
 onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
+onready var networking = preload("res://scripts/networking.gd").new()
 
 var matchmaker_tcp
 
 
 func _ready():
 	add_child(matchmaking)
+	add_child(networking)
+
+	if get_tree().is_network_server():
+		get_node("LevelSelect").show()
 
 	get_node("Username").connect("text_changed", self, "resend_name")
-	get_node("StartGame").connect("pressed", self, "start_game")
+	get_node("StartGame").connect("pressed", self, "_start_game")
 	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
 
 func collect_info():
@@ -71,4 +76,8 @@ sync func assign_team(peer, is_right_team):
 		else:
 			get_node("PlayerSettings/Team").set_text("Left Team")
 	render_player_list()
+
+func _start_game():
+	var level = 2 # TODO
+	networking.rpc_id(1, "start_game", level)
 
