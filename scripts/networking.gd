@@ -117,7 +117,7 @@ sync func _spawn_player(p):
 	var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
 	player.set_name(str(p))
 	player.set_network_master(p)
-	player.players = players[p]
+	player.player_info = players[p]
 	get_node("/root/Level/Players").call_deferred("add_child", player)
 
 sync func _pre_configure_game(level):
