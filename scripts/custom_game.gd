@@ -1,15 +1,12 @@
 extends Control
 
-onready var networking = preload("res://scripts/networking.gd").new()
-
 func _ready():
-	add_child(networking)
-
 	get_node("Server").connect("pressed", self, "_start_server")
 	get_node("Client").connect("pressed", self, "_start_client")
 
 func _start_server():
-	networking.start_server(_get_port())
+	# Custom Game can assume we're playing as well
+	networking.start_server(_get_port(), true)
 	_show_lobby()
 
 func _start_client():

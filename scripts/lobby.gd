@@ -3,29 +3,35 @@ extends Control
 var port = null # Defined by command-line argument with default
 
 # var my_info = {}
-var server_playing = true
+remote var players = {}
 var global_server_ip = "nv.cosinegaming.com"
 var ip = null
 var players_done = []
 var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
 
 onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
-onready var networking = preload("res://scripts/networking.gd").new()
 
 var matchmaker_tcp
 
+var right_team_next = false
 
 func _ready():
 	add_child(matchmaking)
-	add_child(networking)
 
 	if get_tree().is_network_server():
 		get_node("LevelSelect").show()
+
+	get_tree().connect("network_peer_connected", self, "_register_player")
 
 	get_node("Username").connect("text_changed", self, "_send_name")
 	get_node("StartGame").connect("pressed", self, "_start_game")
 	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
 	_send_name()
+
+func _register_player(peer):
+	players[peer] = {}
+	if is_network_server():
+		rset(peer, "players", players)
 
 func _collect_info():
 	var my_id = get_tree().get_network_unique_id()
