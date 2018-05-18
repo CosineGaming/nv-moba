@@ -20,8 +20,8 @@ var right_team_next = false
 func _ready():
 	add_child(matchmaking)
 
-	get_tree().connect("network_peer_connected", self, "_register_player")
-	get_tree().connect("network_peer_disconnected", self, "disconnect_player")
+	get_tree().connect("network_peer_disconnected", self, "unregister_player")
+	get_tree().connect("network_peer_connected", self, "register_player")
 	# get_tree().connect("connected_to_server", self, "_on_connect")
 
 # func connect_global_server(): TODO
@@ -60,11 +60,13 @@ func start_server(port, server_playing=false):
 	get_tree().set_network_peer(peer)
 	# As soon as we're listening, let the matchmaker know
 	_connect_to_matchmaker(port)
+	if not util.args.get_value("-silent"):
+		register_player(get_tree().get_network_unique_id())
 	# is_connected = true TODO
 	# get_node("CustomGame/Server").set_text("Serving!")
 	# get_node("JoinedGameLobby").show()
-	# if "start_game" in my_info and my_info.start_game: TODO
-	# 	start_game()
+	if util.args.get_value("-start-game"):
+		start_game()
 
 sync func start_game(level):
 	print(var2str(players))
@@ -81,8 +83,11 @@ func disconnect_player(id):
 # 		rpc_id(1, "start_game")
 	# is_connected = true TODO
 
-remote func _register_player(new_peer):
-	players[new_peer] = {}
+remote func register_player(new_peer):
+	var info = {}
+	info.is_right_team = right_team_next
+	right_team_next = not right_team_next
+	players[new_peer] = info
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		rset_id(new_peer, "players", players)
@@ -106,9 +111,19 @@ remote func _register_player(new_peer):
 		# 	rpc_id(new_peer, "_pre_configure_game", my_info.level)
 		# 	rpc_id(new_peer, "_post_configure_game")
 
-sync func _unregister_player(peer):
+sync func unregister_player(peer):
 	players.erase(peer)
-	get_node("/root/Level/Players/%d" % peer).queue_free()
+	if begun:
+		get_node("/root/Level/Players/%d" % peer).queue_free()
+
+func set_spectating(spectating):
+	var id = get_tree().get_network_unique_id()
+	if spectating:
+		if players[id]:
+			unregister_player(id)
+	else:
+		if not players[id]:
+			register_player(id)
 
 sync func _spawn_player(p):
 	var hero = 0

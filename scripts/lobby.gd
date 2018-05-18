@@ -9,8 +9,10 @@ func _ready():
 	get_node("Username").connect("text_changed", self, "_send_name")
 	get_node("StartGame").connect("pressed", self, "_start_game")
 
-	get_node("Spectating").pressed = util.args.get_value("-silent")
-	get_node("Spectating").connect("pressed", self, "_change_spectating") # TODO
+	var spectating = util.args.get_value("-silent")
+	get_node("Spectating").pressed = spectating
+	# 
+	get_node("Spectating").connect("toggled", networking, "set_spectating") # TODO
 	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
 	# _send_name()
 
