@@ -2,36 +2,17 @@ extends Control
 
 var port = null # Defined by command-line argument with default
 
-# var my_info = {}
-remote var players = {}
-var global_server_ip = "nv.cosinegaming.com"
-var ip = null
-var players_done = []
-var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
-
-onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
-
-var matchmaker_tcp
-
-var right_team_next = false
-
 func _ready():
-	add_child(matchmaking)
-
 	if get_tree().is_network_server():
 		get_node("LevelSelect").show()
 
-	get_tree().connect("network_peer_connected", self, "_register_player")
-
 	get_node("Username").connect("text_changed", self, "_send_name")
 	get_node("StartGame").connect("pressed", self, "_start_game")
-	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
-	_send_name()
 
-func _register_player(peer):
-	players[peer] = {}
-	if is_network_server():
-		rset(peer, "players", players)
+	get_node("Spectating").pressed = util.args.get_value("-silent")
+	get_node("Spectating").connect("pressed", self, "_change_spectating") # TODO
+	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
+	# _send_name()
 
 func _collect_info():
 	var my_id = get_tree().get_network_unique_id()
@@ -55,9 +36,8 @@ sync func set_hero(peer, hero):
 	render_player_list()
 
 func _send_name():
-	if is_connected:
-		var name = get_node("Username").text
-		rpc("_set_name", get_tree().get_network_unique_id(), name)
+	var name = get_node("Username").text
+	rpc("_set_name", get_tree().get_network_unique_id(), name)
 
 sync func _set_name(peer, name):
 	networking.players[peer].username = name

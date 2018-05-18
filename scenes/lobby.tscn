@@ -23,7 +23,7 @@ use_mipmaps = false
 use_filter = false
 font_data = SubResource( 2 )
 
-[node name="Lobby" type="Control"]
+[node name="Lobby" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -94,10 +94,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 44.0
-margin_top = 394.0
-margin_right = 385.0
-margin_bottom = 427.0
+margin_left = 43.0
+margin_top = 348.0
+margin_right = 384.0
+margin_bottom = 381.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -121,109 +121,32 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_moving_by_right_click = true
 
-[node name="TeamLabel" type="Label" parent="." index="2"]
+[node name="Spectating" type="CheckButton" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 498.0
-margin_top = 87.0
-margin_right = 666.0
-margin_bottom = 111.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-text = "Your team:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="Team" type="Label" parent="." index="3"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 625.0
-margin_top = 87.0
-margin_right = 665.0
-margin_bottom = 111.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="PlayerList" type="Label" parent="." index="4"]
-
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 480.0
-margin_top = 130.0
-margin_right = 981.0
-margin_bottom = 408.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = SubResource( 3 )
-text = "Waiting for players to connect...."
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="StartGame" type="Button" parent="." index="5"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 496.0
-margin_top = 453.0
-margin_right = 618.0
-margin_bottom = 493.0
+margin_left = 36.0
+margin_top = 396.0
+margin_right = 226.0
+margin_bottom = 436.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-toggle_mode = false
+toggle_mode = true
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Ready!"
+text = "Spectating"
 flat = false
-align = 1
+align = 0
 
-[node name="VSeparator" type="VSeparator" parent="." index="6"]
+[node name="LevelSelect" type="OptionButton" parent="." index="3"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 453.0
-margin_top = 50.0
-margin_right = 471.0
-margin_bottom = 538.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-
-[node name="LevelSelect" type="OptionButton" parent="." index="7"]
-
-visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -268,6 +191,106 @@ text = "Map:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="TeamLabel" type="Label" parent="." index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 498.0
+margin_top = 87.0
+margin_right = 666.0
+margin_bottom = 111.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Your team:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Team" type="Label" parent="." index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 625.0
+margin_top = 87.0
+margin_right = 665.0
+margin_bottom = 111.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="PlayerList" type="Label" parent="." index="6"]
+
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 480.0
+margin_top = 130.0
+margin_right = 981.0
+margin_bottom = 408.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 3 )
+text = "Waiting for players to connect...."
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="StartGame" type="Button" parent="." index="7"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 496.0
+margin_top = 453.0
+margin_right = 618.0
+margin_bottom = 493.0
+rect_pivot_offset = Vector2( 0, 0 )
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Ready!"
+flat = false
+align = 1
+
+[node name="VSeparator" type="VSeparator" parent="." index="8"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 453.0
+margin_top = 50.0
+margin_right = 471.0
+margin_bottom = 538.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
 
 
 [editable path="HeroSelect"]

@@ -2,16 +2,20 @@ extends Node
 
 onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
 
-remote var players = []
-# TODO: Should we abstract server so variables like this aren't cluttering everything up?
+remote var players = {}
 var players_done = []
+var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
+# TODO: Should we abstract server so variables like this aren't cluttering everything up?
 var begun = false
 # TODO: This needs to go. It carries nothing of value
 # ALL server negotiation should happen before ANY data is investigated (in lobby)
 var my_info = {
-	hero: 0,
-	username: "Nickname",
+	"hero": 0,
+	"username": "Nickname",
 }
+var global_server_ip = "nv.cosinegaming.com"
+var matchmaker_tcp
+var right_team_next = false
 
 func _ready():
 	add_child(matchmaking)
@@ -56,8 +60,6 @@ func start_server(port, server_playing=false):
 	get_tree().set_network_peer(peer)
 	# As soon as we're listening, let the matchmaker know
 	_connect_to_matchmaker(port)
-	if server_playing:
-		players[1] = my_info
 	# is_connected = true TODO
 	# get_node("CustomGame/Server").set_text("Serving!")
 	# get_node("JoinedGameLobby").show()
@@ -80,7 +82,7 @@ func disconnect_player(id):
 	# is_connected = true TODO
 
 remote func _register_player(new_peer):
-	players.push(new_peer)
+	players[new_peer] = {}
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		rset_id(new_peer, "players", players)
