@@ -9,20 +9,18 @@ var is_connected = false # Technically this can be done with ENetcetera but it's
 var begun = false
 # TODO: This needs to go. It carries nothing of value
 # ALL server negotiation should happen before ANY data is investigated (in lobby)
-var my_info = {
-	"hero": 0,
-	"username": "Nickname",
-}
 var global_server_ip = "nv.cosinegaming.com"
 var matchmaker_tcp
 var right_team_next = false
+
+signal info_updated
 
 func _ready():
 	add_child(matchmaking)
 
 	get_tree().connect("network_peer_disconnected", self, "unregister_player")
 	get_tree().connect("network_peer_connected", self, "register_player")
-	# get_tree().connect("connected_to_server", self, "_on_connect")
+	get_tree().connect("connected_to_server", self, "_on_connect")
 
 # func connect_global_server(): TODO
 # 	ip = global_server_ip
@@ -69,19 +67,26 @@ func start_server(port, server_playing=false):
 		start_game()
 
 sync func start_game(level):
-	print(var2str(players))
 	rpc("_pre_configure_game", level)
-
-func disconnect_player(id):
-	if get_tree().is_network_server():
-		rpc("unregister_player", id)
-	# call_deferred("render_player_list") TODO
 
 # func _on_connect():
 # 	rpc("_register_player", get_tree().get_network_unique_id(), my_info)
 # 	if util.args.get_value("-start-game"):
 # 		rpc_id(1, "start_game")
 	# is_connected = true TODO
+
+# remote func _set_players(json):
+# 	print(json)
+# 	players = JSON.parse(json).result
+# 	print("setted")
+# 	print(JSON.print(players))
+
+func send_all_info(new_peer):
+	for p in players:
+		if p != new_peer:
+			for key in players[p]:
+				var val = players[p][key]
+				set_info(key, val, p)
 
 remote func register_player(new_peer):
 	var info = {}
@@ -90,7 +95,9 @@ remote func register_player(new_peer):
 	players[new_peer] = info
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
-		rset_id(new_peer, "players", players)
+		send_all_info(new_peer)
+		# rset_id(new_peer, "players", players)
+	emit_signal("info_updated")
 	# render_player_list() TODO
 		# var right_team_count = 0
 		# Send current players' info to new player
@@ -115,15 +122,32 @@ sync func unregister_player(peer):
 	players.erase(peer)
 	if begun:
 		get_node("/root/Level/Players/%d" % peer).queue_free()
+	emit_signal("info_updated")
 
 func set_spectating(spectating):
 	var id = get_tree().get_network_unique_id()
 	if spectating:
 		if players[id]:
-			unregister_player(id)
+			rpc("unregister_player", id)
 	else:
 		if not players[id]:
-			register_player(id)
+			rpc("register_player", id)
+
+sync func _set_info(key, value, peer=0):
+	if not peer:
+		peer = get_tree().get_rpc_sender_id()
+		if peer == 0:
+			# Was self. See https://github.com/godotengine/godot/issues/19026
+			peer = get_tree().get_network_unique_id()
+	players[peer][key] = value
+	emit_signal("info_updated")
+
+func set_info(key, value, peer=0):
+	rpc("_set_info", str(key), value, peer)
+
+func _on_connect():
+	emit_signal("info_updated")
+	register_player(get_tree().get_network_unique_id())
 
 sync func _spawn_player(p):
 	var hero = 0
@@ -138,7 +162,7 @@ sync func _spawn_player(p):
 sync func _pre_configure_game(level):
 	level = 2 # TODO: Remove this!!
 	begun = true
-	my_info.level = level # Remember the level for future player registration
+	# my_info.level = level # Remember the level for future player registration
 
 	var self_peer_id = get_tree().get_network_unique_id()
 

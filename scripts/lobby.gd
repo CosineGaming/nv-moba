@@ -2,6 +2,8 @@ extends Control
 
 var port = null # Defined by command-line argument with default
 
+onready var hero_select = get_node("HeroSelect/Hero")
+
 func _ready():
 	if get_tree().is_network_server():
 		get_node("LevelSelect").show()
@@ -15,23 +17,17 @@ func _ready():
 	get_node("Spectating").connect("toggled", networking, "set_spectating") # TODO
 	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
 	# _send_name()
+	# hero_select.set_hero(0)
 
-func _collect_info():
-	var my_id = get_tree().get_network_unique_id()
-	var my_info = networking.players[my_id]
-	if not "username" in my_info:
-		my_info.username = get_node("Username").get_text()
-	if not "hero" in my_info:
-		my_info.hero = get_node("HeroSelect/Hero").get_selected_id()
-	if not "is_right_team" in my_info:
-		my_info.is_right_team = false # Server assigns team, wait for that
+	networking.connect("info_updated", self, "render_player_list")
+	get_tree().connect("connected_to_server", self, "_send_settings")
+	if get_tree().is_network_server():
+		_send_settings()
 
-func select_hero(hero):
-	var description = get_node("HeroSelect").hero_text[hero]
-	get_node("HeroDescription").set_text(description)
-	var my_id = get_tree().get_network_unique_id()
-	networking.players[my_id].hero = hero
-	rpc("set_hero", get_tree().get_network_unique_id(), hero)
+func _send_settings():
+	print("sending")
+	_send_name()
+	hero_select.random_hero()
 
 sync func set_hero(peer, hero):
 	networking.players[peer].hero = hero
@@ -39,34 +35,21 @@ sync func set_hero(peer, hero):
 
 func _send_name():
 	var name = get_node("Username").text
-	rpc("_set_name", get_tree().get_network_unique_id(), name)
-
-sync func _set_name(peer, name):
-	networking.players[peer].username = name
-	render_player_list()
+	networking.set_info("username", name)
 
 func render_player_list():
-	if has_node("PlayerSettings"):
-		var list = ""
-		var hero_names = get_node("HeroSelect").hero_names
-		for p in networking.players:
-			list += "%-15s" % networking.players[p].username
-			list += "%-20s" % hero_names[networking.players[p].hero]
-			if networking.players[p].is_right_team:
-				list += "Right Team"
-			else:
-				list += "Left Team"
-			list += "\n"
-		get_node("JoinedGameLobby/PlayerList").set_text(list)
-
-sync func assign_team(peer, is_right_team):
-	networking.players[peer].is_right_team = is_right_team
-	if peer == get_tree().get_network_unique_id():
-		if is_right_team:
-			get_node("Team").set_text("Right Team")
+	print(JSON.print(networking.players))
+	var list = ""
+	var hero_names = hero_select.hero_names
+	for p in networking.players:
+		list += "%-15s" % networking.players[p].username
+		list += "%-20s" % hero_names[networking.players[p].hero]
+		if networking.players[p].is_right_team:
+			list += "Right Team"
 		else:
-			get_node("Team").set_text("Left Team")
-	render_player_list()
+			list += "Left Team"
+		list += "\n"
+	get_node("PlayerList").set_text(list)
 
 func _start_game():
 	_collect_info()
