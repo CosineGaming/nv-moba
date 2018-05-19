@@ -49,12 +49,12 @@ func _arg_actions():
 	# if not o.get_value("-no-record") and not o.get_value("-ai"):
 	# 	my_info.record = true
 	if o.get_value("-server"):
-		networking.call_deferred("start_server")
+		networking.start_server()
 		get_tree().change_scene("res://scenes/lobby.tscn")
 	# if o.get_value("-matchmaker"):
 	# 	call_deferred("_matchmaker_init")
 	if o.get_value("-client"):
-		networking.call_deferred("start_client")
+		networking.start_client()
 		get_tree().change_scene("res://scenes/lobby.tscn")
 	if o.get_value("-start-game"):
 		networking.call_deferred("start_game")

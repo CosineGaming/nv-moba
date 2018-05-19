@@ -31,6 +31,7 @@ func _get_args():
 	opts.add('-matchmaker', false, 'Whether to be the sole matchmaker')
 	opts.add('-client', false, 'Immediately connect as client')
 	opts.add('-silent', false, 'If the server is not playing, merely serving')
+	opts.add('-ip', '127.0.0.1', 'The ip to connect to (client only!)')
 	opts.add('-port', 54673, 'The port to run a server on or connect to')
 	opts.add('-hero', 'r', 'Your choice of hero (index)')
 	opts.add('-level', 'r', 'Your choice of level (index) - server only!')

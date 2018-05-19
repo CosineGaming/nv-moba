@@ -26,8 +26,12 @@ func _ready():
 # 	ip = global_server_ip
 # 	_client_init()
 
-func start_client(ip, port):
+func start_client(ip="", port=0):
 	# collect_info() TODO
+	if not ip:
+		ip = util.args.get_value("-ip")
+	if not port:
+		port = util.args.get_value("-port")
 	var peer = NetworkedMultiplayerENet.new()
 	print("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
@@ -50,8 +54,10 @@ func _connect_to_matchmaker(game_port):
 	matchmaker_tcp.put_var(matchmaking.messages.ready_to_connect)
 	matchmaker_tcp.put_var(game_port)
 
-func start_server(port, server_playing=false):
+func start_server(port=0):
 	# collect_info() TODO
+	if not port:
+		port = util.args.get_value("-port")
 	var peer = NetworkedMultiplayerENet.new()
 	print("Starting server on port " + str(port))
 	peer.create_server(port, matchmaking.GAME_SIZE)

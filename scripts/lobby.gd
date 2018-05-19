@@ -7,6 +7,8 @@ onready var hero_select = get_node("HeroSelect/Hero")
 func _ready():
 	if get_tree().is_network_server():
 		get_node("LevelSelect").show()
+	else:
+		get_node("LevelSelect").hide()
 
 	get_node("Username").connect("text_changed", self, "_send_name")
 	get_node("StartGame").connect("pressed", self, "_start_game")
