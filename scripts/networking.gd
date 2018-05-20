@@ -147,14 +147,9 @@ sync func _spawn_player(p):
 
 sync func _pre_configure_game(level):
 	begun = true
-	# my_info.level = level # Remember the level for future player registration
 
 	var self_peer_id = get_tree().get_network_unique_id()
 
-	# Remove the interface so as to not fuck with things
-	# But we still need the lobby alive to deal with networking!
-	# for element in get_node("/root/Lobby").get_children():
-	# 	element.queue_free()
 	get_node("/root/Lobby").hide()
 
 	var world = load("res://scenes/levels/%d.tscn" % level).instance()
@@ -165,13 +160,13 @@ sync func _pre_configure_game(level):
 		players[p].level = level
 		_spawn_player(p)
 
-	rpc_id(1, "done_preconfiguring", self_peer_id)
+	rpc_id(1, "_done_preconfiguring", self_peer_id)
 
 sync func _done_preconfiguring(who):
 	players_done.append(who)
 	if players_done.size() == players.size():
 		# We call deferred in case singleplayer has placing the player in queue still
-		call_deferred("rpc", "post_configure_game")
+		call_deferred("rpc", "_post_configure_game")
 
 sync func _post_configure_game():
 	# Begin all players (including self)
