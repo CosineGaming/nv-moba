@@ -297,7 +297,7 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-text = "Ready!"
+text = "Start!"
 flat = false
 align = 1
 

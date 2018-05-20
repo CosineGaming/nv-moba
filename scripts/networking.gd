@@ -4,7 +4,6 @@ onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
 
 remote var players = {}
 var players_done = []
-var begun = false
 var global_server_ip = "nv.cosinegaming.com"
 var matchmaker_tcp
 var right_team_next = false
@@ -79,6 +78,7 @@ remote func register_player(new_peer):
 	info.is_right_team = right_team_next
 	info.ready = false
 	info.spectating = false
+	info.begun = false
 	right_team_next = not right_team_next
 	players[new_peer] = info
 	if get_tree().is_network_server():
@@ -104,8 +104,9 @@ remote func register_player(new_peer):
 
 sync func unregister_player(peer):
 	players.erase(peer)
-	if begun:
-		get_node("/root/Level/Players/%d" % peer).queue_free()
+	var p = util.get_player(peer)
+	if p:
+		p.queue_free()
 	emit_signal("info_updated")
 
 sync func _set_info(key, value, peer=0):
@@ -148,20 +149,23 @@ sync func _spawn_player(p):
 	get_node("/root/Level/Players").call_deferred("add_child", player)
 
 sync func _pre_configure_game(level):
-	begun = true
 
 	var self_peer_id = get_tree().get_network_unique_id()
 
-	get_node("/root/Lobby").hide()
+	if not players[self_peer_id].begun:
+		get_node("/root/Lobby").hide()
 
-	var world = load("res://scenes/levels/%d.tscn" % level).instance()
-	get_node("/root").add_child(world)
+		var world = load("res://scenes/levels/%d.tscn" % level).instance()
+		get_node("/root").add_child(world)
 
 	# Load all players (including self)
 	for p in players:
 		if not players[p].spectating:
-			_spawn_player(p)
+			var existing_player = util.get_player(p)
+			if not players[self_peer_id].begun or not existing_player:
+				_spawn_player(p)
 
+	set_info("begun", true)
 	rpc_id(1, "_done_preconfiguring", self_peer_id)
 
 sync func _done_preconfiguring(who):
@@ -178,7 +182,7 @@ sync func _post_configure_game():
 			_begin_player_deferred(p)
 
 func _begin_player(peer):
-	get_node("/root/Level/Players/%d" % peer).begin()
+	util.get_player(peer).begin()
 
 remote func _begin_player_deferred(peer):
 	call_deferred("_begin_player", peer)

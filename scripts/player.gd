@@ -56,7 +56,6 @@ func _ready():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
 		get_node(tp_camera).cam_view_sensitivity = 0.05
-		spawn()
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
 			ai_instanced = true
@@ -192,6 +191,8 @@ func begin():
 	mat.albedo_color = color
 	for mesh in colored_meshes:
 		get_node(mesh).set_surface_material(0, mat)
+
+	spawn()
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):

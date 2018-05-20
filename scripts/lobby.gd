@@ -5,6 +5,7 @@ var port = null # Defined by command-line argument with default
 onready var hero_select = get_node("HeroSelect/Hero")
 onready var level_select = get_node("LevelSelect")
 onready var start_game_button = get_node("StartGame")
+onready var ready_button = get_node("Ready")
 
 func _ready():
 
@@ -13,12 +14,12 @@ func _ready():
 	var spectating = util.args.get_value("-silent")
 	get_node("Spectating").pressed = spectating
 	get_node("Spectating").connect("toggled", self, "_set_info_callback", ["spectating"])
-	get_node("Ready").connect("toggled", self, "_set_info_callback", ["ready"])
+	ready_button.connect("toggled", self, "_set_info_callback", ["ready"])
 	start_game_button.connect("pressed", networking, "start_game")
+	# Shown, maybe, in _check_begun
+	start_game_button.hide()
 	if get_tree().is_network_server():
 		start_game_button.show()
-	else:
-		start_game_button.hide()
 
 	if get_tree().is_network_server():
 		# We put level in our players dict because it's automatically broadcast to other players
@@ -40,6 +41,7 @@ func _ready():
 		_connected()
 
 func _connected():
+
 	_send_name()
 	if util.args.get_value("-hero") == "r":
 		hero_select.random_hero()
@@ -66,7 +68,15 @@ func _send_name():
 	var name = get_node("Username").text
 	networking.set_info("username", name)
 
+func _check_begun():
+	var game_started = networking.players[1].begun
+	if game_started:
+		start_game_button.show()
+		# The "Ready" toggle doesn't really make sense on a started game
+		ready_button.hide()
+
 func render_player_list():
+	_check_begun()
 	var list = ""
 	var hero_names = hero_select.hero_names
 	for p in networking.players:

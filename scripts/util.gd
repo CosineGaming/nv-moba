@@ -10,7 +10,11 @@ func _ready():
 	args = _get_args()
 
 func get_master_player():
-	var path = "/root/Level/Players/%d" % get_tree().get_network_unique_id()
+	return get_player(get_tree().get_network_unique_id())
+
+func get_player(netid):
+	# We not %d? Because sometimes we need to do get_player(thing.get_name())
+	var path = "/root/Level/Players/%s" % str(netid)
 	if has_node(path):
 		return get_node(path)
 	else:

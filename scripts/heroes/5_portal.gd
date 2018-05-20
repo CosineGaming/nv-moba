@@ -25,7 +25,7 @@ func _exit_tree():
 		other.queue_free()
 
 func init(maker):
-	
+
 	index = maker.placement.placed.size()
 
 	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
