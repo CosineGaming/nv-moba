@@ -4,15 +4,21 @@ var port = null # Defined by command-line argument with default
 
 onready var hero_select = get_node("HeroSelect/Hero")
 onready var level_select = get_node("LevelSelect")
+onready var start_game_button = get_node("StartGame")
 
 func _ready():
 
 	get_node("Username").connect("text_changed", self, "_send_name")
-	get_node("StartGame").connect("pressed", networking, "start_game")
 
 	var spectating = util.args.get_value("-silent")
 	get_node("Spectating").pressed = spectating
-	get_node("Spectating").connect("toggled", self, "_set_spectating")
+	get_node("Spectating").connect("toggled", self, "_set_info_callback", ["spectating"])
+	get_node("Ready").connect("toggled", self, "_set_info_callback", ["ready"])
+	start_game_button.connect("pressed", networking, "start_game")
+	if get_tree().is_network_server():
+		start_game_button.show()
+	else:
+		start_game_button.hide()
 
 	if get_tree().is_network_server():
 		# We put level in our players dict because it's automatically broadcast to other players
@@ -47,8 +53,10 @@ func _connected():
 func _set_level(level):
 	networking.level = level
 
-func _set_spectating(is_spectating):
-	networking.set_info("spectating", is_spectating)
+# Because of the annoying way callbacks work (automatic parameter, optional parameter)
+# We need a utility function for making these kinds of callbacks for set_info
+func _set_info_callback(value, key):
+	networking.set_info(key, value)
 
 sync func set_hero(peer, hero):
 	networking.players[peer].hero = hero
@@ -63,17 +71,18 @@ func render_player_list():
 	var hero_names = hero_select.hero_names
 	for p in networking.players:
 		var player = networking.players[p]
-		var spectating = player.has("spectating") and player.spectating
 		# A spectating server is just a dedicated server, ignore it
-		if not (spectating and p == 1):
+		if not (player.spectating and p == 1):
 			list += "%-15s " % player.username
-			list += "%-20s " % hero_names[player.hero]
-			var team_format = "%-14s"
+			list += "%-10s " % hero_names[player.hero]
+			var team_format = "%-11s"
 			if player.is_right_team:
 				list += team_format % "Right Team"
 			else:
 				list += team_format % "Left Team"
-			if spectating:
+			var ready_text = "Ready" if player.ready else ""
+			list += "%-6s" % ready_text
+			if player.spectating:
 				list += "Spectating"
 			list += "\n"
 	get_node("PlayerList").set_text(list)

@@ -4,9 +4,7 @@ onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
 
 remote var players = {}
 var players_done = []
-# TODO: Should we abstract server so variables like this aren't cluttering everything up?
 var begun = false
-# ALL server negotiation should happen before ANY data is investigated (in lobby)
 var global_server_ip = "nv.cosinegaming.com"
 var matchmaker_tcp
 var right_team_next = false
@@ -22,9 +20,7 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "register_player")
 	get_tree().connect("connected_to_server", self, "_on_connect")
 
-# func connect_global_server(): TODO
-# 	ip = global_server_ip
-# 	_client_init()
+	connect("info_updated", self, "_check_info")
 
 func start_client(ip="", port=0):
 	if not ip:
@@ -81,6 +77,8 @@ func send_all_info(new_peer):
 remote func register_player(new_peer):
 	var info = {}
 	info.is_right_team = right_team_next
+	info.ready = false
+	info.spectating = false
 	right_team_next = not right_team_next
 	players[new_peer] = info
 	if get_tree().is_network_server():
@@ -127,9 +125,21 @@ func _on_connect():
 	emit_signal("info_updated")
 	register_player(get_tree().get_network_unique_id())
 
+func _check_info():
+	# Check for "everyone is ready"
+	# Only have 1 person check this, might as well be server
+	if get_tree().is_network_server():
+		var ready = true
+		for p in players:
+			if not players[p].spectating:
+				if not players[p].ready:
+					ready = false
+		if ready:
+			start_game()
+
 sync func _spawn_player(p):
 	var hero = 0
-	if players[p].has("hero"): # TODO: Rethink how we do this whole shenanigan
+	if players[p].has("hero"):
 		hero = players[p].hero
 	var player = load("res://scenes/heroes/" + str(hero) + ".tscn").instance()
 	player.set_name(str(p))
@@ -149,7 +159,7 @@ sync func _pre_configure_game(level):
 
 	# Load all players (including self)
 	for p in players:
-		if not (players[p].has("spectating") and players[p].spectating):
+		if not players[p].spectating:
 			_spawn_player(p)
 
 	rpc_id(1, "_done_preconfiguring", self_peer_id)
@@ -164,7 +174,7 @@ sync func _done_preconfiguring(who):
 sync func _post_configure_game():
 	# Begin all players (including self)
 	for p in players:
-		if not (players[p].has("spectating") and players[p].spectating):
+		if not players[p].spectating:
 			_begin_player_deferred(p)
 
 func _begin_player(peer):
