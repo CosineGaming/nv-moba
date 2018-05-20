@@ -13,7 +13,9 @@ func _gui_setup():
 	get_node("Center/Singleplayer").connect("pressed", self, "_singleplayer")
 
 func _find_game():
-	print("still refactoring matchmaker")
+	var ip = networking.global_server_ip
+	var port = networking.matchmaking.MATCHMAKING_PORT
+	networking.start_client(ip, port)
 
 func _custom_game():
 	get_tree().change_scene("res://scenes/custom_game.tscn")

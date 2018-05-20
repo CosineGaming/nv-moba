@@ -27,20 +27,13 @@ func _ready():
 func start_client(ip="", port=0):
 	if not ip:
 		ip = util.args.get_value("-ip")
+	ip = IP.resolve_hostname(ip)
 	if not port:
 		port = util.args.get_value("-port")
 	var peer = NetworkedMultiplayerENet.new()
 	print("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
-
-# func singleplayer_init(): TODO
-# 	# collect_info() TODO
-# 	var peer = NetworkedMultiplayerENet.new()
-# 	peer.create_server(port, 1)
-# 	get_tree().set_network_peer(peer)
-# 	players[1] = my_info
-# 	start_game()
 
 func _connect_to_matchmaker(game_port):
 	var matchmaker_peer = StreamPeerTCP.new()
