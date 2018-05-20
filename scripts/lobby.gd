@@ -45,7 +45,7 @@ func _connected():
 		networking.start_game()
 
 func _set_level(level):
-	networking.set_info("level", level)
+	networking.level = level
 
 func _set_spectating(is_spectating):
 	networking.set_info("spectating", is_spectating)

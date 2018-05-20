@@ -13,7 +13,8 @@ func _gui_setup():
 	get_node("Center/Singleplayer").connect("pressed", self, "_singleplayer")
 
 func _find_game():
-	var ip = networking.global_server_ip
+	# var ip = networking.global_server_ip
+	var ip = util.args.get_value("-ip")
 	var port = networking.matchmaking.MATCHMAKING_PORT
 	networking.start_client(ip, port)
 
@@ -42,12 +43,10 @@ func _arg_actions():
 	# 	my_info.record = true
 	if o.get_value("-server"):
 		networking.start_server()
-		get_tree().change_scene("res://scenes/lobby.tscn")
-	# if o.get_value("-matchmaker"):
-	# 	call_deferred("_matchmaker_init")
+	if o.get_value("-matchmaker"):
+		networking.matchmaking.start_matchmaker()
 	if o.get_value("-client"):
 		networking.start_client()
-		get_tree().change_scene("res://scenes/lobby.tscn")
 	if o.get_value("-singleplayer"):
 		_singleplayer()
 	if o.get_value('-h'):

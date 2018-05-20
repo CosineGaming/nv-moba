@@ -7,13 +7,8 @@ func _ready():
 func _start_server():
 	# Custom Game can assume we're playing as well
 	networking.start_server()
-	_show_lobby()
 
 func _start_client():
 	var ip = get_node("IP").text
 	networking.start_client(ip)
-	_show_lobby()
-
-func _show_lobby():
-	get_tree().change_scene("res://scenes/lobby.tscn")
 

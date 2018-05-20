@@ -80,7 +80,7 @@ func queue(netid):
 # 	#
 
 func add_to_game(netid, port):
-	lobby.rpc_id(netid, "_client_init", port)
+	networking.rpc_id(netid, "reconnect", port)
 
 func skirmish_to_game(port, count=1):
 	for i in range(count):

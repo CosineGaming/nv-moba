@@ -11,6 +11,8 @@ var global_server_ip = "nv.cosinegaming.com"
 var matchmaker_tcp
 var right_team_next = false
 
+var level
+
 signal info_updated
 
 func _ready():
@@ -34,6 +36,12 @@ func start_client(ip="", port=0):
 	print("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
+	get_tree().change_scene("res://scenes/lobby.tscn")
+
+remote func reconnect(port):
+	# Reset previously known players
+	players = {}
+	start_client("", port)
 
 func _connect_to_matchmaker(game_port):
 	var matchmaker_peer = StreamPeerTCP.new()
@@ -55,9 +63,9 @@ func start_server(port=0):
 	register_player(get_tree().get_network_unique_id())
 	if util.args.get_value("-silent"):
 		set_info("spectating", true)
+	get_tree().change_scene("res://scenes/lobby.tscn")
 
 master func _start_game():
-	var level = players[1].level # TODO: Can we guarantee this will have level?
 	rpc("_pre_configure_game", level)
 
 func start_game():
@@ -108,8 +116,9 @@ sync func _set_info(key, value, peer=0):
 		if peer == 0:
 			# Was self. See https://github.com/godotengine/godot/issues/19026
 			peer = get_tree().get_network_unique_id()
-	players[peer][key] = value
-	emit_signal("info_updated")
+	if players.has(peer):
+		players[peer][key] = value
+		emit_signal("info_updated")
 
 func set_info(key, value, peer=0):
 	rpc("_set_info", str(key), value, peer)
@@ -140,7 +149,6 @@ sync func _pre_configure_game(level):
 
 	# Load all players (including self)
 	for p in players:
-		players[p].level = level
 		if not (players[p].has("spectating") and players[p].spectating):
 			_spawn_player(p)
 
@@ -149,6 +157,7 @@ sync func _pre_configure_game(level):
 sync func _done_preconfiguring(who):
 	players_done.append(who)
 	if players_done.size() == players.size():
+		print("done")
 		# We call deferred in case singleplayer has placing the player in queue still
 		call_deferred("rpc", "_post_configure_game")
 
