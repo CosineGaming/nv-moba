@@ -19,7 +19,8 @@ func _custom_game():
 	get_tree().change_scene("res://scenes/custom_game.tscn")
 
 func _singleplayer():
-	print("still refactoring singleplayer")
+	networking.start_server()
+	get_tree().change_scene("res://scenes/singleplayer_lobby.tscn")
 
 # Command line
 
@@ -33,17 +34,6 @@ func _option_sel(button_name, option):
 
 func _arg_actions():
 	var o = util.args
-	# if o.get_value("-silent"):
-	# 	server_playing = false
-	# if o.get_value("-hero"):
-	# 	var hero = o.get_value("-hero")
-	# 	_option_sel("PlayerSettings/HeroSelect", hero)
-	# 	# For some reason, calling _option_sel doesn't trigger the actual selection
-	# 	select_hero(get_node("PlayerSettings/HeroSelect").get_selected_id())
-	# if o.get_value("-level"):
-	# 	_option_sel("CustomGame/LevelSelect", o.get_value("-level"))
-	# if o.get_value("-port"):
-	# 	port = o.get_value("-port")
 	# if o.get_value("-ai"):
 	# 	my_info.is_ai = true
 	# if not o.get_value("-no-record") and not o.get_value("-ai"):
@@ -56,8 +46,8 @@ func _arg_actions():
 	if o.get_value("-client"):
 		networking.start_client()
 		get_tree().change_scene("res://scenes/lobby.tscn")
-	# if o.get_value("-singleplayer"):
-	# 	networking.call_deferred("start_singleplayer")
+	if o.get_value("-singleplayer"):
+		_singleplayer()
 	if o.get_value('-h'):
 		o.print_help()
 		quit()

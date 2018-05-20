@@ -25,11 +25,11 @@ func _ready():
 	connect("item_selected", self, "set_hero")
 
 func set_hero(hero):
+	select(hero)
 	networking.set_info("hero", hero)
 
 func random_hero():
 	var hero = randi() % hero_names.size()
-	select(hero)
 	set_hero(hero)
 	return hero
 

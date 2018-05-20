@@ -19,6 +19,7 @@ func _ready():
 		var level = util.args.get_value("-level")
 		if level == "r":
 			level = randi() % level_select.get_item_count()
+		level = int(level)
 		_set_level(level)
 
 		level_select.show()
@@ -34,7 +35,11 @@ func _ready():
 
 func _connected():
 	_send_name()
-	hero_select.random_hero()
+	if util.args.get_value("-hero") == "r":
+		hero_select.random_hero()
+	else:
+		print(util.args.get_value("-hero"))
+		hero_select.set_hero(int(util.args.get_value("-hero")))
 
 	if util.args.get_value("-start-game"):
 		networking.start_game()
