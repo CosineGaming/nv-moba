@@ -4,10 +4,8 @@ onready var matchmaking = preload("res://scripts/matchmaking.gd").new()
 
 remote var players = {}
 var players_done = []
-var is_connected = false # Technically this can be done with ENetcetera but it's easier this way
 # TODO: Should we abstract server so variables like this aren't cluttering everything up?
 var begun = false
-# TODO: This needs to go. It carries nothing of value
 # ALL server negotiation should happen before ANY data is investigated (in lobby)
 var global_server_ip = "nv.cosinegaming.com"
 var matchmaker_tcp
@@ -27,7 +25,6 @@ func _ready():
 # 	_client_init()
 
 func start_client(ip="", port=0):
-	# collect_info() TODO
 	if not ip:
 		ip = util.args.get_value("-ip")
 	if not port:
@@ -36,7 +33,6 @@ func start_client(ip="", port=0):
 	print("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
-	# get_node("CustomGame/Client").set_text("Clienting!") TODO
 
 # func singleplayer_init(): TODO
 # 	# collect_info() TODO
@@ -55,7 +51,6 @@ func _connect_to_matchmaker(game_port):
 	matchmaker_tcp.put_var(game_port)
 
 func start_server(port=0):
-	# collect_info() TODO
 	if not port:
 		port = util.args.get_value("-port")
 	var peer = NetworkedMultiplayerENet.new()
@@ -66,26 +61,15 @@ func start_server(port=0):
 	_connect_to_matchmaker(port)
 	if not util.args.get_value("-silent"):
 		register_player(get_tree().get_network_unique_id())
-	# is_connected = true TODO
-	# get_node("CustomGame/Server").set_text("Serving!")
-	# get_node("JoinedGameLobby").show()
 	if util.args.get_value("-start-game"):
 		start_game()
 
-sync func start_game(level):
+master func _start_game():
+	var level = players[1].level # TODO: Can we guarantee this will have level?
 	rpc("_pre_configure_game", level)
 
-# func _on_connect():
-# 	rpc("_register_player", get_tree().get_network_unique_id(), my_info)
-# 	if util.args.get_value("-start-game"):
-# 		rpc_id(1, "start_game")
-	# is_connected = true TODO
-
-# remote func _set_players(json):
-# 	print(json)
-# 	players = JSON.parse(json).result
-# 	print("setted")
-# 	print(JSON.print(players))
+func start_game():
+	rpc_id(1, "_start_game")
 
 func send_all_info(new_peer):
 	for p in players:
@@ -102,22 +86,18 @@ remote func register_player(new_peer):
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		send_all_info(new_peer)
-		# rset_id(new_peer, "players", players)
 	emit_signal("info_updated")
-	# render_player_list() TODO
 		# var right_team_count = 0
 		# Send current players' info to new player
-			# Send new player, old player's info
-			# rpc_id(new_peer, "_register_player", old_peer, players[old_peer])
 			# if old_peer != new_peer:
 			# 	# We need to assign team later, so count current
 			# 	if players[old_peer].is_right_team:
 			# 		right_team_count += 1
-				# if begun: TODO this should belong to lobby
+				# if begun: TODO this should belong to lobby?
 				# 	rpc_id(old_peer, "_spawn_player", new_peer)
 				# 	rpc_id(old_peer, "_begin_player_deferred", new_peer) # Spawning is deferred
 		# var assign_right_team = right_team_count * 2 < players.size()
-		# rpc("assign_team", new_peer, assign_right_team)
+		# set_info("is_right_team", assign_right_team, new_peer)
 		# if not begun and players.size() == matchmaking.GAME_SIZE:
 		# 	start_game()
 		# if begun:
@@ -166,7 +146,6 @@ sync func _spawn_player(p):
 	get_node("/root/Level/Players").call_deferred("add_child", player)
 
 sync func _pre_configure_game(level):
-	level = 2 # TODO: Remove this!!
 	begun = true
 	# my_info.level = level # Remember the level for future player registration
 
@@ -174,12 +153,12 @@ sync func _pre_configure_game(level):
 
 	# Remove the interface so as to not fuck with things
 	# But we still need the lobby alive to deal with networking!
-	for element in get_node("/root/Lobby").get_children():
-		element.queue_free()
+	# for element in get_node("/root/Lobby").get_children():
+	# 	element.queue_free()
+	get_node("/root/Lobby").hide()
 
 	var world = load("res://scenes/levels/%d.tscn" % level).instance()
 	get_node("/root").add_child(world)
-	print("added level!")
 
 	# Load all players (including self)
 	for p in players:

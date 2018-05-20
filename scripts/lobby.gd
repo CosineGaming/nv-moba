@@ -3,33 +3,44 @@ extends Control
 var port = null # Defined by command-line argument with default
 
 onready var hero_select = get_node("HeroSelect/Hero")
+onready var level_select = get_node("LevelSelect")
 
 func _ready():
-	if get_tree().is_network_server():
-		get_node("LevelSelect").show()
-	else:
-		get_node("LevelSelect").hide()
 
 	get_node("Username").connect("text_changed", self, "_send_name")
-	get_node("StartGame").connect("pressed", self, "_start_game")
+	get_node("StartGame").connect("pressed", networking, "start_game")
 
 	var spectating = util.args.get_value("-silent")
 	get_node("Spectating").pressed = spectating
-	# 
-	get_node("Spectating").connect("toggled", networking, "set_spectating") # TODO
-	# get_node("CustomGame/LevelSelect").connect("item_selected", self, "select_level") TODO
-	# _send_name()
-	# hero_select.set_hero(0)
+	get_node("Spectating").connect("toggled", networking, "set_spectating")
+
+	if get_tree().is_network_server():
+		# We put level in our players dict because it's automatically broadcast to other players
+		var level = util.args.get_value("-level")
+		if level == "r":
+			level = randi() % level_select.get_item_count()
+		_set_level(level)
+
+		level_select.show()
+		level_select.select(level)
+		level_select.connect("item_selected", self, "_set_level")
+	else:
+		level_select.hide()
 
 	networking.connect("info_updated", self, "render_player_list")
-	get_tree().connect("connected_to_server", self, "_send_settings")
+	get_tree().connect("connected_to_server", self, "_connected")
 	if get_tree().is_network_server():
-		_send_settings()
+		_connected()
 
-func _send_settings():
-	print("sending")
+func _connected():
 	_send_name()
 	hero_select.random_hero()
+
+	if util.args.get_value("-start-game"):
+		networking.start_game()
+
+func _set_level(level):
+	networking.set_info("level", level)
 
 sync func set_hero(peer, hero):
 	networking.players[peer].hero = hero
@@ -40,7 +51,6 @@ func _send_name():
 	networking.set_info("username", name)
 
 func render_player_list():
-	print(JSON.print(networking.players))
 	var list = ""
 	var hero_names = hero_select.hero_names
 	for p in networking.players:
@@ -52,9 +62,4 @@ func render_player_list():
 			list += "Left Team"
 		list += "\n"
 	get_node("PlayerList").set_text(list)
-
-func _start_game():
-	_collect_info()
-	var level = 2 # TODO
-	networking.rpc_id(1, "start_game", level)
 

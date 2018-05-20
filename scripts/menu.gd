@@ -56,8 +56,6 @@ func _arg_actions():
 	if o.get_value("-client"):
 		networking.start_client()
 		get_tree().change_scene("res://scenes/lobby.tscn")
-	if o.get_value("-start-game"):
-		networking.call_deferred("start_game")
 	# if o.get_value("-singleplayer"):
 	# 	networking.call_deferred("start_singleplayer")
 	if o.get_value('-h'):
