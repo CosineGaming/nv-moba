@@ -52,10 +52,9 @@ func start_server(port=0):
 	get_tree().set_network_peer(peer)
 	# As soon as we're listening, let the matchmaker know
 	_connect_to_matchmaker(port)
-	if not util.args.get_value("-silent"):
-		register_player(get_tree().get_network_unique_id())
-	if util.args.get_value("-start-game"):
-		start_game()
+	register_player(get_tree().get_network_unique_id())
+	if util.args.get_value("-silent"):
+		set_info("spectating", true)
 
 master func _start_game():
 	var level = players[1].level # TODO: Can we guarantee this will have level?
@@ -103,15 +102,6 @@ sync func unregister_player(peer):
 		get_node("/root/Level/Players/%d" % peer).queue_free()
 	emit_signal("info_updated")
 
-func set_spectating(spectating):
-	var id = get_tree().get_network_unique_id()
-	if spectating:
-		if players[id]:
-			rpc("unregister_player", id)
-	else:
-		if not players[id]:
-			rpc("register_player", id)
-
 sync func _set_info(key, value, peer=0):
 	if not peer:
 		peer = get_tree().get_rpc_sender_id()
@@ -151,7 +141,8 @@ sync func _pre_configure_game(level):
 	# Load all players (including self)
 	for p in players:
 		players[p].level = level
-		_spawn_player(p)
+		if not (players[p].has("spectating") and players[p].spectating):
+			_spawn_player(p)
 
 	rpc_id(1, "_done_preconfiguring", self_peer_id)
 
@@ -164,7 +155,8 @@ sync func _done_preconfiguring(who):
 sync func _post_configure_game():
 	# Begin all players (including self)
 	for p in players:
-		_begin_player_deferred(p)
+		if not (players[p].has("spectating") and players[p].spectating):
+			_begin_player_deferred(p)
 
 func _begin_player(peer):
 	get_node("/root/Level/Players/%d" % peer).begin()

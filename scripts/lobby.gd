@@ -12,7 +12,7 @@ func _ready():
 
 	var spectating = util.args.get_value("-silent")
 	get_node("Spectating").pressed = spectating
-	get_node("Spectating").connect("toggled", networking, "set_spectating")
+	get_node("Spectating").connect("toggled", self, "_set_spectating")
 
 	if get_tree().is_network_server():
 		# We put level in our players dict because it's automatically broadcast to other players
@@ -47,6 +47,9 @@ func _connected():
 func _set_level(level):
 	networking.set_info("level", level)
 
+func _set_spectating(is_spectating):
+	networking.set_info("spectating", is_spectating)
+
 sync func set_hero(peer, hero):
 	networking.players[peer].hero = hero
 	render_player_list()
@@ -59,12 +62,19 @@ func render_player_list():
 	var list = ""
 	var hero_names = hero_select.hero_names
 	for p in networking.players:
-		list += "%-15s" % networking.players[p].username
-		list += "%-20s" % hero_names[networking.players[p].hero]
-		if networking.players[p].is_right_team:
-			list += "Right Team"
-		else:
-			list += "Left Team"
-		list += "\n"
+		var player = networking.players[p]
+		var spectating = player.has("spectating") and player.spectating
+		# A spectating server is just a dedicated server, ignore it
+		if not (spectating and p == 1):
+			list += "%-15s " % player.username
+			list += "%-20s " % hero_names[player.hero]
+			var team_format = "%-14s"
+			if player.is_right_team:
+				list += team_format % "Right Team"
+			else:
+				list += team_format % "Left Team"
+			if spectating:
+				list += "Spectating"
+			list += "\n"
 	get_node("PlayerList").set_text(list)
 
