@@ -16,6 +16,7 @@ func _ready():
 	get_node("Spectating").connect("toggled", self, "_set_info_callback", ["spectating"])
 	ready_button.connect("toggled", self, "_set_info_callback", ["ready"])
 	start_game_button.connect("pressed", networking, "start_game")
+	get_node("Back").connect("pressed", self, "_exit_to_menu")
 	# Shown, maybe, in _check_begun
 	start_game_button.hide()
 	if get_tree().is_network_server():
@@ -96,4 +97,8 @@ func render_player_list():
 				list += "Spectating"
 			list += "\n"
 	get_node("PlayerList").set_text(list)
+
+func _exit_to_menu():
+	get_tree().network_peer.close_connection()
+	get_tree().change_scene("res://scenes/menu.tscn")
 

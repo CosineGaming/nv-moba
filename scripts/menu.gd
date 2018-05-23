@@ -11,6 +11,7 @@ func _gui_setup():
 	get_node("Center/Play").connect("pressed", self, "_find_game")
 	get_node("Center/CustomGame").connect("pressed", self, "_custom_game")
 	get_node("Center/Singleplayer").connect("pressed", self, "_singleplayer")
+	get_node("Center/Quit").connect("pressed", get_tree(), "quit")
 
 func _find_game():
 	# var ip = networking.global_server_ip
