@@ -41,7 +41,6 @@ script = ExtResource( 2 )
 
 [node name="HeroSelect" parent="." index="0" instance=ExtResource( 3 )]
 
-editor/display_folded = true
 margin_left = 30.0
 margin_top = 69.0
 margin_right = 30.0
@@ -62,9 +61,9 @@ visible = false
 [node name="HeroDescription" parent="HeroSelect" index="2"]
 
 margin_left = -2.0
-margin_top = 133.0
+margin_top = 125.0
 margin_right = 366.0
-margin_bottom = 250.0
+margin_bottom = 288.0
 text = "L Let s put oeuntahoeu nthaoeu ntaoheunt aoheunt hoaenth oaentuh Let s put oeuntahoeu nthaoeu ntaoheunt aoheunt hoaenth "
 
 [node name="Title" type="Label" parent="HeroSelect" index="3"]
@@ -95,9 +94,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 43.0
-margin_top = 348.0
+margin_top = 391.0
 margin_right = 384.0
-margin_bottom = 381.0
+margin_bottom = 424.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -128,9 +127,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 36.0
-margin_top = 396.0
-margin_right = 226.0
-margin_bottom = 436.0
+margin_top = 439.0
+margin_right = 237.0
+margin_bottom = 479.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -152,9 +151,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 45.0
-margin_top = 486.0
+margin_top = 529.0
 margin_right = 411.0
-margin_bottom = 527.0
+margin_bottom = 570.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -310,7 +309,7 @@ anchor_bottom = 0.0
 margin_left = 453.0
 margin_top = 50.0
 margin_right = 471.0
-margin_bottom = 538.0
+margin_bottom = 566.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 0
 mouse_default_cursor_shape = 0
