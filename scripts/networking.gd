@@ -141,6 +141,10 @@ sync func _spawn_player(p):
 	player.player_info = players[p]
 	get_node("/root/Level/Players").add_child(player)
 
+func _begin_player(p):
+	var player = util.get_player(p)
+	player.begin()
+
 sync func _pre_configure_game(level):
 
 	var self_peer_id = get_tree().get_network_unique_id()
@@ -158,6 +162,10 @@ sync func _pre_configure_game(level):
 			var existing_player = util.get_player(p)
 			if not self_begun or not existing_player:
 				_spawn_player(p)
+	for p in players:
+		if not players[p].spectating:
+			# Begin requires all players
+			_begin_player(p)
 
 	# Why do we check first? Weird error. It's because set_info triggers a
 	# start_game if everyone is ready
@@ -176,12 +184,8 @@ sync func _done_preconfiguring(who):
 
 sync func _post_configure_game():
 	# Begin all players (including self)
-	for p in players:
-		if not players[p].spectating:
-			_begin_player(p)
-
-func _begin_player(peer):
-	util.get_player(peer).begin()
+	# TODO: What do? Maybe, unpause game?
+	pass
 
 sync func reset_state():
 	players_done = []

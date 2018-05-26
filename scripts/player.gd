@@ -52,6 +52,7 @@ func _ready():
 
 	set_process_input(true)
 	debug_node = get_node("/root/Level/Debug")
+	_set_color()
 	if is_network_master():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
@@ -59,6 +60,7 @@ func _ready():
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
 			ai_instanced = true
+		spawn()
 	else:
 		get_node("PlayerName").set_text(player_info.username)
 		# Remove HUD
@@ -175,10 +177,13 @@ func event_to_obj(event):
 	return d
 
 func begin():
+	_set_color()
+
+func _set_color():
 	master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
-	if master_player and master_player.player_info.is_right_team == player_info.is_right_team:
+	if master_player.player_info.is_right_team == player_info.is_right_team:
 		color = friend_color
 	else:
 		color = enemy_color
@@ -191,8 +196,6 @@ func begin():
 	mat.albedo_color = color
 	for mesh in colored_meshes:
 		get_node(mesh).set_surface_material(0, mat)
-
-	spawn()
 
 func toggle_mouse_capture():
 	if (Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED):
@@ -305,7 +308,6 @@ sync func switch_hero(hero):
 	get_node("/root/Level/Players").call_deferred("add_child", new_hero)
 	# We must wait until after _ready is called, so that we don't end up at spawn
 	new_hero.call_deferred("set_status", get_status())
-	new_hero.call_deferred("begin")
 	queue_free()
 
 func write_recording():
