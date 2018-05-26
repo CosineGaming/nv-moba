@@ -47,5 +47,6 @@ margin_right = -98.0
 margin_bottom = -91.0
 cost = 0
 ability_name = "Destroy"
+action = "primary_ability"
 
 

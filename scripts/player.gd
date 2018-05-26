@@ -20,6 +20,7 @@ var movement_charge = 0.15 # In percent per meter (except when heroes change tha
 onready var switch_text = get_node("MasterOnly/ChargeBar/ChargeText")
 onready var switch_bar = get_node("MasterOnly/ChargeBar")
 onready var switch_bar_extra = get_node("MasterOnly/ChargeBar/Extra")
+onready var switch_hero_action = get_node("MasterOnly/SwitchHero")
 
 var fall_height = -400 # This is essentially the respawn timer
 var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
@@ -51,13 +52,15 @@ func _ready():
 
 	set_process_input(true)
 	debug_node = get_node("/root/Level/Debug")
+	_set_color()
 	if is_network_master():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
 		get_node(tp_camera).set_enabled(true)
-		spawn()
+		get_node(tp_camera).cam_view_sensitivity = 0.05
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
 			ai_instanced = true
+		spawn()
 	else:
 		get_node("PlayerName").set_text(player_info.username)
 		# Remove HUD
@@ -81,11 +84,12 @@ func _process(delta):
 		var vel = get_linear_velocity()
 		if translation.y < switch_height:
 			vel.y = 0 # Don't gain charge from falling when below switch_height
-		switch_charge += movement_charge * vel.length() * delta
+		build_charge(movement_charge * vel.length() * delta)
 		switch_text.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
 		if switch_charge >= 100:
-			# Let switch_charge keep building, because we use it for walk_speed and things
-			switch_text.set_text("100%% (%.f)\nQ - Switch hero" % switch_charge)
+			switch_hero_action.show()
+		else:
+			switch_hero_action.hide()
 		if switch_charge > switch_charge_cap:
 			# There is however a cap
 			switch_charge = switch_charge_cap
@@ -114,6 +118,21 @@ func _exit_tree():
 
 # Functions
 # =========
+
+# Build all charge with a multiplier for ~~balance~~
+func build_charge(amount):
+	# If we used build_charge to cost charge, don't mess with it!
+	if amount > 0:
+		var losing_advantage = 1.2
+		var uncapped_advantage = 1.3
+		var obj = get_node("/root/Level/FullObjective/Objective")
+		if (obj.left > obj.right) == player_info.is_right_team:
+			# Is losing (left winning, we're on right or vice versa)
+			amount *= losing_advantage
+		if obj.right_active != player_info.is_right_team and obj.active:
+			# Point against us (right active and left, or vice versa)
+			amount *= uncapped_advantage
+	switch_charge += amount
 
 sync func spawn():
 	emit_signal("spawn")
@@ -158,10 +177,13 @@ func event_to_obj(event):
 	return d
 
 func begin():
+	_set_color()
+
+func _set_color():
 	master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
-	if master_player and master_player.player_info.is_right_team == player_info.is_right_team:
+	if master_player.player_info.is_right_team == player_info.is_right_team:
 		color = friend_color
 	else:
 		color = enemy_color
@@ -286,7 +308,6 @@ sync func switch_hero(hero):
 	get_node("/root/Level/Players").call_deferred("add_child", new_hero)
 	# We must wait until after _ready is called, so that we don't end up at spawn
 	new_hero.call_deferred("set_status", get_status())
-	new_hero.call_deferred("begin")
 	queue_free()
 
 func write_recording():

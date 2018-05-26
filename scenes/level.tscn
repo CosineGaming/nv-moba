@@ -155,7 +155,6 @@ directional_shadow_max_distance = 200.0
 
 [node name="Players" type="Spatial" parent="." index="1"]
 
-
 [node name="Ball" type="RigidBody" parent="." index="2"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4344, 6.09969, 4.40885 )

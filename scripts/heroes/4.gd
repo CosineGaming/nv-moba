@@ -46,8 +46,8 @@ func _process(delta):
 			var player = pick_from(players)
 			if player != -1:
 				# We get charge for just stunning, plus charge for how much linear velocity we cut out
-				switch_charge += stun_charge * delta
-				switch_charge += velocity_charge * players[player].get_linear_velocity().length() * delta
+				build_charge(stun_charge * delta)
+				build_charge(velocity_charge * players[player].linear_velocity.length() * delta)
 				rpc("stun", players[player].get_name(), get_node("TPCamera/Camera/Ray").get_collision_point())
 				is_stunning = true
 
@@ -60,7 +60,7 @@ func _process(delta):
 
 sync func stun(net_id, position):
 	# Stun the thing!
-	var player = get_node("/root/Level/Players/%s" % net_id)
+	var player = util.get_player(net_id)
 	player.set_linear_velocity(Vector3())
 
 	# Show the beam!

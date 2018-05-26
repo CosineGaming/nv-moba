@@ -22,3 +22,14 @@ func _ready():
 	for hero_index in range(hero_names.size()):
 		add_item(hero_names[hero_index], hero_index)
 
+	connect("item_selected", self, "set_hero")
+
+func set_hero(hero):
+	select(hero)
+	networking.set_info_from_server("hero", hero)
+
+func random_hero():
+	var hero = randi() % hero_names.size()
+	set_hero(hero)
+	return hero
+

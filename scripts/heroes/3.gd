@@ -39,7 +39,7 @@ func _process(delta):
 			# Subtract and then add, so we can continously add this
 			switch_charge -= boost_charge
 			boost_charge = merged.switch_charge - original_charge
-			switch_charge += boost_charge
+			build_charge(boost_charge)
 
 func control_player(state):
 	if !merged:
@@ -90,7 +90,7 @@ func set_boosted(node, is_boosted):
 
 sync func merge(node_name):
 	set_boosting(true)
-	var other = $"/root/Level/Players".get_node(node_name)
+	var other = util.get_player(node_name)
 	set_boosted(other, true)
 	merged = other
 

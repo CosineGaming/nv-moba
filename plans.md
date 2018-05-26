@@ -8,6 +8,7 @@ Big TODOs:
 - ^ I think you need more abilities for heroes, that combine well
   - Like, you could combine PAZIENZA with [destroys buildings]
 - Start making maps and figuring out what works / what you like
+  - Make just one new main level with the lessons you've learned from this one
   - I'd love to do a payload map!
   - More platforming for everyone (It's industria only rn tbh)
   - Give portals a tilted wall to fuck with acceleration
@@ -25,8 +26,8 @@ Smaller TODOs:
 - Ira is OP?
   - Nerfed - 5 walls
 - Make motion more reactive?
-- Grab someone and draw an impulse on them
-  - Combine with SUPERBIA, use charge to build portals
+- Remember some player settings, probably in a player.json or something
+  - I'm mostly thinking of nickname, but also SR eventually
 
 Bugs:
 

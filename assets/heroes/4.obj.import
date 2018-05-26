@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/4.obj-773905e6e7c2c08ad34fe36bfaacca4e.mesh"
+
+[deps]
+
+files=[ "res://.import/4.obj-773905e6e7c2c08ad34fe36bfaacca4e.mesh" ]
+
+source_file="res://assets/heroes/4.obj"
+source_md5="8a2ea58bae6a5ba0b5a28b7ab6163ed9"
+
+dest_files=[ "res://.import/4.obj-773905e6e7c2c08ad34fe36bfaacca4e.mesh", "res://.import/4.obj-773905e6e7c2c08ad34fe36bfaacca4e.mesh" ]
+dest_md5="93358c6c816510bd069825e089cee878"
+
+[params]
+
+generate_tangents=true

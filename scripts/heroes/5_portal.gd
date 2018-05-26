@@ -2,6 +2,7 @@ extends "res://scripts/placeable.gd"
 
 var portal_charge = -5
 var other
+var index
 
 var enemy_colors = [
 	Color("#d14013"),
@@ -24,6 +25,8 @@ func _exit_tree():
 		other.queue_free()
 
 func init(maker):
+
+	index = maker.placement.placed.size()
 
 	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
 	var second = index % 2 != 0
@@ -62,5 +65,5 @@ func portal(player):
 				# With both axes, gravity could never bring us to hit the portal
 				var to = other.to_global(Vector3(spawn_distance,0,-spawn_distance)) 
 				player.set_translation(to)
-				maker_node.switch_charge += portal_charge
+				maker_node.build_charge(portal_charge)
 

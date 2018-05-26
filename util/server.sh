@@ -1,2 +1,2 @@
-godot -level=2 -silent -server -start-game
+godot-server -level=2 -silent -server "$@"
 
