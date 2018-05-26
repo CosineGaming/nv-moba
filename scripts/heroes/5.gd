@@ -1,6 +1,7 @@
 extends "res://scripts/player.gd"
 
 onready var placement = preload("res://scripts/placement.gd").new(self, "res://scenes/heroes/5_portal.tscn")
+onready var portal_ability = get_node("MasterOnly/Portal")
 onready var teleport_ability = get_node("MasterOnly/Teleport")
 
 var radius = 15
@@ -8,7 +9,6 @@ var radius = 15
 var first_crosshair = "   [..."
 var second_crosshair = "...]   "
 var no_portal_crosshair = "+"
-var portal_cost = 20
 
 var flicking = null
 var flick_charge = 3
@@ -27,11 +27,11 @@ func _process(delta):
 	if is_network_master():
 		var is_second = placement.placed.size() % 2 != 0
 		var portal_crosshair = second_crosshair if is_second else first_crosshair
-		var crosshair = no_portal_crosshair if switch_charge < portal_cost else portal_crosshair
+		var crosshair = no_portal_crosshair if switch_charge < portal_ability.cost else portal_crosshair
 		get_node("MasterOnly/Crosshair").set_text(crosshair)
-		var can_build = switch_charge > portal_cost
+		var can_build = switch_charge > portal_ability.cost
 		if placement.place_input(radius, can_build, true) and is_second:
-			switch_charge -= portal_cost
+			switch_charge -= portal_ability.cost
 
 		teleport_ability.disabled = placement.placed.size() <= 1
 
