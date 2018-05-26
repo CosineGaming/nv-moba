@@ -172,7 +172,6 @@ sync func _pre_configure_game(level):
 	# This causes a stack overflow if we call it from here repeatedly
 	# So we only change it once, only start_game twice, and avoida segfault
 	if not self_begun:
-		print("setting my begun to true")
 		set_info("begun", true)
 	rpc_id(1, "_done_preconfiguring", self_peer_id)
 

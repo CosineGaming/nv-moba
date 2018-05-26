@@ -52,5 +52,5 @@ func _arg_actions():
 		_singleplayer()
 	if o.get_value('-h'):
 		o.print_help()
-		quit()
+		get_tree().quit()
 
