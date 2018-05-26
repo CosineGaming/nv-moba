@@ -71,29 +71,23 @@ func send_all_info(new_peer):
 		if p != new_peer:
 			for key in players[p]:
 				var val = players[p][key]
+				# TODO: This broadcasts every connected peer,
+				# which isn't really a problem but it's lazy
 				set_info(key, val, p)
+
+func _right_team_next():
+	var right_team_count = 0
+	for p in players:
+		var player = players[p]
+		if player.has("is_right_team") and player.is_right_team:
+			right_team_count += 1
+	return (right_team_count <= players.size() / 2)
 
 remote func register_player(new_peer):
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		send_all_info(new_peer)
-	emit_signal("info_updated")
-		# var right_team_count = 0
-		# Send current players' info to new player
-			# if old_peer != new_peer:
-			# 	# We need to assign team later, so count current
-			# 	if players[old_peer].is_right_team:
-			# 		right_team_count += 1
-				# if begun: TODO this should belong to lobby?
-				# 	rpc_id(old_peer, "_spawn_player", new_peer)
-				# 	rpc_id(old_peer, "_begin_player_deferred", new_peer) # Spawning is deferred
-		# var assign_right_team = right_team_count * 2 < players.size()
-		# set_info("is_right_team", assign_right_team, new_peer)
-		# if not begun and players.size() == matchmaking.GAME_SIZE:
-		# 	start_game()
-		# if begun:
-		# 	rpc_id(new_peer, "_pre_configure_game", my_info.level)
-		# 	rpc_id(new_peer, "_post_configure_game")
+		set_info("is_right_team", _right_team_next(), new_peer)
 
 sync func unregister_player(peer):
 	players.erase(peer)
