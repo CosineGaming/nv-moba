@@ -96,18 +96,15 @@ sync func unregister_player(peer):
 		p.queue_free()
 	emit_signal("info_updated")
 
-sync func _set_info(key, value, peer=0):
-	if not peer:
-		peer = get_tree().get_rpc_sender_id()
-		if peer == 0:
-			# Was self. See https://github.com/godotengine/godot/issues/19026
-			peer = get_tree().get_network_unique_id()
+sync func _set_info(key, value, peer):
 	if not players.has(peer):
 		players[peer] = {}
 	players[peer][key] = value
 	emit_signal("info_updated")
 
 master func set_info(key, value, peer=0):
+	if not peer:
+		peer = get_tree().get_network_unique_id()
 	rpc("_set_info", str(key), value, peer)
 
 # When connectivity is not yet guaranteed, the only one we know is always
@@ -142,13 +139,14 @@ sync func _spawn_player(p):
 	player.set_name(str(p))
 	player.set_network_master(p)
 	player.player_info = players[p]
-	get_node("/root/Level/Players").call_deferred("add_child", player)
+	get_node("/root/Level/Players").add_child(player)
 
 sync func _pre_configure_game(level):
 
 	var self_peer_id = get_tree().get_network_unique_id()
+	var self_begun = players[self_peer_id].begun
 
-	if not players[self_peer_id].begun:
+	if not self_begun:
 		get_node("/root/Lobby").hide()
 
 		var world = load("res://scenes/levels/%d.tscn" % level).instance()
@@ -158,30 +156,32 @@ sync func _pre_configure_game(level):
 	for p in players:
 		if not players[p].spectating:
 			var existing_player = util.get_player(p)
-			if not players[self_peer_id].begun or not existing_player:
+			if not self_begun or not existing_player:
 				_spawn_player(p)
 
-	set_info("begun", true)
+	# Why do we check first? Weird error. It's because set_info triggers a
+	# start_game if everyone is ready
+	# This causes a stack overflow if we call it from here repeatedly
+	# So we only change it once, only start_game twice, and avoida segfault
+	if not self_begun:
+		print("setting my begun to true")
+		set_info("begun", true)
 	rpc_id(1, "_done_preconfiguring", self_peer_id)
 
 sync func _done_preconfiguring(who):
 	players_done.append(who)
 	if players_done.size() == players.size():
 		print("done")
-		# We call deferred in case singleplayer has placing the player in queue still
-		call_deferred("rpc", "_post_configure_game")
+		rpc("_post_configure_game")
 
 sync func _post_configure_game():
 	# Begin all players (including self)
 	for p in players:
 		if not players[p].spectating:
-			_begin_player_deferred(p)
+			_begin_player(p)
 
 func _begin_player(peer):
 	util.get_player(peer).begin()
-
-remote func _begin_player_deferred(peer):
-	call_deferred("_begin_player", peer)
 
 sync func reset_state():
 	players_done = []
