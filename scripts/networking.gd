@@ -128,8 +128,8 @@ func _check_info():
 	if get_tree().is_network_server():
 		var ready = true
 		for p in players:
-			if not players[p].spectating:
-				if not players[p].ready:
+			if not players[p].has("spectating") or not players[p].spectating:
+				if not players[p].has("ready") or not players[p].ready:
 					ready = false
 		if ready:
 			start_game()

@@ -76,11 +76,13 @@ func _send_name():
 	networking.set_info_from_server("username", name)
 
 func _check_begun():
-	var game_started = networking.players[1].begun
-	if game_started:
-		start_game_button.show()
-		# The "Ready" toggle doesn't really make sense on a started game
-		ready_button.hide()
+	if networking.players.has(1) and networking.players[1].has("begun"):
+		var game_started = networking.players[1].begun
+		if game_started:
+			start_game_button.show()
+			start_game_button.text = "Join game"
+			# The "Ready" toggle doesn't really make sense on a started game
+			ready_button.hide()
 
 func render_player_list():
 	_check_begun()
@@ -89,17 +91,21 @@ func render_player_list():
 	for p in networking.players:
 		var player = networking.players[p]
 		# A spectating server is just a dedicated server, ignore it
-		if not (player.spectating and p == 1):
-			list += "%-15s " % player.username
-			list += "%-10s " % hero_names[player.hero]
-			var team_format = "%-11s"
-			if player.is_right_team:
-				list += team_format % "Right Team"
-			else:
-				list += team_format % "Left Team"
-			var ready_text = "Ready" if player.ready else ""
+		if p and player.has("spectating") and not (player.spectating and p == 1):
+			var username = player.username if player.has("username") else "Loading..."
+			list += "%-15s " % username
+			var hero = hero_names[player.hero] if player.has("hero") else "Loading..."
+			list += "%-10s " % hero
+			var team = "Loading..."
+			if player.has("is_right_team"):
+				if player.is_right_team:
+					team = "Right Team"
+				else:
+					team = "Left Team"
+			list += "%-11s" % team
+			var ready_text = "Ready" if player.has("ready") and player.ready else ""
 			list += "%-6s" % ready_text
-			if player.spectating:
+			if player.has("spectating") and player.spectating:
 				list += "Spectating"
 			list += "\n"
 	get_node("PlayerList").set_text(list)
