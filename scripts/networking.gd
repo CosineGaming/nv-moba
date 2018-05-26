@@ -33,10 +33,10 @@ func start_client(ip="", port=0):
 	get_tree().set_network_peer(peer)
 	get_tree().change_scene("res://scenes/lobby.tscn")
 
-remote func reconnect(port):
+remote func reconnect(ip, port):
 	# Reset previously known players
 	players = {}
-	start_client("", port)
+	start_client(ip, port)
 
 func _connect_to_matchmaker(game_port):
 	var matchmaker_peer = StreamPeerTCP.new()

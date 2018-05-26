@@ -4,7 +4,7 @@ var SERVER_TO_SERVER_PORT = 54671
 var MATCHMAKING_PORT = 54672
 var GAME_SIZE = 6
 # Number of games we can make without blowing up the computer
-var MAX_GAMES = 50 # Totally random guess
+var MAX_GAMES = 50 # Based on how many ports I decided to forward
 
 var next_port = 54673
 
@@ -80,7 +80,7 @@ func queue(netid):
 # 	#
 
 func add_to_game(netid, port):
-	networking.rpc_id(netid, "reconnect", port)
+	networking.rpc_id(netid, "reconnect", networking.global_server_ip, port)
 
 func skirmish_to_game(port, count=1):
 	for i in range(count):

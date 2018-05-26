@@ -14,8 +14,8 @@ func _gui_setup():
 	get_node("Center/Quit").connect("pressed", get_tree(), "quit")
 
 func _find_game():
-	# var ip = networking.global_server_ip
-	var ip = util.args.get_value("-ip")
+	var ip = networking.global_server_ip
+	# var ip = util.args.get_value("-ip")
 	var port = networking.matchmaking.MATCHMAKING_PORT
 	networking.start_client(ip, port)
 
