@@ -26,7 +26,7 @@ func _ready():
 
 func set_hero(hero):
 	select(hero)
-	networking.set_info("hero", hero)
+	networking.set_info_from_server("hero", hero)
 
 func random_hero():
 	var hero = randi() % hero_names.size()

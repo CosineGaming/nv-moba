@@ -74,13 +74,6 @@ func send_all_info(new_peer):
 				set_info(key, val, p)
 
 remote func register_player(new_peer):
-	var info = {}
-	info.is_right_team = right_team_next
-	info.ready = false
-	info.spectating = false
-	info.begun = false
-	right_team_next = not right_team_next
-	players[new_peer] = info
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		send_all_info(new_peer)
@@ -115,16 +108,25 @@ sync func _set_info(key, value, peer=0):
 		if peer == 0:
 			# Was self. See https://github.com/godotengine/godot/issues/19026
 			peer = get_tree().get_network_unique_id()
-	if players.has(peer):
-		players[peer][key] = value
-		emit_signal("info_updated")
+	if not players.has(peer):
+		players[peer] = {}
+	players[peer][key] = value
+	emit_signal("info_updated")
 
-func set_info(key, value, peer=0):
+master func set_info(key, value, peer=0):
 	rpc("_set_info", str(key), value, peer)
 
+# When connectivity is not yet guaranteed, the only one we know is always
+# connected to everyone is the server. So in initial handshakes, it's better to
+# tell the server what to tell everyone to do
+func set_info_from_server(key, value, peer=0):
+	if not peer:
+		peer = get_tree().get_network_unique_id()
+	rpc_id(1, "set_info", key, value, peer)
+
 func _on_connect():
-	emit_signal("info_updated")
 	register_player(get_tree().get_network_unique_id())
+	emit_signal("info_updated")
 
 func _check_info():
 	# Check for "everyone is ready"

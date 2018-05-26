@@ -9,14 +9,20 @@ onready var ready_button = get_node("Ready")
 
 func _ready():
 
+	# Connect (to networking)
 	get_node("Username").connect("text_changed", self, "_send_name")
-
-	var spectating = util.args.get_value("-silent")
-	get_node("Spectating").pressed = spectating
 	get_node("Spectating").connect("toggled", self, "_set_info_callback", ["spectating"])
 	ready_button.connect("toggled", self, "_set_info_callback", ["ready"])
 	start_game_button.connect("pressed", networking, "start_game")
+	# Connect (from networking)
+	networking.connect("info_updated", self, "render_player_list")
+	get_tree().connect("connected_to_server", self, "_connected")
+
+	# Connect (static)
 	get_node("Back").connect("pressed", self, "_exit_to_menu")
+
+	var spectating = util.args.get_value("-silent")
+	get_node("Spectating").pressed = spectating
 	# Shown, maybe, in _check_begun
 	start_game_button.hide()
 	if get_tree().is_network_server():
@@ -36,18 +42,18 @@ func _ready():
 	else:
 		level_select.hide()
 
-	networking.connect("info_updated", self, "render_player_list")
-	get_tree().connect("connected_to_server", self, "_connected")
 	if get_tree().is_network_server():
 		_connected()
 
 func _connected():
 
 	_send_name()
+	networking.set_info_from_server("ready", false)
+	networking.set_info_from_server("spectating", util.args.get_value("-silent"))
+	networking.set_info_from_server("begun", false)
 	if util.args.get_value("-hero") == "r":
 		hero_select.random_hero()
 	else:
-		print(util.args.get_value("-hero"))
 		hero_select.set_hero(int(util.args.get_value("-hero")))
 
 	if util.args.get_value("-start-game"):
@@ -59,7 +65,7 @@ func _set_level(level):
 # Because of the annoying way callbacks work (automatic parameter, optional parameter)
 # We need a utility function for making these kinds of callbacks for set_info
 func _set_info_callback(value, key):
-	networking.set_info(key, value)
+	networking.set_info_from_server(key, value)
 
 sync func set_hero(peer, hero):
 	networking.players[peer].hero = hero
@@ -67,7 +73,7 @@ sync func set_hero(peer, hero):
 
 func _send_name():
 	var name = get_node("Username").text
-	networking.set_info("username", name)
+	networking.set_info_from_server("username", name)
 
 func _check_begun():
 	var game_started = networking.players[1].begun
