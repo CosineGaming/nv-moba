@@ -68,6 +68,9 @@ sync func reset_state():
 		players[p].begun = false
 		# TODO: Do I in fact want to unready everyone automatically?
 		players[p].ready = false
+	# TODO: Is this not very kosher?
+	util.get_master_player().toggle_mouse_capture()
+	get_node("/root/Lobby").show()
 	get_node("/root/Level").queue_free()
 
 
