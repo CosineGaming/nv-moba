@@ -13,7 +13,7 @@ func _ready():
 	ready_button.connect("toggled", self, "_set_info_callback", ["ready"])
 	start_game_button.connect("pressed", networking, "start_game")
 	# Connect (from networking)
-	networking.connect("info_updated", self, "render_player_list")
+	networking.connect("info_updated", self, "_render_player_list")
 	get_tree().connect("connected_to_server", self, "_connected")
 
 	# Connect (static)
@@ -67,7 +67,7 @@ func _set_info_callback(value, key):
 
 sync func set_hero(peer, hero):
 	networking.players[peer].hero = hero
-	render_player_list()
+	_render_player_list()
 
 func _send_name():
 	var name = get_node("Username").text
@@ -82,7 +82,7 @@ func _check_begun():
 			# The "Ready" toggle doesn't really make sense on a started game
 			ready_button.hide()
 
-func render_player_list():
+func _render_player_list():
 	_check_begun()
 	var list = ""
 	var hero_names = hero_select.hero_names
