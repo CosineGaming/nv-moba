@@ -3,13 +3,20 @@
 
 extends RigidBody
 
+signal spawn
+
+# Set by lobby. Contains player metadata (hero, nickname, etc)
+var player_info
+
+# Basic movement settings
+# These are all public out here because they are customized by heroes
+
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
 var jump_speed = 5 # m/s
 var air_accel = .1 # m/s/s
 var floor_friction = 1-0.08
 var air_friction = 1-0.03
-var player_info # Set by lobby
 
 var walk_speed_build = 0.006 # `walk_speed` per `switch_charge`
 var air_speed_build = 0.006 # `air_accel` per `switch_charge`
@@ -17,32 +24,22 @@ var air_speed_build = 0.006 # `air_accel` per `switch_charge`
 sync var switch_charge = 0
 var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
 var movement_charge = 0.15 # In percent per meter (except when heroes change that)
+
+# Nodes
 onready var switch_text = get_node("MasterOnly/ChargeBar/ChargeText")
 onready var switch_bar = get_node("MasterOnly/ChargeBar")
 onready var switch_bar_extra = get_node("MasterOnly/ChargeBar/Extra")
 onready var switch_hero_action = get_node("MasterOnly/SwitchHero")
+onready var tp_camera = get_node("TPCamera")
+onready var master_only = get_node("MasterOnly")
+onready var debug_node = get_node("/root/Level/Debug")
 
-var fall_height = -400 # This is essentially the respawn timer
-var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
-
-var debug_node
 var recording
-
-slave var slave_transform = Basis()
-slave var slave_lin_v = Vector3()
-slave var slave_ang_v = Vector3()
-
-var tp_camera = "TPCamera"
-var master_only = "MasterOnly"
-
-var master_player
-var friend_color = Color("#4ab0e5") # Blue
-var enemy_color = Color("#f04273") # Red
-
 var ai_instanced = false
 
-signal spawn
-
+var friend_color = Color("#4ab0e5") # Blue
+var enemy_color = Color("#f04273") # Red
+# These meshes get colored with friendliness
 var colored_meshes = [
 	"Yaw/MainMesh",
 	"Yaw/Pitch/RotatedHead",
@@ -51,11 +48,10 @@ var colored_meshes = [
 func _ready():
 
 	set_process_input(true)
-	debug_node = get_node("/root/Level/Debug")
 	if is_network_master():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
-		get_node(tp_camera).set_enabled(true)
-		get_node(tp_camera).cam_view_sensitivity = 0.05
+		tp_camera.set_enabled(true)
+		tp_camera.cam_view_sensitivity = 0.05
 		spawn()
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
@@ -63,7 +59,7 @@ func _ready():
 	else:
 		get_node("PlayerName").set_text(player_info.username)
 		# Remove HUD
-		remove_child(get_node(master_only))
+		remove_child(master_only)
 
 func _input(event):
 	if is_network_master():
@@ -80,10 +76,18 @@ func _input(event):
 func _process(delta):
 	# All player code not caused by input, and not causing movement
 	if is_network_master():
+
+		# Check falling (cancel charge and respawn)
+		var fall_height = -400 # This is essentially the respawn timer
+		var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
 		var vel = get_linear_velocity()
 		if translation.y < switch_height:
 			vel.y = 0 # Don't gain charge from falling when below switch_height
 		build_charge(movement_charge * vel.length() * delta)
+		if get_translation().y < fall_height:
+			rpc("spawn")
+
+		# Update switch charge GUI
 		switch_text.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
 		if switch_charge >= 100:
 			switch_hero_action.show()
@@ -94,14 +98,12 @@ func _process(delta):
 			switch_charge = switch_charge_cap
 		switch_bar.value = switch_charge
 		switch_bar_extra.value = switch_charge - 100
+		# ... And it's network value
+		rset_unreliable("switch_charge", switch_charge)
 
-		if get_translation().y < fall_height:
-			rpc("spawn")
-
+		# AI recording
 		if "record" in player_info:
 			recording.time += delta
-
-		rset_unreliable("switch_charge", switch_charge)
 
 func _integrate_forces(state):
 	if is_network_master():
@@ -154,8 +156,8 @@ sync func spawn():
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
-	get_node(tp_camera).cam_yaw = 0
-	get_node(tp_camera).cam_pitch = 0
+	tp_camera.cam_yaw = 0
+	tp_camera.cam_pitch = 0
 
 func event_to_obj(event):
 	var d = {}
@@ -176,7 +178,7 @@ func event_to_obj(event):
 	return d
 
 func begin():
-	master_player = util.get_master_player()
+	var master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player and master_player.player_info.is_right_team == player_info.is_right_team:
@@ -201,8 +203,8 @@ func toggle_mouse_capture():
 
 # Update visual yaw + pitch components to match camera
 func set_rotation():
-	get_node("Yaw").set_rotation(Vector3(0, deg2rad(get_node(tp_camera).cam_yaw), 0))
-	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-get_node(tp_camera).cam_pitch), 0, 0))
+	get_node("Yaw").set_rotation(Vector3(0, deg2rad(tp_camera.cam_yaw), 0))
+	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-tp_camera.cam_pitch), 0, 0))
 
 func record_status(status):
 	if "record" in player_info:
@@ -214,16 +216,16 @@ slave func set_status(s):
 	set_transform(s[0])
 	set_linear_velocity(s[1])
 	set_angular_velocity(s[2])
-	get_node(tp_camera).cam_yaw = s[3]
-	get_node(tp_camera).cam_pitch = s[4]
+	tp_camera.cam_yaw = s[3]
+	tp_camera.cam_pitch = s[4]
 
 func get_status():
 	return [
 		get_transform(),
 		get_linear_velocity(),
 		get_angular_velocity(),
-		get_node(tp_camera).cam_yaw,
-		get_node(tp_camera).cam_pitch,
+		tp_camera.cam_yaw,
+		tp_camera.cam_pitch,
 	]
 
 func control_player(state):
