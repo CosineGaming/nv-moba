@@ -75,10 +75,6 @@ func queue(netid):
 	skirmishing_players.append(netid)
 	check_queue()
 
-# # This is only for clients, but it's in here so we can rpc it easily
-# slave func join_game(port):
-# 	#
-
 func add_to_game(netid, port):
 	networking.rpc_id(netid, "reconnect", networking.global_server_ip, port)
 
