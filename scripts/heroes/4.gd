@@ -60,7 +60,7 @@ func _process(delta):
 
 sync func stun(net_id, position):
 	# Stun the thing!
-	var player = get_node("/root/Level/Players/%s" % net_id)
+	var player = util.get_player(net_id)
 	player.set_linear_velocity(Vector3())
 
 	# Show the beam!
