@@ -38,7 +38,7 @@ func start_matchmaker():
 	set_process(true)
 
 	# Setup skirmish server
-	skirmish = spawn_server()
+	skirmish = spawn_server(true)
 
 	# Set up communication between GAMESERVERS
 	# This is necessary for eg, when a player leaves to backfill
@@ -94,8 +94,12 @@ func check_queue():
 		spawn_server()
 		# games.append(port)
 
-func spawn_server():
-	OS.execute("util/server.sh", ['-port='+str(next_port)], false)
+func spawn_server(skirmish=false):
+	var args = ['-port='+str(next_port)]
+	if skirmish:
+		# Begin skirmish immediately, so players "join" instead of "ready"
+		args.append("-start-game")
+	OS.execute("util/server.sh", args, false)
 	next_port += 1
 	return (next_port - 1) # Return original port
 
