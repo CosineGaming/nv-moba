@@ -66,7 +66,7 @@ func flick_input():
 		build_charge(flick_charge)
 
 sync func flick(player_id, towards):
-	var who = $"/root/Level/Players".get_node(player_id)
+	var who = util.get_player(player_id)
 	if who.is_network_master():
 		var direction = towards - who.translation
 		var impulse = direction.normalized() * flick_strength * who.get_mass()

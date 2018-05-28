@@ -10,5 +10,5 @@ fi
 
 util/open-multiple.sh $count "$@"
 sleep 1
-godot -start-game "$@" &
+godot -client -start-game "$@" &
 
