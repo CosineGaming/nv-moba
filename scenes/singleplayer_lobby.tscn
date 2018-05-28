@@ -66,15 +66,20 @@ visible = false
 
 visible = false
 
-[node name="StartGame" parent="." index="8"]
+[node name="Ready" parent="." index="8"]
 
+visible = false
+
+[node name="StartGame" parent="." index="9"]
+
+visible = true
 margin_left = 41.0
 margin_top = 486.0
 margin_right = 163.0
 margin_bottom = 526.0
 text = "Play!"
 
-[node name="VSeparator" parent="." index="9"]
+[node name="VSeparator" parent="." index="10"]
 
 visible = false
 
