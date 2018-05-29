@@ -178,14 +178,10 @@ func event_to_obj(event):
 	return d
 
 func begin():
-<<<<<<< HEAD
-	var master_player = util.get_master_player()
-=======
 	_set_color()
 
 func _set_color():
-	master_player = util.get_master_player()
->>>>>>> 5c5b76f628d2681bb582b3abcc9acef009e2c534
+	var master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player.player_info.is_right_team == player_info.is_right_team:
