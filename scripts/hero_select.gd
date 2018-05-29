@@ -10,7 +10,7 @@ const hero_names = [
 ]
 
 const hero_text = [
-	"DILIGENCE.\n\nWallride by jumping on walls.\n\nHold left click to go faster (but spend switch charge).",
+	"DILIGENCE.\n\nWallride by jumping on walls.\n\nHold left click to go faster (but spend charge).",
 	"WRATH.\n\nPress E and click (or just click) to build a wall.\n\nRight click to destroy one.",
 	"LUST.\n\nYou attract nearby heroes.\n\nPress E to switch to repelling them.",
 	"GENEROSITY.\n\nMake contact with a friend to boost their speed.\n\nPress E to separate.",

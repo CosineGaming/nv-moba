@@ -15,7 +15,7 @@ func _ready():
 
 func _process(delta):
 	if is_network_master():
-		var can_build = switch_charge > place_wall_ability.cost
+		var can_build = charge > place_wall_ability.cost
 		if can_build:
 			if placement.place_input():
 				build_charge(-place_wall_ability.cost)
@@ -42,8 +42,8 @@ func on_looked_at(who, delta):
 	if who.player_info.is_right_team != player_info.is_right_team:
 		var subtracted = who.build_charge(-looked_at_charge_suck * delta)
 		build_charge(-subtracted)
-		# We rset our switch_charge because otherwise it won't be acknowledged
+		# We rset our charge because otherwise it won't be acknowledged
 		# because we're not master
 		# The *PICKER* is master, we're slave! Well, let's flip that for a mo'
-		rset("switch_charge", switch_charge)
+		rset("charge", charge)
 
