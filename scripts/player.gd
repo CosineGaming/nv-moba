@@ -103,6 +103,13 @@ func _process(delta):
 		if "record" in player_info:
 			recording.time += delta
 
+		# on_looked_at is a special method for objects that need to respond to being looked at
+		# This was the best way to implement Hero 1's passive ability,
+		# But it'll probably come in handy more often so I made it kinda universal
+		var looking_at = pick()
+		if looking_at and looking_at.has_method("on_looked_at"):
+			looking_at.on_looked_at(self, delta)
+
 func _integrate_forces(state):
 	if is_network_master():
 		control_player(state)
