@@ -36,7 +36,7 @@ func _process(delta):
 			destroy_ability.disabled = false
 			if Input.is_action_just_pressed("primary_ability"):
 					if switch_charge > looking_at.destroy_cost:
-						switch_charge -= looking_at.destroy_cost
+						build_charge(-looking_at.destroy_cost)
 						looking_at.rpc("destroy")
 		else:
 			destroy_ability.disabled = true

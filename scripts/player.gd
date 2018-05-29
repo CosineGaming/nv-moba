@@ -98,8 +98,6 @@ func _process(delta):
 			switch_charge = switch_charge_cap
 		switch_bar.value = switch_charge
 		switch_bar_extra.value = switch_charge - 100
-		# ... And it's network value
-		rset_unreliable("switch_charge", switch_charge)
 
 		# AI recording
 		if "record" in player_info:
@@ -133,7 +131,13 @@ func build_charge(amount):
 		if obj.right_active != player_info.is_right_team and obj.active:
 			# Point against us (right active and left, or vice versa)
 			amount *= uncapped_advantage
+	else:
+		# Only build down to 0
+		amount = max(amount, -switch_charge)
 	switch_charge += amount
+	if is_network_master():
+		rset_unreliable("switch_charge", switch_charge)
+	return amount
 
 sync func spawn():
 	emit_signal("spawn")

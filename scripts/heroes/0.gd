@@ -27,7 +27,7 @@ func control_player(state):
 	if get_node("MasterOnly/Boost").is_pressed() and switch_charge > cost:
 		walk_speed *= 2
 		air_accel *= 3
-		switch_charge -= cost
+		build_charge(-cost)
 	.control_player(state)
 	wallride(state)
 	walk_speed = original_speed

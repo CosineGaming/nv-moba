@@ -31,7 +31,7 @@ func _process(delta):
 		get_node("MasterOnly/Crosshair").set_text(crosshair)
 		var can_build = switch_charge > portal_ability.cost
 		if placement.place_input(radius, can_build, true) and is_second:
-			switch_charge -= portal_ability.cost
+			build_charge(-portal_ability.cost)
 
 		teleport_ability.disabled = placement.placed.size() <= 1
 
