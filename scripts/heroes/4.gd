@@ -35,8 +35,8 @@ func _process(delta):
 			destroy_ability.cost = looking_at.destroy_cost
 			destroy_ability.disabled = false
 			if Input.is_action_just_pressed("primary_ability"):
-					if switch_charge > looking_at.destroy_cost:
-						switch_charge -= looking_at.destroy_cost
+					if charge > looking_at.destroy_cost:
+						build_charge(-looking_at.destroy_cost)
 						looking_at.rpc("destroy")
 		else:
 			destroy_ability.disabled = true
@@ -60,7 +60,7 @@ func _process(delta):
 
 sync func stun(net_id, position):
 	# Stun the thing!
-	var player = get_node("/root/Level/Players/%s" % net_id)
+	var player = util.get_player(net_id)
 	player.set_linear_velocity(Vector3())
 
 	# Show the beam!

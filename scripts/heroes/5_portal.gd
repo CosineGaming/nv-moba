@@ -25,7 +25,7 @@ func _exit_tree():
 		other.queue_free()
 
 func init(maker):
-	
+
 	index = maker.placement.placed.size()
 
 	# If index is odd, we're the second (1, 3...), if even, first (0, 4...)
@@ -57,7 +57,7 @@ func player_collided(with, player):
 func portal(player):
 	if player.player_info.is_right_team == maker_node.player_info.is_right_team:
 		if other:
-			if maker_node.switch_charge > -portal_charge:
+			if maker_node.charge > -portal_charge:
 				var spawn_distance = 1.75
 				# Find a sane place to spawn
 				# -Z is in the direction of the portal

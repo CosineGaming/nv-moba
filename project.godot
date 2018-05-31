@@ -10,13 +10,18 @@ config_version=3
 
 [application]
 
-config/name="nv-moba"
-run/main_scene="res://scenes/lobby.tscn"
+config/name="mv-moba"
+run/main_scene="res://scenes/update.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 util="*res://scripts/util.gd"
+networking="*res://scripts/networking.gd"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "open-external-editor" )
 
 [input]
 
@@ -62,6 +67,10 @@ primary_mouse=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"re
  ]
 enable_cheats=[ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":true,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":45,"unicode":0,"echo":false,"script":null)
  ]
+
+[network]
+
+ssl/certificates="res://assets/ca-certificates.crt"
 
 [rendering]
 
