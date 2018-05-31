@@ -19,6 +19,10 @@ config/icon="res://icon.png"
 util="*res://scripts/util.gd"
 networking="*res://scripts/networking.gd"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "open-external-editor" )
+
 [input]
 
 move_forwards=[ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":44,"unicode":0,"echo":false,"script":null)
