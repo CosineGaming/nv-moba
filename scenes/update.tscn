@@ -30,6 +30,7 @@ use_threads = false
 body_size_limit = -1
 max_redirects = 8
 script = ExtResource( 1 )
+domain = "http://ipv4.cosinegaming.com"
 
 [node name="ProgressBar" type="ProgressBar" parent="." index="1"]
 
