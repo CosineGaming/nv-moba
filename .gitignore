@@ -8,6 +8,7 @@ nohup.out
 recordings
 ai
 release
+addons/open-external-editor
 
 ._*
 ehthumbs.db
