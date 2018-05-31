@@ -13,7 +13,7 @@ subdivide_depth = 0
 
 extents = Vector3( 1.5, 1.5, 0.25 )
 
-[node name="StaticBody" type="StaticBody" index="0"]
+[node name="StaticBody" type="StaticBody"]
 
 input_ray_pickable = true
 input_capture_on_drag = false
@@ -40,13 +40,11 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = null
-_sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape" type="CollisionShape" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, -1.5 )
 shape = SubResource( 2 )
 disabled = true
-_sections_unfolded = [ "Transform" ]
 
 

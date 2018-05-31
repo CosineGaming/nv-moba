@@ -3,13 +3,13 @@
 *.swo
 .fscache
 .import
-*.import
 *.blend1
 nohup.out
 recordings
 ai
 release
 vanagloria.pck
+addons/open-external-editor
 
 ._*
 ehthumbs.db

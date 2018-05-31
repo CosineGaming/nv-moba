@@ -51,5 +51,5 @@ func restart():
 	get_tree().quit()
 
 func completed():
-	get_tree().change_scene("res://scenes/lobby.tscn")
+	get_tree().change_scene("res://scenes/menu.tscn")
 

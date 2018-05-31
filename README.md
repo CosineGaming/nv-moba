@@ -27,22 +27,27 @@ Current heroes:
   - CARITAS (Margarine)
   - SUPERBIA (Build portals)
 
-Ideas for Heroes:
+Ideas for Heroes / Abilities:
 
 - More active
-  - Blink (Tracer) - no cooldown, but loses all speed on hitting walls
+  - Blink (like tracer) costs charge
   - Heavy guy - Slow, but very heavy for the see-saw
   - Climb and glide abilities
   - JUMPING
 - More supportive
+  - Switch places with a TEAMMATE
+    - This is awesomely self-regulating because it's zero-sum
+      - However, it can't really gain charge because it can still be abused
   - Boost - Area of effect or zarya-like cast, speeds people up
   - Flop - Changes side of see-saw for each team (should it be mechanic instead??)
   - Build - Build Zineth-like rails for anyone to use
-  - (Combine with Ira?) Portal 2-like gels (bounce, speed, slow?)
+  - (Combine with IRA?) Portal 2-like gels (bounce, speed, slow?)
   - (Combine with LUSSURIA?) Hook and swing on terrain
 - More offensive
   - Lay traps
+  - Freeze a hero. A teammate of that hero must unfreeze them! (Or *n* seconds or whatever)
   - (Combine with PAZIENZA?) Destroy buildings
+  - (Combine wit LUSSURIA?) Hold, then release to explode enemies away
 
 Key concepts:
 

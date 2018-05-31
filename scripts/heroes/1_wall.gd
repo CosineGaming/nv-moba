@@ -5,7 +5,7 @@ var being_touched = 0
 
 func _process(delta):
 	if being_touched > 0:
-		maker_node.switch_charge += touch_charge * delta
+		maker_node.build_charge(touch_charge * delta)
 
 func init(maker):
 
@@ -33,4 +33,7 @@ func count_bodies(with, player, delta):
 	if with == self:
 		if player != maker_node:
 			being_touched += delta
+
+func on_looked_at(who, delta):
+	maker_node.on_looked_at(who, delta)
 
