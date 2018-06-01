@@ -226,7 +226,7 @@ func record_status(status):
 			status[i] = var2str(status[i])
 		recording.states.append([recording.time, status])
 
-slave func set_status(s):
+remote func set_status(s):
 	set_transform(s[0])
 	set_linear_velocity(s[1])
 	set_angular_velocity(s[2])
@@ -343,10 +343,18 @@ func pick_from(group):
 	return group.find(pick())
 func pick_player():
 	var players = get_node("/root/Level/Players").get_children()
-	return players[pick_from(players)]
+	var sel = pick_from(players)
+	if sel != -1:
+		return players[sel]
+	else:
+		return null
 func pick_by_friendly(pick_friendlies):
 	var pick = pick_player()
-	if (pick.player_info.is_right_team == player_info.is_right_team) == pick_friendlies:
+	if not pick:
+		return null
+	var friendly = (pick.player_info.is_right_team == player_info.is_right_team)
+	# Friendly and picking friendly, or enemy and picking enemy
+	if friendly == pick_friendlies:
 		return pick
 	else:
 		return null

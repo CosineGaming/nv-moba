@@ -10,6 +10,7 @@ ai
 release
 vanagloria.pck
 addons/open-external-editor
+docs/*.import
 
 ._*
 ehthumbs.db
