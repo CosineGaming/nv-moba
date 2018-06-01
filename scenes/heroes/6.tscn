@@ -8,8 +8,8 @@
 [node name="RigidBody" instance=ExtResource( 1 )]
 
 script = ExtResource( 2 )
-charge_time = 5
-charge_multiplier = 2
+charge_time = 20
+charge_multiplier = 3
 
 [node name="Pitch" parent="Yaw" index="0"]
 
@@ -24,5 +24,8 @@ mesh = ExtResource( 3 )
 
 transform = Transform( -1.30529e-07, 0, 0.677873, 0, 0.522823, 0, -0.726125, 0, -1.00093e-07, 0, 0.445392, -0.115384 )
 mesh = ExtResource( 4 )
+
+[node name="ChargeBar" parent="MasterOnly" index="1"]
+
 
 

@@ -83,6 +83,6 @@ rounded = false
 percent_visible = false
 script = ExtResource( 1 )
 factor = 1
-player = null
+_player = null
 
 
