@@ -8,6 +8,7 @@ const hero_names = [
 	"PAZIENZA",
 	"SUPERBIA",
 	"INVIDIA",
+	"UMILTA",
 ]
 
 const hero_text = [
@@ -17,7 +18,8 @@ const hero_text = [
 	"GENEROSITY.\n\nMake contact with a friend to boost their speed.\n\nPress E to separate.",
 	"PATIENCE.\n\nHold left mouse button on an enemy to slow them down.\n\nPress E to delete someone else's building (costs charge).",
 	"PRIDE.\n\nDrag on enemies to bully them around.\n\nClick to build a portal. Click again to build its partner (costs charge).",
-	"INVIDIA.\n\nClick a friend to swap places with them!\n\nBuild charge based on your teammate's charge built, so get your friends to good places.",
+	"ENVY.\n\nClick a friend to swap places with them!\n\nBuild charge based on your teammate's charge built, so get your friends to good places.",
+	"HUMILITY.\n\nClimb, jump, and glide by holding space.",
 ]
 
 func _ready():

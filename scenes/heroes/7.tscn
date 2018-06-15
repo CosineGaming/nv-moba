@@ -1,0 +1,83 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/heroes/7.gd" type="Script" id=2]
+[ext_resource path="res://assets/heroes/7_head.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://assets/heroes/7.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://scenes/ability_icon.tscn" type="PackedScene" id=5]
+
+[sub_resource type="CapsuleShape" id=1]
+
+radius = 0.505169
+height = 2.93586
+
+[node name="RigidBody" instance=ExtResource( 1 )]
+mode = 0
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+script = ExtResource( 2 )
+
+[node name="Body" parent="." index="0"]
+transform = Transform( 0.751525, 0, 0, 0, -1.41844e-07, -0.870633, 0, 0.654302, -1.066e-07, -2.46285e-05, 0.5086, 0.0705494 )
+
+[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
+transform = Transform( 0.334912, 0.424635, 0.521833, 0.710105, 0.0552454, -0.5007, -0.241444, 0.538246, -0.283033, -1.55959, 1.7197, 0.337607 )
+shape = SubResource( 1 )
+disabled = false
+
+[node name="CollisionShape2" type="CollisionShape" parent="." index="2"]
+transform = Transform( -0.401817, 0.353388, -0.527684, 0.710467, 0.0621578, -0.499374, -0.143673, -0.575559, -0.276046, 1.55939, 1.7197, 0.337607 )
+shape = SubResource( 1 )
+disabled = false
+
+[node name="Leg" parent="." index="3"]
+transform = Transform( 0.751525, 0, 0, 0, -1.41844e-07, -0.870633, 0, 0.654302, -1.066e-07, 0.0375516, 0.205992, 0.0705494 )
+
+[node name="Ray" parent="." index="4"]
+transform = Transform( 0.751525, 0, 0, 0, 0.870633, 0, 0, 0, 0.654302, -2.46285e-05, 0.249524, 0.0705494 )
+
+[node name="Yaw" parent="." index="5"]
+transform = Transform( 0.751525, 0, 0, 0, 0.870633, 0, 0, 0, 0.654302, -2.46285e-05, 0.118929, 0.0705494 )
+
+[node name="Pitch" parent="Yaw" index="0"]
+transform = Transform( 1, 0, 0, 0, 1.0018, 0, 0, 0, 0.998984, 0, 0.627519, -0.300717 )
+
+[node name="RotatedHead" parent="Yaw/Pitch" index="0"]
+transform = Transform( 1.8246e-14, -1.11993e-07, 0.687409, -0.0604004, 0.483014, 7.8693e-08, -0.619127, -0.0437268, -7.12399e-09, 0, 0, 0 )
+mesh = ExtResource( 3 )
+
+[node name="MainMesh" parent="Yaw" index="1"]
+transform = Transform( 0.000727491, -1, 1.62921e-07, 0, -1.62921e-07, -1, 1, 0.000727491, -1.18523e-10, 0, 0.0860451, 0 )
+mesh = ExtResource( 4 )
+material/1 = null
+
+[node name="Crosshair" parent="MasterOnly" index="0"]
+text = ""
+
+[node name="ChargeBar" parent="MasterOnly" index="1"]
+allow_greater = false
+allow_lesser = false
+
+[node name="Extra" parent="MasterOnly/ChargeBar" index="0"]
+allow_greater = false
+allow_lesser = false
+
+[node name="ChargeText" parent="MasterOnly/ChargeBar" index="1"]
+
+[node name="SwitchHero" parent="MasterOnly" index="2"]
+
+[node name="Climb" parent="MasterOnly" index="3" instance=ExtResource( 5 )]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -88.726
+margin_top = -116.427
+margin_right = -58.726
+margin_bottom = -86.4269
+ability_name = "Climb"
+display_progress = false
+action = "jump"
+
+[node name="PlayerName" parent="." index="10"]
+

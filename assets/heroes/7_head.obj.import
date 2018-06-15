@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/7_head.obj-63d01b88c7a5643578d779b7d45f5a8c.mesh"
+
+[deps]
+
+files=[ "res://.import/7_head.obj-63d01b88c7a5643578d779b7d45f5a8c.mesh" ]
+
+source_file="res://assets/heroes/7_head.obj"
+dest_files=[ "res://.import/7_head.obj-63d01b88c7a5643578d779b7d45f5a8c.mesh", "res://.import/7_head.obj-63d01b88c7a5643578d779b7d45f5a8c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

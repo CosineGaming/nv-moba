@@ -9,11 +9,9 @@ path="res://.import/6_head.obj-e2bad35210de70f34b690819fde566ed.mesh"
 files=[ "res://.import/6_head.obj-e2bad35210de70f34b690819fde566ed.mesh" ]
 
 source_file="res://assets/heroes/6_head.obj"
-source_md5="ce37bd5ce85415399a8927bff5d6a6d5"
-
 dest_files=[ "res://.import/6_head.obj-e2bad35210de70f34b690819fde566ed.mesh", "res://.import/6_head.obj-e2bad35210de70f34b690819fde566ed.mesh" ]
-dest_md5="a89e293ac50b42e4ff64afc802f66bc8"
 
 [params]
 
 generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

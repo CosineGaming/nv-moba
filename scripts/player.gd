@@ -242,31 +242,34 @@ func get_status():
 		tp_camera.cam_pitch,
 	]
 
+func is_on_floor(state):
+	var jump_dot = 0.5 # If normal.dot(up) > jump_dot, we can jump
+	for i in range(state.get_contact_count()):
+		var n = state.get_contact_local_normal(i)
+		if n.dot(Vector3(0,1,0)) > jump_dot:
+			return true
+	return false
+
 func control_player(state):
 
-	var aim = get_node("Yaw").get_global_transform().basis
+	var aim = global_transform.basis
 
 	var direction = Vector3()
 
 	if Input.is_action_pressed("move_forwards"):
-		direction -= aim[2]
+		direction -= aim.z
 	if Input.is_action_pressed("move_backwards"):
-		direction += aim[2]
+		direction += aim.z
 	if Input.is_action_pressed("move_left"):
-		direction -= aim[0]
+		direction -= aim.x
 	if Input.is_action_pressed("move_right"):
-		direction += aim[0]
+		direction += aim.x
 
 	direction = direction.normalized()
 	var ray = get_node("Ray")
 
 	# Detect jumpable
-	var jumpable = false
-	var jump_dot = 0.5 # If normal.dot(up) > jump_dot, we can jump
-	for i in range(state.get_contact_count()):
-		var n = state.get_contact_local_normal(i)
-		if n.dot(Vector3(0,1,0)) > jump_dot:
-			jumpable = true
+	var jumpable = is_on_floor(state)
 
 	if jumpable: # We can navigate normally, we have a surface
 		var up = state.get_total_gravity().normalized()
@@ -358,5 +361,14 @@ func pick_by_friendly(pick_friendlies):
 		return pick
 	else:
 		return null
+
+func preserve_direction(factor=1, ignore_y=true):
+	var forward_node = $Yaw if ignore_y else $Yaw/Pitch
+	var forward = -forward_node.get_global_transform().basis.z.normalized()
+	var current = linear_velocity
+	if ignore_y:
+		current.y = 0
+	linear_velocity += factor * current.length() * forward
+	linear_velocity -= factor * current
 
 # =========
