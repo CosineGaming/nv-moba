@@ -3,6 +3,7 @@ extends HTTPRequest
 var is_update_payload = false
 var save_to
 var time = 0
+var size
 export var domain = "http://ipv4.cosinegaming.com"
 
 func _ready():
@@ -26,6 +27,8 @@ func _request_completed(result, response_code, headers, body):
 		else:
 			is_update_payload = true
 			save_to = server.save_location
+			if server.has('size'):
+				size = server.size
 			use_threads = true
 			print("Need to update! Downloading " + server.download_path)
 			request(domain + server.download_path)
@@ -38,10 +41,13 @@ func _request_completed(result, response_code, headers, body):
 		restart()
 
 func _process(delta):
-	time += delta
-	var fake_progress = 1 - (0.8 / time)
-	# var progress = get_downloaded_bytes() / get_body_size()
-	var progress = fake_progress
+	var progress
+	if size:
+		progress = get_downloaded_bytes() / size
+	else:
+		time += delta
+		var fake_progress = 1 - (0.8 / time)
+		progress = fake_progress
 	get_node("../ProgressBar").value = 100*progress
 
 func restart():
