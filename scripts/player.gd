@@ -287,7 +287,7 @@ func control_player(state):
 		state.set_linear_velocity(lin_v)
 
 		if Input.is_action_just_pressed("jump"):
-			state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
+			state.apply_impulse(Vector3(), -up * jump_speed * get_mass())
 
 	else:
 		var accel = (1 + charge * air_speed_build) * air_accel
