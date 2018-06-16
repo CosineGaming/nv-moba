@@ -8,7 +8,7 @@ extends Node
 # Currently 0.0.0 which means API, gameplay, etc can change suddenly and frequently
 # Don't rely on it for anything
 # 1.0.0 will be the reddit release
-var version = "0.0.1"
+var version = "0.0.2"
 
 var args
 
