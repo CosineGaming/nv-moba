@@ -1,8 +1,9 @@
 extends "res://scripts/player.gd"
 
-var climb_cost = 6 # Per second
+var fly_cost = 50 # Per second
+var fly_strength = 0.25
 var glide_factor = 0.08
-var glide_build = movement_charge
+var glide_build = 0
 var climb_speed = 3
 var time_to_glide = 0.3
 var glide_ramp = glide_factor / 1 # In per second; written as time to full / glide_factor
@@ -27,19 +28,23 @@ func _process(delta):
 
 func control_player(state):
 	var skip_controls = false
-	var cost = climb_cost * state.step
-	if charge > cost and Input.is_action_pressed("jump") and touching_wall(state):
+	if Input.is_action_pressed("jump") and touching_wall(state):
 		# Head towards climb speed, but don't slow down to it
 		var climb_force = max((climb_speed - linear_velocity.y) * get_mass(), 0)
 		state.apply_impulse(Vector3(), Vector3(0, climb_force, 0))
-		build_charge(-cost)
 	else:
 		if _glide:
+			if Input.is_action_pressed("primary_mouse"):
+				var cost = fly_cost * state.step
+				if charge > cost:
+					var forward = -$Yaw/Pitch.get_global_transform().basis.z.normalized()
+					linear_velocity += forward * fly_strength
+					build_charge(-cost)
 			preserve_direction()
 			preserve_direction(_glide, false)
 			if translation.y > charge_height:
 				build_charge(glide_build * linear_velocity.length() * state.step)
-			air_friction = 1
+			air_friction = 1 - 0.01
 			skip_controls = true
 		else:
 			air_friction = _orig_air_friction
