@@ -12,6 +12,9 @@ var _gliding = false
 var _glide = 0
 var _touch_count = 0
 var _orig_air_friction = air_friction
+onready var _fly_ability = $MasterOnly/Fly
+onready var _climb_ability = $MasterOnly/Climb
+onready var _glide_ability = $MasterOnly/Glide
 
 func _ready():
 	charge_height = -20 # It's too easy to abuse the fall charge by looking down and holding space
@@ -21,19 +24,23 @@ func _process(delta):
 		_touch_count = 0
 	else:
 		_touch_count += delta
-	if Input.is_action_pressed("jump") and _touch_count > time_to_glide:
+	var can_glide = _touch_count > time_to_glide
+	_glide_ability.disabled = not can_glide
+	if Input.is_action_pressed("jump") and can_glide:
 		_glide = clamp(_glide + delta * glide_ramp, 0, glide_factor)
 	else:
 		_glide = 0
 
 func control_player(state):
 	var skip_controls = false
-	if Input.is_action_pressed("jump") and touching_wall(state):
+	_climb_ability.disabled = not touching_wall(state)
+	if Input.is_action_pressed("jump") and not _climb_ability.disabled:
 		# Head towards climb speed, but don't slow down to it
 		var climb_force = max((climb_speed - linear_velocity.y) * get_mass(), 0)
 		state.apply_impulse(Vector3(), Vector3(0, climb_force, 0))
 	else:
 		if _glide:
+			_fly_ability.disabled = false
 			if Input.is_action_pressed("primary_mouse"):
 				var cost = fly_cost * state.step
 				if charge > cost:
@@ -48,6 +55,7 @@ func control_player(state):
 			skip_controls = true
 		else:
 			air_friction = _orig_air_friction
+			_fly_ability.disabled = true
 	state.integrate_forces()
 	if not skip_controls:
 		.control_player(state)

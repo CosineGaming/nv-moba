@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/heroes/6.gd" type="Script" id=2]
 [ext_resource path="res://assets/heroes/6_head.obj" type="ArrayMesh" id=3]
 [ext_resource path="res://assets/heroes/6.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://scenes/ability_icon.tscn" type="PackedScene" id=5]
 
 [node name="RigidBody" instance=ExtResource( 1 )]
 
@@ -25,7 +26,19 @@ mesh = ExtResource( 3 )
 transform = Transform( -1.30529e-07, 0, 0.677873, 0, 0.522823, 0, -0.726125, 0, -1.00093e-07, 0, 0.445392, -0.115384 )
 mesh = ExtResource( 4 )
 
-[node name="ChargeBar" parent="MasterOnly" index="1"]
+[node name="Swap" parent="MasterOnly" index="3" instance=ExtResource( 5 )]
 
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -100.0
+margin_top = -99.0
+margin_right = -70.0
+margin_bottom = -69.0
+cost = 0
+ability_name = "Swap Places"
+display_progress = false
+action = "primary_mouse"
 
 

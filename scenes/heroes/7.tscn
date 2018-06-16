@@ -71,13 +71,43 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -88.726
-margin_top = -116.427
-margin_right = -58.726
-margin_bottom = -86.4269
+margin_left = -89.0
+margin_top = -116.0
+margin_right = -59.0
+margin_bottom = -86.0
 cost = 2
 ability_name = "Fly"
 display_progress = false
 action = "primary_mouse"
+
+[node name="Glide" parent="MasterOnly" index="4" instance=ExtResource( 5 )]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -168.0
+margin_top = -117.0
+margin_right = -138.0
+margin_bottom = -87.0
+cost = 0
+ability_name = "Glide"
+display_progress = false
+action = "jump"
+
+[node name="Climb" parent="MasterOnly" index="5" instance=ExtResource( 5 )]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -242.0
+margin_top = -117.0
+margin_right = -212.0
+margin_bottom = -87.0
+cost = 0
+ability_name = "Climb"
+display_progress = false
+action = "jump"
 
 
