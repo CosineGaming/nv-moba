@@ -45,6 +45,9 @@ var colored_meshes = [
 	"Yaw/Pitch/RotatedHead",
 ]
 
+var fall_height = -400 # This is essentially the respawn timer
+var charge_height = -150 # At this point, stop adding to charge. This makes falls not charge you too much
+
 func _ready():
 
 	set_process_input(true)
@@ -78,11 +81,9 @@ func _process(delta):
 	if is_network_master():
 
 		# Check falling (cancel charge and respawn)
-		var fall_height = -400 # This is essentially the respawn timer
-		var switch_height = -150 # At this point, stop adding to charge. This makes falls not charge you too much
 		var vel = get_linear_velocity()
-		if translation.y < switch_height:
-			vel.y = 0 # Don't gain charge from falling when below switch_height
+		if translation.y < charge_height:
+			vel.y = 0 # Don't gain charge from falling when below charge_height
 		build_charge(movement_charge * vel.length() * delta)
 		if get_translation().y < fall_height:
 			rpc("spawn")
