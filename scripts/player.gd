@@ -23,7 +23,7 @@ var air_speed_build = 0.006 # `air_accel` per `charge`
 
 sync var charge = 0
 var charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
-var movement_charge = 0.15 # In percent per meter (except when heroes change that)
+var movement_charge = 0.18 # In percent per meter (except when heroes change that)
 
 # Nodes
 onready var switch_text = get_node("MasterOnly/ChargeBar/ChargeText")
