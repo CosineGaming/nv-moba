@@ -16,9 +16,8 @@ func _ready():
 func _process(delta):
 	if is_network_master():
 		var can_build = charge > place_wall_ability.cost
-		if can_build:
-			if placement.place_input():
-				build_charge(-place_wall_ability.cost)
+		if placement.place_input(-1, can_build):
+			build_charge(-place_wall_ability.cost)
 
 func _exit_tree():
 	._exit_tree()
