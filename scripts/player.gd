@@ -113,12 +113,12 @@ func _process(delta):
 			looking_at.on_looked_at(self, delta)
 
 func _integrate_forces(state):
+	update_rotation()
 	if is_network_master():
 		control_player(state)
 		var status = get_status()
 		rpc_unreliable("set_status", status)
 		record_status(status)
-	set_rotation()
 
 func _exit_tree():
 	if "record" in player_info:
@@ -218,8 +218,8 @@ func toggle_mouse_capture():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 # Update visual yaw + pitch components to match camera
-func set_rotation():
-	get_node("Yaw").set_rotation(Vector3(0, deg2rad(tp_camera.cam_yaw), 0))
+func update_rotation():
+	rotation = Vector3(0, deg2rad(tp_camera.cam_yaw), 0)
 	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-tp_camera.cam_pitch), 0, 0))
 
 func record_status(status):
