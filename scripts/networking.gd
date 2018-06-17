@@ -84,7 +84,7 @@ func _ready():
 	connect("info_updated", self, "_check_info")
 
 remote func _register_player(new_peer):
-	util.log("Player " + str(peer) + " connected.")
+	util.log("Player " + str(new_peer) + " connected.")
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		_send_all_info(new_peer)
