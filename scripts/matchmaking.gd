@@ -94,11 +94,11 @@ func check_queue():
 		# games.append(port)
 
 func spawn_server(skirmish=false):
-	var args = ['-port='+str(next_port)]
+	var args = [str(next_port)]
 	if skirmish:
 		# Begin skirmish immediately, so players "join" instead of "ready"
 		args.append("-start-game")
-	OS.execute("util/server.sh", args, false)
+	OS.execute("run/server.sh", args, false)
 	next_port += 1
 	return (next_port - 1) # Return original port
 
