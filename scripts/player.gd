@@ -322,8 +322,10 @@ sync func switch_hero(hero):
 	new_hero.set_name("%d" % net_id)
 	new_hero.set_network_master(net_id)
 	new_hero.player_info = player_info
+	# Call deferred because we still need to tear down this player
 	get_node("/root/Level/Players").call_deferred("add_child", new_hero)
 	# We must wait until after _ready is called, so that we don't end up at spawn
+	new_hero.call_deferred("begin")
 	new_hero.call_deferred("set_status", get_status())
 	queue_free()
 
