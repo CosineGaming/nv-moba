@@ -14,7 +14,7 @@ func _ready():
 
 func _request_completed(result, response_code, headers, body):
 	if result != RESULT_SUCCESS:
-		print("ERROR: COULD NOT UPDATE. RESULT #" + str(result))
+		util.log("ERROR: COULD NOT UPDATE. RESULT #" + str(result))
 		completed()
 		return
 	if not is_update_payload:
@@ -22,7 +22,7 @@ func _request_completed(result, response_code, headers, body):
 		var server = JSON.parse(body.get_string_from_utf8()).result
 		# 0.0.0 -> Update-shell application, needs more resources
 		if server.version == util.version and util.version != "0.0.0":
-			print("Game up-to-date! Launching")
+			util.log("Game up-to-date! Launching")
 			completed()
 		else:
 			is_update_payload = true
@@ -30,10 +30,10 @@ func _request_completed(result, response_code, headers, body):
 			if server.has('size'):
 				size = server.size
 			use_threads = true
-			print("Need to update! Downloading " + server.download_path)
+			util.log("Need to update! Downloading " + server.download_path)
 			request(domain + server.download_path)
 	else:
-		print("Update recieved. Saving to " + save_to)
+		util.log("Update recieved. Saving to " + save_to)
 		var file = File.new()
 		file.open(save_to, File.WRITE)
 		file.store_buffer(body)

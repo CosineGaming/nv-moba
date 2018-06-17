@@ -35,6 +35,25 @@ func is_friendly(player):
 	else:
 		return true # Doesn't matter, we're headless
 
+var last_log_day = 0
+func log(s, is_error=false, port=null):
+	var output = ""
+	var dt = OS.get_datetime()
+	# Date, only if it's been over a day (on a separate line)
+	if last_log_day != dt.day:
+		output += "==== %d-%02d-%02d ====\n" % [dt.year, dt.month, dt.day]
+		last_log_day = dt.day
+	# Time
+	var pm = dt.hour > 12
+	var pmtext = "pm" if pm else "am"
+	if pm:
+		dt.hour -= 12
+	output += "[%02d:%02d%s] " % [dt.hour, dt.minute, pmtext]
+	if port:
+		output += "[Server %d] " % port
+	output += s
+	print(output)
+
 func _get_args():
 	var opts = Options.new()
 	opts.set_banner(('A non-violent MOBA inspired by Overwatch and Zineth'))

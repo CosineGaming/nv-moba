@@ -44,11 +44,11 @@ func start_matchmaker():
 	# This is necessary for eg, when a player leaves to backfill
 	matchmaker_to_games = TCP_Server.new()
 	if matchmaker_to_games.listen(SERVER_TO_SERVER_PORT):
-		print("Error, could not listen")
+		util.log("Error, could not listen")
 
 	# Use ENet for matchmaker because we can (makes client code cleaner)
 	var matchmaker_to_players = NetworkedMultiplayerENet.new()
-	print("Starting matchmaker on port " + str(MATCHMAKING_PORT))
+	util.log("Starting matchmaker on port " + str(MATCHMAKING_PORT))
 	matchmaker_to_players.create_server(MATCHMAKING_PORT, MAX_GAMES)
 	get_tree().set_network_peer(matchmaker_to_players)
 	matchmaker_to_players.connect("peer_connected", self, "queue")
@@ -66,11 +66,10 @@ func _process(delta):
 			var message = stream.get_var()
 			if message == messages.ready_to_connect:
 				var port = stream.get_var()
-				print("Server " + str(port) + " has requested connection")
+				util.log("Server " + str(port) + " has requested connection")
 				skirmish_to_game(port, GAME_SIZE)
 
 func queue(netid):
-	print("Player " + str(netid) + " connected.")
 	add_to_game(netid, skirmish)
 	skirmishing_players.append(netid)
 	check_queue()
@@ -82,9 +81,9 @@ func skirmish_to_game(port, count=1):
 	for i in range(count):
 		if not skirmishing_players.size():
 			return false
-		print(skirmishing_players[0])
-		print("to")
-		print(port)
+		util.log(skirmishing_players[0])
+		util.log("to")
+		util.log(port)
 		add_to_game(skirmishing_players[0], port)
 	return true
 
