@@ -16,7 +16,7 @@ var walk_speed = 0.8 # Actually acceleration; m/s/s
 var jump_speed = 5 # m/s
 var air_accel = .1 # m/s/s
 var floor_friction = 1-0.08
-var air_friction = 1-0.03
+var air_friction = 1-0.80
 
 var walk_speed_build = 0.006 # `walk_speed` per `charge`
 var air_speed_build = 0.006 # `air_accel` per `charge`
@@ -293,8 +293,8 @@ func control_player(state):
 		var accel = (1 + charge * air_speed_build) * air_accel
 		state.apply_impulse(Vector3(), direction * accel * get_mass())
 		var lin_v = state.get_linear_velocity()
-		lin_v.x *= air_friction
-		lin_v.z *= air_friction
+		lin_v.x *= pow(air_friction, state.step)
+		lin_v.z *= pow(air_friction, state.step)
 		state.set_linear_velocity(lin_v)
 
 	state.integrate_forces()

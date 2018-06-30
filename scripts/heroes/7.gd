@@ -1,17 +1,15 @@
 extends "res://scripts/player.gd"
 
-var fly_cost = 50 # Per second
+var fly_cost = 30 # Per second
 var fly_strength = 0.25
-var glide_factor = 0.08
+var glide_factor = 0.10
 var glide_build = 0
 var climb_speed = 3
 var time_to_glide = 0.3
-var glide_ramp = glide_factor / 1 # In per second; written as time to full / glide_factor
+var glide_friction = 1 - 0.06
 
-var _gliding = false
 var _glide = 0
 var _touch_count = 0
-var _orig_air_friction = air_friction
 onready var _fly_ability = $MasterOnly/Fly
 onready var _climb_ability = $MasterOnly/Climb
 onready var _glide_ability = $MasterOnly/Glide
@@ -27,7 +25,7 @@ func _process(delta):
 	var can_glide = _touch_count > time_to_glide
 	_glide_ability.disabled = not can_glide
 	if Input.is_action_pressed("jump") and can_glide:
-		_glide = clamp(_glide + delta * glide_ramp, 0, glide_factor)
+		_glide = glide_factor
 	else:
 		_glide = 0
 
@@ -51,10 +49,10 @@ func control_player(state):
 			preserve_direction(_glide, false)
 			if translation.y > charge_height:
 				build_charge(glide_build * linear_velocity.length() * state.step)
-			air_friction = 1 - 0.01
+			# We don't control_player which does air friction, so we have to re-do it here our own way
+			linear_velocity *= pow(glide_friction, state.step)
 			skip_controls = true
 		else:
-			air_friction = _orig_air_friction
 			_fly_ability.disabled = true
 	state.integrate_forces()
 	if not skip_controls:
