@@ -13,11 +13,9 @@ var master_team_right = null
 var friend_color
 var enemy_color
 
-# var build_rate = 1.5
-var build_rate = 100
+var build_rate = 1.5
 var restart_count = 0
-# var restart_time = 15
-var restart_time = 1
+var restart_time = 15
 
 slave func set_status(status):
 	transform = status[0]
