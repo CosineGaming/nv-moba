@@ -14,6 +14,8 @@ var args
 
 onready var Options = preload("res://scripts/args.gd").new().Options
 
+var input_index = 0
+
 func _ready():
 	args = _get_args()
 
@@ -34,6 +36,13 @@ func is_friendly(player):
 		return player.player_info.is_right_team == mp.player_info.is_right_team
 	else:
 		return true # Doesn't matter, we're headless
+
+func normalize_joy(x):
+	var der = 2
+	var cutoff = 0.05
+	x = 0 if abs(x) < cutoff else x
+	x = sign(x) * pow(abs(x), der)
+	return x
 
 var last_log_day = 0
 func log(s, is_error=false, port=null):

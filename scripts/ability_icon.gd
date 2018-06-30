@@ -15,28 +15,24 @@ func _ready():
 	get_node("Name").text = ability_name
 	if cost == 0:
 		available.color = _free_color
-	var description
-	if action:
-		var actions = InputMap.get_action_list(action)
-		if actions:
-			var primary = actions[0]
-			if primary is InputEventMouseButton:
-				if primary.button_index == BUTTON_LEFT:
-					description = "Click"
-				elif primary.button_index == BUTTON_RIGHT:
-					description = "Right Click"
-				else:
-					description = "Scroll Click"
-			else:
-				description = primary.as_text()
-		else:
-			description = action # Just text
-	else:
-		description = ""
-	get_node("Button").text = description
+	_render_input()
 
 func is_pressed():
 	return Input.is_action_pressed(action)
+
+func _input(e):
+	if e.is_action(action):
+		# We just used e to do our action
+		# Detect which one we used
+		if action:
+			var possible = InputMap.get_action_list(action)
+			if possible:
+				for i in range(possible.size()):
+					# We use as_text == instead of shortcut_match because
+					# shortcut_match doesn't work with controllers
+					if possible[i].as_text() == e.as_text():
+						util.input_index = i
+	_render_input()
 
 func _process(delta):
 	if action and Input.is_action_pressed(action):
@@ -56,3 +52,27 @@ func _process(delta):
 			available.show()
 		else:
 			available.hide()
+
+func _render_input():
+	var description
+	if action:
+		var actions = InputMap.get_action_list(action)
+		if actions:
+			var used = actions[util.input_index]
+			if used is InputEventMouseButton:
+				if used.button_index == BUTTON_LEFT:
+					description = "Click"
+				elif used.button_index == BUTTON_RIGHT:
+					description = "Right Click"
+				else:
+					description = "Scroll Click"
+			elif used is InputEventJoypadButton:
+				description = Input.get_joy_button_string(used.button_index)
+			else:
+				description = used.as_text()
+		else:
+			description = action # Just text
+	else:
+		description = ""
+	get_node("Button").text = description
+

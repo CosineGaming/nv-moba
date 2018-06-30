@@ -13,6 +13,7 @@ var cam_ray_result = {};
 var cam_smooth_movement = true;
 var cam_fov = 60.0;
 var cam_view_sensitivity = 0.3;
+var cam_joy_sensitivity = 300.0;
 var cam_smooth_lerp = 10;
 var cam_pitch_minmax = Vector2(89, -89);
 
@@ -48,13 +49,14 @@ func _input(ie):
 		return;
 
 	if ie is InputEventMouseMotion:
-		cam_pitch = max(min(cam_pitch+(ie.relative.y*cam_view_sensitivity),cam_pitch_minmax.x),cam_pitch_minmax.y);
-		if cam_smooth_movement:
-			cam_yaw = cam_yaw-(ie.relative.x*cam_view_sensitivity);
-		else:
-			cam_yaw = fmod(cam_yaw-(ie.relative.x*cam_view_sensitivity),360);
-			cam_currentradius = cam_radius;
-			cam_update();
+		cam_coerce(ie.relative.x, ie.relative.y, cam_view_sensitivity)
+		# cam_pitch = max(min(cam_pitch+(ie.relative.y*cam_view_sensitivity),cam_pitch_minmax.x),cam_pitch_minmax.y);
+		# if cam_smooth_movement:
+		# 	cam_yaw = cam_yaw-(ie.relative.x*cam_view_sensitivity);
+		# else:
+		# 	cam_yaw = fmod(cam_yaw-(ie.relative.x*cam_view_sensitivity),360);
+		# 	cam_currentradius = cam_radius;
+		# 	cam_update();
 
 	if ie is InputEventMouseButton:
 		if ie.pressed:
@@ -82,7 +84,20 @@ func _process(delta):
 		cam_cyaw = lerp(cam_cyaw, cam_yaw, 10*delta);
 		cam_currentradius = lerp(cam_currentradius, cam_radius, 5*delta);
 
+	var x = Input.get_joy_axis(0, JOY_AXIS_2)
+	var y = Input.get_joy_axis(0, JOY_AXIS_3)
+	cam_coerce(util.normalize_joy(x) * delta, util.normalize_joy(y) * delta, cam_joy_sensitivity)
+
 	cam_update();
+
+func cam_coerce(x, y, sens):
+	cam_pitch = max(min(cam_pitch+(y*sens),cam_pitch_minmax.x),cam_pitch_minmax.y);
+	if cam_smooth_movement:
+		cam_yaw = cam_yaw-(x*sens);
+	else:
+		cam_yaw = fmod(cam_yaw-(x*sens),360);
+		cam_currentradius = cam_radius;
+		cam_update();
 
 func cam_update():
 	cam_pos = pivot.get_global_transform().origin;

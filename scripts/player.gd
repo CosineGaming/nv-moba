@@ -268,6 +268,14 @@ func control_player(state):
 		direction += aim.x
 
 	direction = direction.normalized()
+
+	# You must do this *after* normalization or all precision is lost
+	# Joystick left
+	# Horizontal
+	direction += aim.x * util.normalize_joy(Input.get_joy_axis(0, JOY_AXIS_0))
+	# Vertical
+	direction += aim.z * util.normalize_joy(Input.get_joy_axis(0, JOY_AXIS_1))
+
 	var ray = get_node("Ray")
 
 	# Detect jumpable
