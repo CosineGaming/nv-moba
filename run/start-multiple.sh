@@ -8,7 +8,7 @@ else
   count=1 # Default 2, minus one for the final -start-game
 fi
 
-util/open-multiple.sh $count "$@"
+run/open-multiple.sh $count "$@"
 sleep 1
 godot -client -start-game "$@" &
 
