@@ -8,9 +8,9 @@ export var looked_at_charge_suck = 25 # charge / sec
 # --- Godot overrides ---
 
 func _ready():
-	placement.start_action = "hero_1_place_wall"
-	placement.confirm_action = "hero_1_confirm_wall"
-	placement.delete_action = "hero_1_remove_wall"
+	placement.start_action = "primary_ability"
+	placement.confirm_action = "primary_mouse"
+	placement.delete_action = "secondary_mouse"
 	placement.max_placed = 5
 
 func _process(delta):

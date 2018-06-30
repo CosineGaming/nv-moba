@@ -42,7 +42,7 @@ margin_right = -60.0
 margin_bottom = -83.0
 cost = 0
 ability_name = "Swap Attract/Repel"
-action = "hero_2_switch_gravity"
+action = "primary_ability"
 
 [node name="Area" type="Area" parent="." index="6"]
 

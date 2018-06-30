@@ -62,7 +62,7 @@ margin_bottom = -71.0
 cost = 0
 ability_name = "Stun"
 display_progress = false
-action = "hero_4_stun"
+action = "primary_mouse"
 
 [node name="Scope" parent="MasterOnly" index="5" instance=ExtResource( 6 )]
 
@@ -77,6 +77,6 @@ margin_bottom = -70.0
 cost = 0
 ability_name = "Zoom"
 display_progress = false
-action = "hero_4_zoom"
+action = "secondary_mouse"
 
 

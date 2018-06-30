@@ -17,9 +17,9 @@ var flick_strength = 4
 # --- Godot overrides ---
 
 func _ready():
-	placement.start_action = "hero_5_place_portal"
-	placement.confirm_action = "hero_5_confirm_portal"
-	placement.delete_action = "hero_5_remove_portal"
+	placement.start_action = "primary_ability"
+	placement.confirm_action = "primary_mouse"
+	placement.delete_action = "secondary_mouse"
 	placement.max_placed = 100
 	set_process_input(true)
 

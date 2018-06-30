@@ -37,7 +37,7 @@ margin_bottom = -109.0
 cost = 2
 ability_name = "Speed Boost"
 display_progress = false
-action = "hero_0_boost"
+action = "primary_mouse"
 
 [node name="Wallride" parent="MasterOnly" index="4" instance=ExtResource( 5 )]
 

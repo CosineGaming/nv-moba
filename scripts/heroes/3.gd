@@ -33,7 +33,7 @@ func _process(delta):
 					if same_team:
 						rpc("merge", col.get_name())
 
-		if merged and Input.is_action_just_pressed("hero_3_unmerge"):
+		if merged and Input.is_action_just_pressed("primary_ability"):
 			rpc("unmerge")
 		if merged:
 			# Subtract and then add, so we can continously add this

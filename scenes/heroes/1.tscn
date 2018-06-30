@@ -42,7 +42,7 @@ margin_right = -63.0
 margin_bottom = -82.0
 cost = 15
 ability_name = "Place Wall"
-action = "hero_1_place_wall"
+action = "primary_ability"
 
 [node name="TPCamera" parent="." index="5"]
 

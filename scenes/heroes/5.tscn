@@ -32,7 +32,7 @@ margin_right = -142.0
 margin_bottom = -104.0
 cost = 75
 ability_name = "Build Portal"
-action = "hero_5_place_portal"
+action = "primary_ability"
 
 [node name="Teleport" parent="MasterOnly" index="3" instance=ExtResource( 5 )]
 
