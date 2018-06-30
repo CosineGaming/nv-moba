@@ -101,6 +101,8 @@ func _process(delta):
 	if restart_count > restart_time:
 		Engine.time_scale = 1
 		if is_network_master():
+			var winner = "Right" if winner_right else "Left"
+			util.log(winner + " team won! Resetting.")
 			get_node("/root/Lobby").rpc("reset_state")
 
 	# Render the percents

@@ -51,7 +51,7 @@ func log(s, is_error=false, port=null):
 	output += "[%02d:%02d%s] " % [dt.hour, dt.minute, pmtext]
 	if port:
 		output += "[Server %d] " % port
-	output += s
+	output += str(s)
 	print(output)
 
 func _get_args():
@@ -61,6 +61,7 @@ func _get_args():
 	opts.add('-server', false, 'Whether to run as server')
 	opts.add('-matchmaker', false, 'Whether to be the sole matchmaker')
 	opts.add('-client', false, 'Immediately connect as client')
+	opts.add('-quick-play', false, 'Immediately connect to quick play')
 	opts.add('-silent', false, 'If the server is not playing, merely serving')
 	opts.add('-ip', '127.0.0.1', 'The ip to connect to (client only!)')
 	opts.add('-port', 54673, 'The port to run a server on or connect to')
