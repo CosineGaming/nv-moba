@@ -45,10 +45,10 @@ func _process(delta):
 	else:
 		if display_progress:
 			if cost == 0:
-				bar.value = 100 if hero.charge > 0 else 0
+				bar.value = 100
 			else:
 				bar.value = 100 * hero.charge / cost
-		if hero.charge > cost:
+		if hero.charge >= cost:
 			available.show()
 		else:
 			available.hide()
