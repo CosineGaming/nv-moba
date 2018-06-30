@@ -36,7 +36,11 @@ func place_input(radius=-1, can_build=true, require_ghost=false):
 	# We allow you to just click to place, without needing to press E
 	var confirm = Input.is_action_just_pressed(confirm_action)
 
-	if can_build and Input.is_action_just_pressed(start_action) or (confirm and not is_placing and not require_ghost):
+	# This if statement got a little complicated so let's break it down
+	var quick_placing = confirm and not is_placing and not require_ghost
+	var ghosting = Input.is_action_just_pressed(start_action)
+	var needs_ghost = ghosting or quick_placing
+	if can_build and needs_ghost:
 		# Press button twice to cancel
 		if is_placing:
 			# We changed our mind, delete the placing wall

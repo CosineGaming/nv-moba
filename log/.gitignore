@@ -1,0 +1,6 @@
+# This directory must be there for run/server.sh to work properly, but I
+# don't want to commit logs
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

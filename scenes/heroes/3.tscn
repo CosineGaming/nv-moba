@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/heroes/3.gd" type="Script" id=2]
 [ext_resource path="res://assets/heroes/3_head.obj" type="ArrayMesh" id=3]
 [ext_resource path="res://assets/heroes/3.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://scenes/ability_icon.tscn" type="PackedScene" id=5]
 
 [node name="RigidBody" instance=ExtResource( 1 )]
 
-contacts_reported = 3
 script = ExtResource( 2 )
 
 [node name="RotatedHead" parent="Yaw/Pitch" index="0"]
@@ -19,7 +19,6 @@ mesh = ExtResource( 3 )
 
 transform = Transform( 0.527155, 0, 0, 0, -1.12384e-07, -0.689809, 0, 0.587457, -9.57091e-08, 0, 0.671806, 0 )
 mesh = ExtResource( 4 )
-material/0 = null
 
 [node name="Crosshair" parent="MasterOnly" index="0"]
 
@@ -46,6 +45,20 @@ align = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="Ability" parent="MasterOnly" index="4" instance=ExtResource( 5 )]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -89.0
+margin_top = -108.0
+margin_right = -59.0
+margin_bottom = -78.0
+cost = 0
+ability_name = "Boost"
+action = "Touch Teammate"
 
 [node name="Boosted" type="Label" parent="." index="6"]
 

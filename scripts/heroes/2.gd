@@ -5,7 +5,7 @@ var overlap_charge = 2
 
 func _process(delta):
 	if is_network_master():
-		if Input.is_action_just_pressed("hero_2_switch_gravity"):
+		if Input.is_action_just_pressed("primary_ability"):
 			# Press button twice to cancel
 			rpc("switch_gravity")
 			is_repelling = !is_repelling

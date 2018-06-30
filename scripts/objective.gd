@@ -104,6 +104,9 @@ func _process(delta):
 		Engine.time_scale = 1
 		if is_network_master():
 			networking.rpc("reset_state")
+			var winner = "Right" if winner_right else "Left"
+			util.log(winner + " team won! Resetting.")
+			get_node("/root/Lobby").rpc("reset_state")
 
 	# Render the percents
 	var on_left = left

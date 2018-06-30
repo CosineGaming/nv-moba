@@ -42,11 +42,41 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -109.0
-margin_top = -100.0
-margin_right = -98.0
+margin_top = -101.0
+margin_right = -97.0
 margin_bottom = -91.0
 cost = 0
 ability_name = "Destroy"
 action = "primary_ability"
+
+[node name="StopEnemy" parent="MasterOnly" index="4" instance=ExtResource( 6 )]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -202.0
+margin_top = -101.0
+margin_right = -172.0
+margin_bottom = -71.0
+cost = 0
+ability_name = "Stun"
+display_progress = false
+action = "primary_mouse"
+
+[node name="Scope" parent="MasterOnly" index="5" instance=ExtResource( 6 )]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -296.0
+margin_top = -100.0
+margin_right = -266.0
+margin_bottom = -70.0
+cost = 0
+ability_name = "Zoom"
+display_progress = false
+action = "secondary_mouse"
 
 

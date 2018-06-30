@@ -26,13 +26,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -160.0
-margin_top = -112.0
-margin_right = -149.0
-margin_bottom = -103.0
+margin_left = -153.0
+margin_top = -113.0
+margin_right = -142.0
+margin_bottom = -104.0
 cost = 75
 ability_name = "Build Portal"
-action = "hero_5_place_portal"
+action = "primary_ability"
 
 [node name="Teleport" parent="MasterOnly" index="3" instance=ExtResource( 5 )]
 
@@ -46,5 +46,20 @@ margin_right = -59.0
 margin_bottom = -103.0
 cost = 5
 ability_name = "Teleport"
+
+[node name="Bully" parent="MasterOnly" index="5" instance=ExtResource( 5 )]
+
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -235.0
+margin_top = -114.0
+margin_right = -205.0
+margin_bottom = -84.0
+cost = 0
+ability_name = "Bully"
+display_progress = false
+action = "primary_mouse"
 
 

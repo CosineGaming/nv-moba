@@ -18,16 +18,18 @@ func _ready():
 func _process(delta):
 	if is_network_master():
 
-		var stun = Input.is_action_pressed("hero_4_stun")
+		var stun = Input.is_action_pressed("primary_mouse")
 		var is_stunning = false
 
-		if Input.is_action_just_pressed("hero_4_zoom"):
+		if Input.is_action_just_pressed("secondary_mouse"):
 			get_node("TPCamera").cam_fov /= zoom_factor
 			get_node("TPCamera").cam_view_sensitivity /= sens_factor
+			get_node("TPCamera").cam_joy_sensitivity /= sens_factor
 			get_node("TPCamera").cam_smooth_movement = false
-		if Input.is_action_just_released("hero_4_zoom"):
+		if Input.is_action_just_released("secondary_mouse"):
 			get_node("TPCamera").cam_fov *= zoom_factor
 			get_node("TPCamera").cam_view_sensitivity *= sens_factor
+			get_node("TPCamera").cam_joy_sensitivity *= sens_factor
 			get_node("TPCamera").cam_smooth_movement = true
 
 		var looking_at = pick()
@@ -35,8 +37,8 @@ func _process(delta):
 			destroy_ability.cost = looking_at.destroy_cost
 			destroy_ability.disabled = false
 			if Input.is_action_just_pressed("primary_ability"):
-					if switch_charge > looking_at.destroy_cost:
-						switch_charge -= looking_at.destroy_cost
+					if charge > looking_at.destroy_cost:
+						build_charge(-looking_at.destroy_cost)
 						looking_at.rpc("destroy")
 		else:
 			destroy_ability.disabled = true

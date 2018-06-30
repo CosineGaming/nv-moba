@@ -33,13 +33,16 @@ func _process(delta):
 					if same_team:
 						rpc("merge", col.get_name())
 
-		if merged and Input.is_action_just_pressed("hero_3_unmerge"):
+		if merged and Input.is_action_just_pressed("primary_ability"):
 			rpc("unmerge")
 		if merged:
 			# Subtract and then add, so we can continously add this
-			switch_charge -= boost_charge
-			boost_charge = merged.switch_charge - original_charge
-			build_charge(boost_charge)
+			# We don't use build_charge because this is delicate math
+			charge -= boost_charge
+			boost_charge = merged.charge - original_charge
+			charge += boost_charge
+			# Network the changes
+			build_charge(0)
 
 func control_player(state):
 	if !merged:
@@ -85,7 +88,7 @@ func set_boosted(node, is_boosted):
 	node.walk_speed *= ratio
 	node.air_accel *= ratio
 	if is_boosted:
-		original_charge = node.switch_charge
+		original_charge = node.charge
 		boost_charge = 0
 
 sync func merge(node_name):

@@ -3,60 +3,59 @@
 
 extends RigidBody
 
+signal spawn
+
+# Set by lobby. Contains player metadata (hero, nickname, etc)
+var player_info
+
+# Basic movement settings
+# These are all public out here because they are customized by heroes
+
 # Walking speed and jumping height are defined later.
 var walk_speed = 0.8 # Actually acceleration; m/s/s
 var jump_speed = 5 # m/s
 var air_accel = .1 # m/s/s
 var floor_friction = 1-0.08
-var air_friction = 1-0.03
-var player_info # Set by lobby
+var air_friction = 1-0.80
 
-var walk_speed_build = 0.006 # `walk_speed` per `switch_charge`
-var air_speed_build = 0.006 # `air_accel` per `switch_charge`
+var walk_speed_build = 0.006 # `walk_speed` per `charge`
+var air_speed_build = 0.006 # `air_accel` per `charge`
 
-sync var switch_charge = 0
-var switch_charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
-var movement_charge = 0.15 # In percent per meter (except when heroes change that)
+sync var charge = 0
+var charge_cap = 200 # While switching is always at 100, things like speed boost might go higher!
+var movement_charge = 0.18 # In percent per meter (except when heroes change that)
+
+# Nodes
 onready var switch_text = get_node("MasterOnly/ChargeBar/ChargeText")
 onready var switch_bar = get_node("MasterOnly/ChargeBar")
 onready var switch_bar_extra = get_node("MasterOnly/ChargeBar/Extra")
 onready var switch_hero_action = get_node("MasterOnly/SwitchHero")
+onready var tp_camera = get_node("TPCamera")
+onready var master_only = get_node("MasterOnly")
+onready var debug_node = get_node("/root/Level/Debug")
 
-var fall_height = -400 # This is essentially the respawn timer
-var switch_height = -150 # At this point, stop adding to switch_charge. This makes falls not charge you too much
-
-var debug_node
 var recording
-
-slave var slave_transform = Basis()
-slave var slave_lin_v = Vector3()
-slave var slave_ang_v = Vector3()
-
-var tp_camera = "TPCamera"
-var master_only = "MasterOnly"
-
-var master_player
-var friend_color = Color("#4ab0e5") # Blue
-var enemy_color = Color("#f04273") # Red
-
 var ai_instanced = false
 
-signal spawn
-
+var friend_color = Color("#4ab0e5") # Blue
+var enemy_color = Color("#f04273") # Red
+# These meshes get colored with friendliness
 var colored_meshes = [
 	"Yaw/MainMesh",
 	"Yaw/Pitch/RotatedHead",
 ]
 
+var fall_height = -400 # This is essentially the respawn timer
+var charge_height = -150 # At this point, stop adding to charge. This makes falls not charge you too much
+
 func _ready():
 
 	set_process_input(true)
-	debug_node = get_node("/root/Level/Debug")
-	_set_color()
 	if is_network_master():
 		get_node("TPCamera/Camera/Ray").add_exception(self)
-		get_node(tp_camera).set_enabled(true)
-		get_node(tp_camera).cam_view_sensitivity = 0.05
+		tp_camera.set_enabled(true)
+		tp_camera.add_collision_exception(self)
+		tp_camera.cam_view_sensitivity = 0.05
 		if "is_ai" in player_info and player_info.is_ai and not ai_instanced:
 			add_child(preload("res://scenes/ai.tscn").instance())
 			ai_instanced = true
@@ -64,7 +63,7 @@ func _ready():
 	else:
 		get_node("PlayerName").set_text(player_info.username)
 		# Remove HUD
-		remove_child(get_node(master_only))
+		remove_child(master_only)
 
 func _input(event):
 	if is_network_master():
@@ -76,41 +75,50 @@ func _input(event):
 		if "record" in player_info:
 			recording.events.append([recording.time, event_to_obj(event)])
 		if Input.is_action_just_pressed("enable_cheats"):
-			switch_charge = 199
+			charge = 199
 
 func _process(delta):
 	# All player code not caused by input, and not causing movement
 	if is_network_master():
-		var vel = get_linear_velocity()
-		if translation.y < switch_height:
-			vel.y = 0 # Don't gain charge from falling when below switch_height
-		build_charge(movement_charge * vel.length() * delta)
-		switch_text.set_text("%d%%" % int(switch_charge)) # We truncate, rather than round, so that switch is displayed AT 100%
-		if switch_charge >= 100:
-			switch_hero_action.show()
-		else:
-			switch_hero_action.hide()
-		if switch_charge > switch_charge_cap:
-			# There is however a cap
-			switch_charge = switch_charge_cap
-		switch_bar.value = switch_charge
-		switch_bar_extra.value = switch_charge - 100
 
+		# Check falling (cancel charge and respawn)
+		var vel = get_linear_velocity()
+		if translation.y < charge_height:
+			vel.y = 0 # Don't gain charge from falling when below charge_height
+		build_charge(movement_charge * vel.length() * delta)
 		if get_translation().y < fall_height:
 			rpc("spawn")
 
+		# Update charge GUI
+		switch_text.set_text("%d%%" % int(charge)) # We truncate, rather than round, so that switch is displayed AT 100%
+		if charge >= 100:
+			switch_hero_action.show()
+		else:
+			switch_hero_action.hide()
+		if charge > charge_cap:
+			# There is however a cap
+			charge = charge_cap
+		switch_bar.value = charge
+		switch_bar_extra.value = charge - 100
+
+		# AI recording
 		if "record" in player_info:
 			recording.time += delta
 
-		rset_unreliable("switch_charge", switch_charge)
+		# on_looked_at is a special method for objects that need to respond to being looked at
+		# This was the best way to implement Hero 1's passive ability,
+		# But it'll probably come in handy more often so I made it kinda universal
+		var looking_at = pick()
+		if looking_at and looking_at.has_method("on_looked_at"):
+			looking_at.on_looked_at(self, delta)
 
 func _integrate_forces(state):
+	update_rotation()
 	if is_network_master():
 		control_player(state)
 		var status = get_status()
 		rpc_unreliable("set_status", status)
 		record_status(status)
-	set_rotation()
 
 func _exit_tree():
 	if "record" in player_info:
@@ -132,7 +140,13 @@ func build_charge(amount):
 		if obj.right_active != player_info.is_right_team and obj.active:
 			# Point against us (right active and left, or vice versa)
 			amount *= uncapped_advantage
-	switch_charge += amount
+	else:
+		# Only build down to 0
+		amount = max(amount, -charge)
+	charge += amount
+	if is_network_master():
+		rset_unreliable("charge", charge)
+	return amount
 
 sync func spawn():
 	emit_signal("spawn")
@@ -151,12 +165,12 @@ sync func spawn():
 	placement.z += rand_range(0, z_varies)
 	recording = { "time": 0, "states": [], "events": [], "spawn": Vector3() }
 	recording.spawn = var2str(placement)
-	recording.switch_charge = var2str(switch_charge)
+	recording.charge = var2str(charge)
 	set_transform(Basis())
 	set_translation(placement)
 	set_linear_velocity(Vector3())
-	get_node(tp_camera).cam_yaw = 0
-	get_node(tp_camera).cam_pitch = 0
+	tp_camera.cam_yaw = 0
+	tp_camera.cam_pitch = 0
 
 func event_to_obj(event):
 	var d = {}
@@ -180,7 +194,7 @@ func begin():
 	_set_color()
 
 func _set_color():
-	master_player = util.get_master_player()
+	var master_player = util.get_master_player()
 	# Set color to blue (teammate) or red (enemy)
 	var color
 	if master_player.player_info.is_right_team == player_info.is_right_team:
@@ -204,9 +218,9 @@ func toggle_mouse_capture():
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 # Update visual yaw + pitch components to match camera
-func set_rotation():
-	get_node("Yaw").set_rotation(Vector3(0, deg2rad(get_node(tp_camera).cam_yaw), 0))
-	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-get_node(tp_camera).cam_pitch), 0, 0))
+func update_rotation():
+	rotation = Vector3(0, deg2rad(tp_camera.cam_yaw), 0)
+	get_node("Yaw/Pitch").set_rotation(Vector3(deg2rad(-tp_camera.cam_pitch), 0, 0))
 
 func record_status(status):
 	if "record" in player_info:
@@ -214,47 +228,58 @@ func record_status(status):
 			status[i] = var2str(status[i])
 		recording.states.append([recording.time, status])
 
-slave func set_status(s):
+remote func set_status(s):
 	set_transform(s[0])
 	set_linear_velocity(s[1])
 	set_angular_velocity(s[2])
-	get_node(tp_camera).cam_yaw = s[3]
-	get_node(tp_camera).cam_pitch = s[4]
+	tp_camera.cam_yaw = s[3]
+	tp_camera.cam_pitch = s[4]
 
 func get_status():
 	return [
 		get_transform(),
 		get_linear_velocity(),
 		get_angular_velocity(),
-		get_node(tp_camera).cam_yaw,
-		get_node(tp_camera).cam_pitch,
+		tp_camera.cam_yaw,
+		tp_camera.cam_pitch,
 	]
 
-func control_player(state):
-
-	var aim = get_node("Yaw").get_global_transform().basis
-
-	var direction = Vector3()
-
-	if Input.is_action_pressed("move_forwards"):
-		direction -= aim[2]
-	if Input.is_action_pressed("move_backwards"):
-		direction += aim[2]
-	if Input.is_action_pressed("move_left"):
-		direction -= aim[0]
-	if Input.is_action_pressed("move_right"):
-		direction += aim[0]
-
-	direction = direction.normalized()
-	var ray = get_node("Ray")
-
-	# Detect jumpable
-	var jumpable = false
+func is_on_floor(state):
 	var jump_dot = 0.5 # If normal.dot(up) > jump_dot, we can jump
 	for i in range(state.get_contact_count()):
 		var n = state.get_contact_local_normal(i)
 		if n.dot(Vector3(0,1,0)) > jump_dot:
-			jumpable = true
+			return true
+	return false
+
+func control_player(state):
+
+	var aim = global_transform.basis
+
+	var direction = Vector3()
+
+	if Input.is_action_pressed("move_forwards"):
+		direction -= aim.z
+	if Input.is_action_pressed("move_backwards"):
+		direction += aim.z
+	if Input.is_action_pressed("move_left"):
+		direction -= aim.x
+	if Input.is_action_pressed("move_right"):
+		direction += aim.x
+
+	direction = direction.normalized()
+
+	# You must do this *after* normalization or all precision is lost
+	# Joystick left
+	# Horizontal
+	direction += aim.x * util.normalize_joy(Input.get_joy_axis(0, JOY_AXIS_0))
+	# Vertical
+	direction += aim.z * util.normalize_joy(Input.get_joy_axis(0, JOY_AXIS_1))
+
+	var ray = get_node("Ray")
+
+	# Detect jumpable
+	var jumpable = is_on_floor(state)
 
 	if jumpable: # We can navigate normally, we have a surface
 		var up = state.get_total_gravity().normalized()
@@ -262,7 +287,7 @@ func control_player(state):
 		var floor_velocity = Vector3()
 		var object = ray.get_collider()
 
-		var accel = (1 + switch_charge * walk_speed_build) * walk_speed
+		var accel = (1 + charge * walk_speed_build) * walk_speed
 		state.apply_impulse(Vector3(), direction * accel * get_mass())
 		var lin_v = state.get_linear_velocity()
 		lin_v.x *= floor_friction
@@ -270,20 +295,20 @@ func control_player(state):
 		state.set_linear_velocity(lin_v)
 
 		if Input.is_action_just_pressed("jump"):
-			state.apply_impulse(Vector3(), normal * jump_speed * get_mass())
+			state.apply_impulse(Vector3(), -up * jump_speed * get_mass())
 
 	else:
-		var accel = (1 + switch_charge * air_speed_build) * air_accel
+		var accel = (1 + charge * air_speed_build) * air_accel
 		state.apply_impulse(Vector3(), direction * accel * get_mass())
 		var lin_v = state.get_linear_velocity()
-		lin_v.x *= air_friction
-		lin_v.z *= air_friction
+		lin_v.x *= pow(air_friction, state.step)
+		lin_v.z *= pow(air_friction, state.step)
 		state.set_linear_velocity(lin_v)
 
 	state.integrate_forces()
 
 func switch_hero_interface():
-	if switch_charge >= 100:
+	if charge >= 100:
 		# Interface needs the mouse!
 		toggle_mouse_capture()
 		# Pause so if we have walls and such nothing funny happens
@@ -305,8 +330,10 @@ sync func switch_hero(hero):
 	new_hero.set_name("%d" % net_id)
 	new_hero.set_network_master(net_id)
 	new_hero.player_info = player_info
+	# Call deferred because we still need to tear down this player
 	get_node("/root/Level/Players").call_deferred("add_child", new_hero)
 	# We must wait until after _ready is called, so that we don't end up at spawn
+	new_hero.call_deferred("begin")
 	new_hero.call_deferred("set_status", get_status())
 	queue_free()
 
@@ -331,12 +358,29 @@ func pick_from(group):
 	return group.find(pick())
 func pick_player():
 	var players = get_node("/root/Level/Players").get_children()
-	return players[pick_from(players)]
+	var sel = pick_from(players)
+	if sel != -1:
+		return players[sel]
+	else:
+		return null
 func pick_by_friendly(pick_friendlies):
 	var pick = pick_player()
-	if (pick.player_info.is_right_team == player_info.is_right_team) == pick_friendlies:
+	if not pick:
+		return null
+	var friendly = (pick.player_info.is_right_team == player_info.is_right_team)
+	# Friendly and picking friendly, or enemy and picking enemy
+	if friendly == pick_friendlies:
 		return pick
 	else:
 		return null
+
+func preserve_direction(factor=1, ignore_y=true):
+	var forward_node = $Yaw if ignore_y else $Yaw/Pitch
+	var forward = -forward_node.get_global_transform().basis.z.normalized()
+	var current = linear_velocity
+	if ignore_y:
+		current.y = 0
+	linear_velocity += factor * current.length() * forward
+	linear_velocity -= factor * current
 
 # =========

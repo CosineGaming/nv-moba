@@ -18,10 +18,8 @@ font_data = SubResource( 1 )
 
 anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1024.0
-margin_bottom = 600.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 0
 mouse_default_cursor_shape = 0
@@ -30,28 +28,7 @@ size_flags_vertical = 1
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
 
-[node name="Title" type="Label" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 60.0
-margin_top = 50.0
-margin_right = 248.0
-margin_bottom = 90.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
-text = "VANAGLORIA"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="Center" type="Control" parent="." index="1"]
+[node name="Center" type="Control" parent="." index="0"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -74,9 +51,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = -250.0
-margin_top = -70.0
+margin_top = -140.0
 margin_right = 298.0
-margin_bottom = -10.0
+margin_bottom = -80.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -98,9 +75,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = -252.0
-margin_top = 14.0
+margin_top = -56.0
 margin_right = 300.0
-margin_bottom = 75.0
+margin_bottom = 5.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -122,9 +99,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = -251.0
-margin_top = 104.0
+margin_top = 34.0
 margin_right = 299.0
-margin_bottom = 170.0
+margin_bottom = 100.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -146,9 +123,9 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = -252.0
-margin_top = 200.0
+margin_top = 130.0
 margin_right = 298.0
-margin_bottom = 266.0
+margin_bottom = 196.0
 rect_pivot_offset = Vector2( 0, 0 )
 focus_mode = 2
 mouse_filter = 0
@@ -162,5 +139,26 @@ group = null
 text = "Quit"
 flat = false
 align = 1
+
+[node name="Title" type="Label" parent="Center" index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -72.0
+margin_top = -230.0
+margin_right = 116.0
+margin_bottom = -190.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 2 )
+text = "VANAGLORIA"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 

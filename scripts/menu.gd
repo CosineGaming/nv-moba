@@ -50,6 +50,8 @@ func _arg_actions():
 		networking.start_client()
 	if o.get_value("-singleplayer"):
 		_singleplayer()
+	if o.get_value("-quick-play"):
+		_find_game()
 	if o.get_value('-h'):
 		o.print_help()
 		get_tree().quit()

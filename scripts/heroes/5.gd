@@ -1,6 +1,7 @@
 extends "res://scripts/player.gd"
 
 onready var placement = preload("res://scripts/placement.gd").new(self, "res://scenes/heroes/5_portal.tscn")
+onready var portal_ability = get_node("MasterOnly/Portal")
 onready var teleport_ability = get_node("MasterOnly/Teleport")
 
 var radius = 15
@@ -8,7 +9,6 @@ var radius = 15
 var first_crosshair = "   [..."
 var second_crosshair = "...]   "
 var no_portal_crosshair = "+"
-var portal_cost = 20
 
 var flicking = null
 var flick_charge = 3
@@ -17,9 +17,9 @@ var flick_strength = 4
 # --- Godot overrides ---
 
 func _ready():
-	placement.start_action = "hero_5_place_portal"
-	placement.confirm_action = "hero_5_confirm_portal"
-	placement.delete_action = "hero_5_remove_portal"
+	placement.start_action = "primary_ability"
+	placement.confirm_action = "primary_mouse"
+	placement.delete_action = "secondary_mouse"
 	placement.max_placed = 100
 	set_process_input(true)
 
@@ -27,11 +27,11 @@ func _process(delta):
 	if is_network_master():
 		var is_second = placement.placed.size() % 2 != 0
 		var portal_crosshair = second_crosshair if is_second else first_crosshair
-		var crosshair = no_portal_crosshair if switch_charge < portal_cost else portal_crosshair
+		var crosshair = no_portal_crosshair if charge < portal_ability.cost else portal_crosshair
 		get_node("MasterOnly/Crosshair").set_text(crosshair)
-		var can_build = switch_charge > portal_cost
+		var can_build = charge > portal_ability.cost
 		if placement.place_input(radius, can_build, true) and is_second:
-			switch_charge -= portal_cost
+			build_charge(-portal_ability.cost)
 
 		teleport_ability.disabled = placement.placed.size() <= 1
 
