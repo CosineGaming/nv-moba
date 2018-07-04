@@ -23,7 +23,7 @@ func start_client(ip="", port=0):
 	if not port:
 		port = util.args.get_value("-port")
 	var peer = NetworkedMultiplayerENet.new()
-	print("Connecting to " + ip + ":" + str(port))
+	util.log("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
 	get_tree().change_scene("res://scenes/lobby.tscn")
@@ -37,7 +37,7 @@ func start_server(port=0):
 	if not port:
 		port = util.args.get_value("-port")
 	var peer = NetworkedMultiplayerENet.new()
-	print("Starting server on port " + str(port))
+	util.log("Starting server on port " + str(port))
 	peer.create_server(port, matchmaking.GAME_SIZE)
 	get_tree().set_network_peer(peer)
 	# As soon as we're listening, let the matchmaker know
@@ -84,12 +84,14 @@ func _ready():
 	connect("info_updated", self, "_check_info")
 
 remote func _register_player(new_peer):
+	util.log("Player " + str(new_peer) + " connected.")
 	if get_tree().is_network_server():
 		# I tell new player about all the existing people
 		_send_all_info(new_peer)
 		set_info("is_right_team", _right_team_next(), new_peer)
 
 sync func _unregister_player(peer):
+	util.log("Player " + str(peer) + " disconnected.")
 	players.erase(peer)
 	var p = util.get_player(peer)
 	if p:

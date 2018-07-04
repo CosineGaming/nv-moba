@@ -24,10 +24,10 @@ func control_player(state):
 	var boost_strength = 2
 	var boost_drain = 25 # Recall increased charge must be factored in
 	var cost = boost_drain * state.step
-	if get_node("MasterOnly/Boost").is_pressed() and switch_charge > cost:
+	if get_node("MasterOnly/Boost").is_pressed() and charge > cost:
 		walk_speed *= 2
 		air_accel *= 3
-		switch_charge -= cost
+		build_charge(-cost)
 	.control_player(state)
 	wallride(state)
 	walk_speed = original_speed
@@ -60,7 +60,7 @@ func wallride(state):
 			apply_impulse(Vector3(), air_accel * aim[2] * get_mass())
 		# Allow jumping (for wall hopping!)
 		if Input.is_action_just_pressed("jump"):
-			var build_factor = 1 + switch_charge * wallride_leap_build
+			var build_factor = 1 + charge * wallride_leap_build
 			var jump_impulse = build_factor * wallride_leap_side * last_wall_normal
 			jump_impulse.y += build_factor * wallride_leap_height
 			set_gravity_scale(1) # Jumping requires gravity

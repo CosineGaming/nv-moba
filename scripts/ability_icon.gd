@@ -9,21 +9,28 @@ export var display_progress = true
 export var action = ""
 # This is intended to be public
 var disabled = false
+var _free_color = Color(0.082886, 0.615445, 0.757812) # Light blue
 
 func _ready():
 	get_node("Name").text = ability_name
+	if cost == 0:
+		available.color = _free_color
 	var description
 	if action:
-		var primary = InputMap.get_action_list(action)[0]
-		if primary is InputEventMouseButton:
-			if primary.button_index == BUTTON_LEFT:
-				description = "Click"
-			elif primary.button_index == BUTTON_RIGHT:
-				description = "Right Click"
+		var actions = InputMap.get_action_list(action)
+		if actions:
+			var primary = actions[0]
+			if primary is InputEventMouseButton:
+				if primary.button_index == BUTTON_LEFT:
+					description = "Click"
+				elif primary.button_index == BUTTON_RIGHT:
+					description = "Right Click"
+				else:
+					description = "Scroll Click"
 			else:
-				description = "Scroll Click"
+				description = primary.as_text()
 		else:
-			description = primary.as_text()
+			description = action # Just text
 	else:
 		description = ""
 	get_node("Button").text = description
@@ -42,10 +49,10 @@ func _process(delta):
 	else:
 		if display_progress:
 			if cost == 0:
-				bar.value = 100 if hero.switch_charge > 0 else 0
+				bar.value = 100 if hero.charge > 0 else 0
 			else:
-				bar.value = 100 * hero.switch_charge / cost
-		if hero.switch_charge > cost:
+				bar.value = 100 * hero.charge / cost
+		if hero.charge > cost:
 			available.show()
 		else:
 			available.hide()

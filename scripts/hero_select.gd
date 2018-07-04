@@ -7,15 +7,19 @@ const hero_names = [
 	"CARITAS",
 	"PAZIENZA",
 	"SUPERBIA",
+	"INVIDIA",
+	"UMILTA",
 ]
 
 const hero_text = [
-	"DILIGENCE.\n\nWallride by jumping on walls.\n\nHold left click to go faster (but spend switch charge).",
+	"DILIGENCE.\n\nWallride by jumping on walls.\n\nHold left click to go faster (but spend charge).",
 	"WRATH.\n\nPress E and click (or just click) to build a wall.\n\nRight click to destroy one.",
 	"LUST.\n\nYou attract nearby heroes.\n\nPress E to switch to repelling them.",
 	"GENEROSITY.\n\nMake contact with a friend to boost their speed.\n\nPress E to separate.",
 	"PATIENCE.\n\nHold left mouse button on an enemy to slow them down.\n\nPress E to delete someone else's building (costs charge).",
 	"PRIDE.\n\nDrag on enemies to bully them around.\n\nClick to build a portal. Click again to build its partner (costs charge).",
+	"ENVY.\n\nClick a friend to swap places with them!\n\nBuild charge based on your teammate's charge built, so get your friends to good places.",
+	"HUMILITY.\n\nClimb, jump, and glide by holding space.",
 ]
 
 func _ready():

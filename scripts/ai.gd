@@ -24,8 +24,8 @@ func _physics_process(delta):
 
 func set_spawn():
 	get_node("..").set_translation(str2var(recording.spawn))
-	print(recording.switch_charge)
-	get_node("..").switch_charge = str2var(recording.switch_charge)
+	print(recording.charge)
+	get_node("..").charge = str2var(recording.charge)
 
 func read_recording():
 
@@ -80,7 +80,7 @@ func play_keys():
 	# events[0][0] is first event's TIME
 	if recording.events.size() == 0:
 		get_node("..").spawn() # This may cause spawn twice, I hope this isn't a problem
-		# get_node("..").switch_charge = 0 # This needs to reset so the recording is accurate
+		# get_node("..").charge = 0 # This needs to reset so the recording is accurate
 		read_recording()
 	while float(recording.events[0][0]) <= time:
 		# events[0][1] is first event's EVENT

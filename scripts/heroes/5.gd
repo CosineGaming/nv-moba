@@ -27,11 +27,11 @@ func _process(delta):
 	if is_network_master():
 		var is_second = placement.placed.size() % 2 != 0
 		var portal_crosshair = second_crosshair if is_second else first_crosshair
-		var crosshair = no_portal_crosshair if switch_charge < portal_ability.cost else portal_crosshair
+		var crosshair = no_portal_crosshair if charge < portal_ability.cost else portal_crosshair
 		get_node("MasterOnly/Crosshair").set_text(crosshair)
-		var can_build = switch_charge > portal_ability.cost
+		var can_build = charge > portal_ability.cost
 		if placement.place_input(radius, can_build, true) and is_second:
-			switch_charge -= portal_ability.cost
+			build_charge(-portal_ability.cost)
 
 		teleport_ability.disabled = placement.placed.size() <= 1
 
