@@ -1,3 +1,5 @@
+# Bully enemies, place portals for friends
+
 extends "res://scripts/player.gd"
 
 onready var placement = preload("res://scripts/placement.gd").new(self, "res://scenes/heroes/5_portal.tscn")

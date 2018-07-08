@@ -1,3 +1,5 @@
+# Attract / repel
+
 extends "res://scripts/player.gd"
 
 var is_repelling = false

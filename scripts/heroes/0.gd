@@ -11,12 +11,16 @@ var wallride_forgiveness = .3
 
 func _ready():
 	._ready()
+	# Hero settings
 	walk_speed *= 0.8
 	air_accel *= 1.5
 	jump_speed *= 1
 	air_speed_build *= 2
 	# Since movement is the only ability of this hero, it builds charge more
 	movement_charge *= 2
+
+	# Audio setup
+	asp2.bus = "hero_0_boost"
 
 func control_player(state):
 	var original_speed = walk_speed
@@ -28,6 +32,11 @@ func control_player(state):
 		walk_speed *= 2
 		air_accel *= 3
 		build_charge(-cost)
+		if not asp2.playing:
+			asp2.stream = preload("res://assets/audio/0-boost.wav")
+			asp2.play()
+	else:
+		asp2.stop()
 	.control_player(state)
 	wallride(state)
 	walk_speed = original_speed
@@ -50,7 +59,7 @@ func wallride(state):
 	if since_on_wall < wallride_forgiveness:
 		# Add zero gravity
 		set_gravity_scale(0)
-		# Remove any momentum we may have
+		# Remove any y momentum we may have
 		state.set_linear_velocity(Vector3(vel.x, 0, vel.z))
 		# Because 1/2 of our energy is wasted in the wall, get more forwards/backwards here:
 		var aim = get_node("Yaw").get_global_transform().basis
@@ -58,6 +67,11 @@ func wallride(state):
 			apply_impulse(Vector3(), -air_accel * aim[2] * get_mass())
 		if Input.is_action_pressed("move_backwards"):
 			apply_impulse(Vector3(), air_accel * aim[2] * get_mass())
+
+		if not asp.playing:
+			asp.stream = preload("res://assets/audio/0-slide.wav")
+			asp.play()
+
 		# Allow jumping (for wall hopping!)
 		if Input.is_action_just_pressed("jump"):
 			var build_factor = 1 + charge * wallride_leap_build
@@ -65,9 +79,13 @@ func wallride(state):
 			jump_impulse.y += build_factor * wallride_leap_height
 			set_gravity_scale(1) # Jumping requires gravity
 			state.apply_impulse(Vector3(), jump_impulse * get_mass())
+			asp.stream = preload("res://assets/audio/0-jump.wav")
+			asp.play()
+
 	else:
 		# We need to return to falling (we aren't riding anymore)
 		set_gravity_scale(1)
+		asp.stop()
 
 	state.integrate_forces()
 

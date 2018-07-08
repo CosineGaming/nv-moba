@@ -18,6 +18,8 @@ func _process(delta):
 		var can_build = charge > place_wall_ability.cost
 		if placement.place_input(-1, can_build):
 			build_charge(-place_wall_ability.cost)
+			asp.stream = preload("res://assets/audio/1-place.wav")
+			asp.play()
 
 func _exit_tree():
 	._exit_tree()
@@ -45,4 +47,3 @@ func on_looked_at(who, delta):
 		# because we're not master
 		# The *PICKER* is master, we're slave! Well, let's flip that for a mo'
 		rset("charge", charge)
-

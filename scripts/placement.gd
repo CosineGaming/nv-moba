@@ -55,6 +55,8 @@ func place_input(radius=-1, can_build=true, require_ghost=false):
 		var pick = player.pick_from(placed)
 		if pick != -1:
 			rpc("remove_placed", placed[pick].get_name())
+			player.asp.stream = preload("res://assets/audio/placement-remove.wav")
+			player.asp.play()
 
 	if is_placing:
 		position_placement(placing_node)

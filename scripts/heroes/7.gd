@@ -1,3 +1,5 @@
+# Climb, glide, and fly!
+
 extends "res://scripts/player.gd"
 
 var fly_cost = 30 # Per second

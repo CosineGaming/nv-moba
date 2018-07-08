@@ -1,3 +1,5 @@
+# Swap with friends
+
 extends "res://scripts/player.gd"
 
 export var charge_time = 20

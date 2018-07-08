@@ -1,4 +1,5 @@
 # Stuns people at a distance, removing their linear velocity
+# Also can destroy buildings
 
 extends "res://scripts/player.gd"
 
@@ -40,6 +41,8 @@ func _process(delta):
 					if charge > looking_at.destroy_cost:
 						build_charge(-looking_at.destroy_cost)
 						looking_at.rpc("destroy")
+						asp.stream = preload("res://assets/audio/4-destroy.wav")
+						asp.play()
 		else:
 			destroy_ability.disabled = true
 

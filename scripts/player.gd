@@ -33,6 +33,8 @@ onready var switch_hero_action = get_node("MasterOnly/SwitchHero")
 onready var tp_camera = get_node("TPCamera")
 onready var master_only = get_node("MasterOnly")
 onready var debug_node = get_node("/root/Level/Debug")
+onready var asp = get_node("MasterOnly/ASP")
+onready var asp2 = get_node("MasterOnly/ASP2")
 
 var recording
 var ai_instanced = false
