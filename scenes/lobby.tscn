@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/theme.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/lobby.gd" type="Script" id=2]
 [ext_resource path="res://scenes/hero_select.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/DejaVuSansMono.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://scenes/mumble.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -339,6 +340,8 @@ group = null
 text = "Exit to menu"
 flat = false
 align = 1
+
+[node name="Mumble" parent="." index="11" instance=ExtResource( 5 )]
 
 
 [editable path="HeroSelect"]

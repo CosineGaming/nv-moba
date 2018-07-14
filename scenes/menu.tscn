@@ -161,4 +161,12 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="Sprite" type="Node2D" parent="." index="1"]
+
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Sprite" index="0"]
+
+texture = ExtResource( 4 )
+centered = false
 
