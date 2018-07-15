@@ -12,6 +12,9 @@ vanagloria.pck
 addons/open-external-editor
 docs/*.import
 
+# Python
+__pycache__
+
 ._*
 ehthumbs.db
 Thumbs.db
