@@ -1,9 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/theme.tres" type="Theme" id=1]
 [ext_resource path="res://scripts/menu.gd" type="Script" id=2]
-[ext_resource path="res://py/VoiceChat.py" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFontData" id=1]
 
@@ -162,14 +160,5 @@ text = "VANAGLORIA"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-
-[node name="Node2D" type="Node2D" parent="." index="1"]
-
-script = ExtResource( 3 )
-
-[node name="Sprite" type="Sprite" parent="Node2D" index="0"]
-
-texture = ExtResource( 4 )
-centered = false
 
 

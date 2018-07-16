@@ -25,6 +25,11 @@ func _ready():
 	start_game_button.hide()
 	if get_tree().is_network_server():
 		start_game_button.show()
+	
+	# Instead of making voice chat a child of this, and being toggled by
+	# starting game, we can just make it a child of root
+	# TODO: Check if it's properly deleted when game left
+	get_node("/root").add_child(preload("res://scenes/mumble.tscn").instance())
 
 	if get_tree().is_network_server():
 		# We put level in our players dict because it's automatically broadcast to other players

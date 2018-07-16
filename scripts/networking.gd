@@ -10,32 +10,38 @@ var global_server_ip = "nv.cosinegaming.com"
 var matchmaker_tcp
 
 var level
+var port
 
 signal info_updated
 
 # Public methods
 # ==============
 
-func start_client(ip="", port=0):
+func start_client(ip="", _port=0):
 	if not ip:
 		ip = util.args.get_value("-ip")
 	ip = IP.resolve_hostname(ip)
 	if not port:
 		port = util.args.get_value("-port")
+	if _port:
+		port = _port
 	var peer = NetworkedMultiplayerENet.new()
 	util.log("Connecting to " + ip + ":" + str(port))
 	peer.create_client(ip, port)
 	get_tree().set_network_peer(peer)
 	get_tree().change_scene("res://scenes/lobby.tscn")
 
-remote func reconnect(ip, port):
+remote func reconnect(ip, _port):
 	# Reset previously known players
 	players = {}
-	start_client(ip, port)
+	port = _port
+	start_client(ip, _port)
 
-func start_server(port=0):
+func start_server(_port=0):
 	if not port:
 		port = util.args.get_value("-port")
+	if _port:
+		port = _port
 	var peer = NetworkedMultiplayerENet.new()
 	util.log("Starting server on port " + str(port))
 	peer.create_server(port, matchmaking.GAME_SIZE)
