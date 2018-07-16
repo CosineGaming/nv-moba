@@ -12,6 +12,12 @@ vanagloria.pck
 addons/open-external-editor
 docs/*.import
 
+# Pythonscript
+# This SHOULD be in source control but it's WAY too big (it holds an entire
+# python) in it.
+pythonscript.gdnlib
+pythonscript/
+
 # Python
 __pycache__
 

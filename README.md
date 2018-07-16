@@ -66,10 +66,31 @@ Key concepts:
 Running
 =======
 
-First, install [godot engine (3.0)](https://godotengine.org/download). Then:
+1. Install [Godot](https://godotengine.org/download) 3.0 or later
 
-    $ git clone https://github.com/CosineGaming/nv-moba && cd nv-moba
-    $ godot
+1. `$ git clone https://github.com/CosineGaming/nv-moba && cd nv-moba`
+
+2. We have a submodule, so you gotta do that janky git stuff
+
+    ```
+    $ git submodule init && git submodule update
+    ```
+
+3. Install "PythonScript" (the CPython one) from Godot AssetLib. Then restart.
+   This project is way too big for me to include in source control because it
+   contains an entire Python. I have no reason to believe that it wouldn't work
+   with PyPy but I've never tried.
+
+4. Install pymumble from the submodule:
+
+    ```
+    $ cd py/pymumble
+    $ ../../pythonscript/[yourplatform]/bin/python3 setup.py install
+    ```
+
+5. Hope that's it?? Idk
+
+6. `$ godot`
 
 Contributing
 ============
