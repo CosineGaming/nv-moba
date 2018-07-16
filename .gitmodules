@@ -1,0 +1,3 @@
+[submodule "py/pymumble"]
+	path = py/pymumble
+	url = git@github.com:CosineGaming/pymumble.git
