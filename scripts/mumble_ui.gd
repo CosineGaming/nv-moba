@@ -28,7 +28,9 @@ func _send_message(text):
 	# when trying to focus, and releasing focus immediately after gaining
 	if textbox.has_focus():
 		textbox.release_focus()
-		util.get_master_player().call_deferred("toggle_mouse_capture")
+		var player = util.get_master_player()
+		if player:
+			player.call_deferred("toggle_mouse_capture")
 		# Only send message if we've typed, otherwise we're just exiting
 		if text:
 			# Pymumble doesn't support text messages "from" fields, so we have to
@@ -45,7 +47,9 @@ func _input(input):
 			# We'll release immediately unless we call deferred and wait for the
 			# _send_message has_focus check
 			textbox.call_deferred("grab_focus")
-			util.get_master_player().call_deferred("toggle_mouse_capture")
+			var player = util.get_master_player()
+			if player:
+				player.call_deferred("toggle_mouse_capture")
 
 func _process(delta):
 	var speaking = mumble.get_speaking()
@@ -59,21 +63,27 @@ func _process(delta):
 		speakers_node.add_child(speaker)
 
 	var messages = mumble.get_messages()
-	var start = 0
+	var text = ""
+	for message in messages:
+		# We grow upwards, so add the newline to the beginning
+		text += "\n" + message
+	chatlog.text = text
 
-	var max_lines = 13
+	# Making RichTextLabel VAlign to bottom is impossible
+	# So to achieve the same effect while having the necessary scroll
+	# We slowly size up the chat until it fills the square
+	var lines = messages.size()
+	var original = -115 # Taken from the editor and unfortunately duplicated
+	var size_per_line = 15
+	var display_lines = min(lines, 15) # Taken from counting the lines in the white box
+	chatlog.margin_top = original - size_per_line * display_lines
+
 	if textbox.has_focus():
 		bg.show()
+		chatlog.scroll_active = true
+		textbox.modulate = Color(1,1,1,1) # Fully visible
 	else:
 		bg.hide()
-		# Force it to regrow
-		# Changing rect size to 0 breaks grow direction
-		chatlog.margin_top = 10000000
-		start = max(0, messages.size() - max_lines)
-
-	var text = ""
-	for i in range(start, messages.size()):
-		# We grow upwards, so add the newline to the beginning
-		text += "\n" + messages[i]
-	chatlog.text = text
+		chatlog.scroll_active = false
+		textbox.modulate = Color(1,1,1,0.5) # Semitransparent
 
