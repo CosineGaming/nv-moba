@@ -31,7 +31,7 @@ class VoiceChat(Node):
 	def connect_to_server(self, channel, name):
 		# Mumble setup
 		self.mumble = Mumble(
-				"192.168.1.13",
+				"nv.cosinegaming.com",
 				name)
 		self.mumble.set_application_string("Godot voice-chat")
 		# You have to enable receiving sound fsr
