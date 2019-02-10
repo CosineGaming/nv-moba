@@ -14,6 +14,7 @@ font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFontData" id=2]
 
+hinting = 2
 font_path = "res://assets/DejaVuSansMono.ttf"
 
 [sub_resource type="DynamicFont" id=3]
@@ -168,8 +169,8 @@ group = null
 text = "Platform map"
 flat = false
 align = 0
-selected = 0
 items = [ "Platform map", null, false, 0, null, "City-like thing", null, false, 1, null, "Slide", null, false, 2, null ]
+selected = 0
 
 [node name="Label" type="Label" parent="LevelSelect" index="1"]
 
