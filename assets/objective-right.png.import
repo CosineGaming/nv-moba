@@ -3,20 +3,21 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/objective-right.png-d18195ff55e7aff72b594ff190053ce4.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/objective-right.png"
-source_md5="2725f8f335a4f2ceb2562ef44343830d"
-
 dest_files=[ "res://.import/objective-right.png-d18195ff55e7aff72b594ff190053ce4.stex" ]
-dest_md5="c3fa2e979e2fdea8132655a82686526d"
 
 [params]
 
 compress/mode=0
 compress/lossy_quality=0.7
 compress/hdr_mode=0
+compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
 flags/filter=true
@@ -26,6 +27,7 @@ flags/srgb=2
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
+process/invert_color=false
 stream=false
 size_limit=0
 detect_3d=true

@@ -4,35 +4,17 @@
 [ext_resource path="res://assets/DejaVuSansMono.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
-
 size = 50
-use_mipmaps = false
-use_filter = false
 font_data = ExtResource( 2 )
 
 [node name="Control" type="Control"]
-
-anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
 
-[node name="HTTPRequest" type="HTTPRequest" parent="." index="0"]
-
-download_file = ""
-use_threads = false
-body_size_limit = -1
-max_redirects = 8
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
 script = ExtResource( 1 )
-domain = "http://ipv4.cosinegaming.com"
 
-[node name="ProgressBar" type="ProgressBar" parent="." index="1"]
-
+[node name="ProgressBar" type="ProgressBar" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -41,22 +23,9 @@ margin_left = -431.0
 margin_top = -30.5
 margin_right = 431.0
 margin_bottom = 30.5
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 0
-min_value = 0.0
-max_value = 100.0
 step = 1.0
-page = 0.0
-value = 0.0
-exp_edit = false
-rounded = false
-percent_visible = true
 
-[node name="Updating" type="Label" parent="." index="2"]
-
+[node name="Updating" type="Label" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -65,37 +34,16 @@ margin_left = -35.0
 margin_top = -63.0
 margin_right = 34.0
 margin_bottom = -49.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Updating..."
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="Title" type="Label" parent="." index="3"]
-
+[node name="Title" type="Label" parent="."]
 anchor_left = 0.5
-anchor_top = 0.0
 anchor_right = 0.5
-anchor_bottom = 0.0
 margin_left = -209.0
 margin_top = 70.0
 margin_right = 208.0
 margin_bottom = 136.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "VANAGLORIA"
 align = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-

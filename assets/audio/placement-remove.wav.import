@@ -7,10 +7,7 @@ path="res://.import/placement-remove.wav-6f312cb3b1c94e92ed93cce8777eab7e.sample
 [deps]
 
 source_file="res://assets/audio/placement-remove.wav"
-source_md5="d34404bbd696f15a984cd2127813b9e9"
-
 dest_files=[ "res://.import/placement-remove.wav-6f312cb3b1c94e92ed93cce8777eab7e.sample" ]
-dest_md5="b64baffa13e61d9f90b0a9648dbc49de"
 
 [params]
 
