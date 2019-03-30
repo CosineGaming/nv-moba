@@ -30,8 +30,6 @@ enabled=PoolStringArray( "open-external-editor" )
 
 [gdnative]
 
-singletons=[ "res://pythonscript.gdnlib", "res://release/installer/x11-test/pythonscript.gdnlib" ]
-
 [input]
 
 move_forwards={
